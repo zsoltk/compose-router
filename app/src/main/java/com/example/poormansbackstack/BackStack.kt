@@ -4,6 +4,9 @@ data class BackStack<T>(
     private val defaultElement: T,
     private val elements: List<T> = listOf(defaultElement)
 ) {
+    val size: Int =
+        elements.size
+
     fun last(): T =
         elements.last()
 

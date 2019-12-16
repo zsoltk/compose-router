@@ -59,8 +59,15 @@ interface SomeChild {
         )
 
         @Composable
-        fun Root() {
-            Content(0, "Root", R.color.blue_grey_200, SubtreeA)
+        fun Root(backPress: BackPress, cantPopBackStack: () -> Unit) {
+            Content(
+                backPress = backPress,
+                cantPopBackStack = cantPopBackStack,
+                level = 0,
+                id = "Root",
+                bgColor = R.color.blue_grey_200,
+                defaultRouting = SubtreeA
+            )
         }
 
         /**
@@ -73,18 +80,35 @@ interface SomeChild {
          * sealed class would also reflect more meaningful names of actual app functionality.
          */
         @Composable
-        private fun Content(level: Int, id: String, bgColor: Int, defaultRouting: Routing) {
+        private fun Content(
+            backPress: BackPress,
+            cantPopBackStack: () -> Unit,
+            level: Int,
+            id: String,
+            bgColor: Int,
+            defaultRouting: Routing
+        ) {
             if (level < MAX_NESTING_LEVEL) {
-                NestedContainerWithRouting(level, id, bgColor, defaultRouting)
+                NestedContainerWithRouting(backPress, cantPopBackStack, level, id, bgColor, defaultRouting)
             } else {
-                Leaf(level, id)
+                Leaf(backPress, cantPopBackStack, level, id)
             }
         }
 
-        private fun Leaf(level: Int, id: String) {
+        private fun Leaf(
+            backPress: BackPress,
+            cantPopBackStack: () -> Unit,
+            level: Int,
+            id: String
+        ) {
+            if (backPress.triggered) {
+                cantPopBackStack()
+            }
+
             Surface(
                 color = Color.White,
-                shape = RoundedCornerShape(4.dp)) {
+                shape = RoundedCornerShape(4.dp)
+            ) {
                 Text(
                     text = "Leaf $level.$id",
                     style = (+MaterialTheme.typography()).body1,
@@ -94,8 +118,25 @@ interface SomeChild {
         }
 
         @Composable
-        private fun NestedContainerWithRouting(level: Int, id: String, bgColor: Int, defaultRouting: Routing) {
+        private fun NestedContainerWithRouting(
+            backPress: BackPress,
+            cantPopBackStack: () -> Unit,
+            level: Int,
+            id: String,
+            bgColor: Int,
+            defaultRouting: Routing
+        ) {
             var backStack by +state { BackStack(defaultRouting) }
+
+            val cantPopBackStackDelegate = {
+                val newBackStack =  backStack.pop()
+                if (newBackStack.size < backStack.size) {
+                    backStack = newBackStack
+                    BackPress.triggered = false
+                } else {
+                    cantPopBackStack()
+                }
+            }
 
             Container(
                 name = if (level == 0) "Root" else "Container $level.$id",
@@ -113,19 +154,27 @@ interface SomeChild {
                      * ("Profile", "Settings", "Chat", "Gallery", etc.) with different
                      * Composables on the right side.
                      */
-                    SubtreeA -> Content(
-                        level + 1,
-                        "A",
-                        colorSets[currentRouting]!![level],
-                        currentRouting
-                    )
+                    SubtreeA -> {
+                        Content(
+                            backPress,
+                            cantPopBackStackDelegate,
+                            level + 1,
+                            "A",
+                            colorSets[currentRouting]!![level],
+                            currentRouting
+                        )
+                    }
                     SubtreeB -> Content(
+                        backPress,
+                        cantPopBackStackDelegate,
                         level + 1,
                         "B",
                         colorSets[currentRouting]!![level],
                         currentRouting
                     )
                     SubtreeC -> Content(
+                        backPress,
+                        cantPopBackStackDelegate,
                         level + 1,
                         "C",
                         colorSets[currentRouting]!![level],
@@ -157,5 +206,5 @@ interface SomeChild {
                 SubtreeB -> SubtreeC
                 SubtreeC -> SubtreeA
             }
-        }
+    }
 }
