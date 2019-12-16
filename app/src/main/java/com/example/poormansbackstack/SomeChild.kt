@@ -1,6 +1,7 @@
 package com.example.poormansbackstack
 
 import androidx.compose.Composable
+import androidx.compose.memo
 import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.core.Text
@@ -89,6 +90,9 @@ interface SomeChild {
             defaultRouting: Routing
         ) {
             if (level < MAX_NESTING_LEVEL) {
+                if (level + 1 == MAX_NESTING_LEVEL) {
+                    NestedContainerWithRouting(backPress, cantPopBackStack, level, id, bgColor, defaultRouting)
+                }
                 NestedContainerWithRouting(backPress, cantPopBackStack, level, id, bgColor, defaultRouting)
             } else {
                 Leaf(backPress, cantPopBackStack, level, id)
@@ -117,6 +121,8 @@ interface SomeChild {
             }
         }
 
+        class State<T>(var value: T)
+
         @Composable
         private fun NestedContainerWithRouting(
             backPress: BackPress,
@@ -127,19 +133,24 @@ interface SomeChild {
             defaultRouting: Routing
         ) {
             var backStack by +state { BackStack(defaultRouting) }
+            val nbChildren = if (level + 2 == MAX_NESTING_LEVEL) 2 else 1
+            val unhandledCount = +memo { State(0) }
 
             val cantPopBackStackDelegate = {
-                val newBackStack =  backStack.pop()
-                if (newBackStack.size < backStack.size) {
-                    backStack = newBackStack
-                    BackPress.triggered = false
-                } else {
-                    cantPopBackStack()
+                if (++unhandledCount.value == nbChildren) {
+                    val newBackStack =  backStack.pop()
+                    if (newBackStack.size < backStack.size) {
+                        backStack = newBackStack
+                        BackPress.triggered = false
+                    } else {
+                        cantPopBackStack()
+                    }
+                    unhandledCount.value = 0
                 }
             }
 
             Container(
-                name = if (level == 0) "Root" else "Container $level.$id",
+                name = if (level == 0) "Root" else "L$level.$id",
                 bgColor = bgColor,
                 onButtonClick = { backStack = backStack.push(backStack.last().next()) }
             ) {
