@@ -10,6 +10,7 @@ import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Column
 import androidx.ui.layout.HeightSpacer
+import androidx.ui.layout.Row
 import androidx.ui.layout.Spacing
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
@@ -59,6 +60,15 @@ interface SomeChild {
             )
         )
 
+        // Careful with that axe, Eugene
+        private val nbChildrenPerLevel = mapOf(
+            0 to 1,
+            1 to 1,
+            2 to 1,
+            3 to 2,
+            4 to 1
+        )
+
         @Composable
         fun Root(backPress: BackPress, cantPopBackStack: () -> Unit) {
             Content(
@@ -89,16 +99,14 @@ interface SomeChild {
             bgColor: Int,
             defaultRouting: Routing
         ) {
-            if (level < MAX_NESTING_LEVEL) {
-                if (level + 1 == MAX_NESTING_LEVEL) {
-                    NestedContainerWithRouting(backPress, cantPopBackStack, level, id, bgColor, defaultRouting)
-                }
-                NestedContainerWithRouting(backPress, cantPopBackStack, level, id, bgColor, defaultRouting)
-            } else {
+            if (level >= MAX_NESTING_LEVEL) {
                 Leaf(backPress, cantPopBackStack, level, id)
+            } else {
+                NestedContainerWithRouting(backPress, cantPopBackStack, level, id, bgColor, defaultRouting)
             }
         }
 
+        @Composable
         private fun Leaf(
             backPress: BackPress,
             cantPopBackStack: () -> Unit,
@@ -121,8 +129,6 @@ interface SomeChild {
             }
         }
 
-        class State<T>(var value: T)
-
         @Composable
         private fun NestedContainerWithRouting(
             backPress: BackPress,
@@ -133,19 +139,29 @@ interface SomeChild {
             defaultRouting: Routing
         ) {
             var backStack by +state { BackStack(defaultRouting) }
-            val nbChildren = if (level + 2 == MAX_NESTING_LEVEL) 2 else 1
-            val unhandledCount = +memo { State(0) }
+            val nbChildren = nbChildrenPerLevel.getOrDefault(level, 1)
+            // Remember how many failed already
+            val nbChildrenDidNotHandleBackPress = +memo { State(0) }
 
-            val cantPopBackStackDelegate = {
-                if (++unhandledCount.value == nbChildren) {
+            val onChildFailedToHandle = {
+                // All of them failed?
+                if (++nbChildrenDidNotHandleBackPress.value == nbChildren) {
+                    // Pop our own if we can
                     val newBackStack =  backStack.pop()
+
+                    // Did we succeed?
                     if (newBackStack.size < backStack.size) {
+                        // Consider handled
                         backStack = newBackStack
                         BackPress.triggered = false
                     } else {
+                        // Propagate to one level higher if we can't
                         cantPopBackStack()
                     }
-                    unhandledCount.value = 0
+
+                    // In any case, don't forget to reset, so that after recompose
+                    // we can start from scratch
+                    nbChildrenDidNotHandleBackPress.value = 0
                 }
             }
 
@@ -154,47 +170,17 @@ interface SomeChild {
                 bgColor = bgColor,
                 onButtonClick = { backStack = backStack.push(backStack.last().next()) }
             ) {
-                when (val currentRouting = backStack.last()) {
-                    /**
-                     * Now these branches below are almost the same, so you could of course
-                     * get rid of the when expression and parameterize the whole thing (only
-                     * the id labels "A" are different).
-                     *
-                     * But I thought that would remove the demonstration value imagining that in
-                     * real life circumstances these branches would have more meaningful names
-                     * ("Profile", "Settings", "Chat", "Gallery", etc.) with different
-                     * Composables on the right side.
-                     */
-                    SubtreeA -> {
-                        Content(
-                            backPress,
-                            cantPopBackStackDelegate,
-                            level + 1,
-                            "A",
-                            colorSets[currentRouting]!![level],
-                            currentRouting
-                        )
+                Row {
+                    for (i in 1..nbChildren) {
+                        Child(backStack.last(), backPress, onChildFailedToHandle, level)
                     }
-                    SubtreeB -> Content(
-                        backPress,
-                        cantPopBackStackDelegate,
-                        level + 1,
-                        "B",
-                        colorSets[currentRouting]!![level],
-                        currentRouting
-                    )
-                    SubtreeC -> Content(
-                        backPress,
-                        cantPopBackStackDelegate,
-                        level + 1,
-                        "C",
-                        colorSets[currentRouting]!![level],
-                        currentRouting
-                    )
                 }
             }
         }
 
+        /**
+         * Adds a button and some children
+         */
         @Composable
         private fun Container(
             name: String,
@@ -208,6 +194,56 @@ interface SomeChild {
                     HeightSpacer(height = 16.dp)
                     children()
                 }
+            }
+        }
+
+        /**
+         * Adds child based on current routing
+         */
+        @Composable
+        private fun Child(
+            currentRouting: Routing,
+            backPress: BackPress,
+            cantPopBackStackDelegate: () -> Unit,
+            level: Int
+        ) {
+            when (currentRouting) {
+                /**
+                 * Now these branches below are almost the same, so you could of course
+                 * get rid of the when expression and parameterize the whole thing (only
+                 * the id labels "A" are different).
+                 *
+                 * But I thought that would remove the demonstration value imagining that in
+                 * real life circumstances these branches would have more meaningful names
+                 * ("Profile", "Settings", "Chat", "Gallery", etc.) with different
+                 * Composables on the right side.
+                 */
+                SubtreeA -> {
+                    Content(
+                        backPress,
+                        cantPopBackStackDelegate,
+                        level + 1,
+                        "A",
+                        colorSets[currentRouting]!![level],
+                        currentRouting
+                    )
+                }
+                SubtreeB -> Content(
+                    backPress,
+                    cantPopBackStackDelegate,
+                    level + 1,
+                    "B",
+                    colorSets[currentRouting]!![level],
+                    currentRouting
+                )
+                SubtreeC -> Content(
+                    backPress,
+                    cantPopBackStackDelegate,
+                    level + 1,
+                    "C",
+                    colorSets[currentRouting]!![level],
+                    currentRouting
+                )
             }
         }
 
