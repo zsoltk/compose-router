@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "Poor man's back stack with Compose"
