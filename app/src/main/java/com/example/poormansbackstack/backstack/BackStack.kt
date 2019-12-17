@@ -1,4 +1,4 @@
-package com.example.poormansbackstack
+package com.example.poormansbackstack.backstack
 
 data class BackStack<T>(
     private val defaultElement: T,

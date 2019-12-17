@@ -7,6 +7,9 @@ import androidx.ui.core.setContent
 import androidx.ui.foundation.HorizontalScroller
 import androidx.ui.material.MaterialTheme
 import androidx.ui.tooling.preview.Preview
+import com.example.poormansbackstack.backpress.BackPress
+import com.example.poormansbackstack.backpress.composable.RootBackHandler
+import com.example.poormansbackstack.composable.SomeChild
 
 class MainActivity : AppCompatActivity() {
     private val backPress = BackPress()
@@ -16,8 +19,10 @@ class MainActivity : AppCompatActivity() {
         setContent {
             MaterialTheme {
                 HorizontalScroller {
-                    SomeChild.Root(backPress) {
-                        finish()
+                    RootBackHandler(
+                        backPress = backPress,
+                        cantPopBackStack = { finish() }) {
+                        SomeChild.Root()
                     }
                 }
             }
@@ -27,7 +32,6 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         backPress.triggered = true
     }
-
 }
 
 
@@ -35,6 +39,6 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun DefaultPreview() {
     MaterialTheme {
-        SomeChild.Root(BackPress()) {}
+        SomeChild.Root()
     }
 }

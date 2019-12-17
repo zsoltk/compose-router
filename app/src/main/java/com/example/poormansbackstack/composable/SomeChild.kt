@@ -1,12 +1,6 @@
-package com.example.poormansbackstack
+package com.example.poormansbackstack.composable
 
-import androidx.compose.Ambient
 import androidx.compose.Composable
-import androidx.compose.State
-import androidx.compose.ambient
-import androidx.compose.memo
-import androidx.compose.onDispose
-import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.core.Text
 import androidx.ui.core.dp
@@ -20,9 +14,11 @@ import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.Surface
 import androidx.ui.res.colorResource
-import com.example.poormansbackstack.SomeChild.Routing.SubtreeA
-import com.example.poormansbackstack.SomeChild.Routing.SubtreeB
-import com.example.poormansbackstack.SomeChild.Routing.SubtreeC
+import com.example.poormansbackstack.R
+import com.example.poormansbackstack.composable.SomeChild.Routing.SubtreeA
+import com.example.poormansbackstack.composable.SomeChild.Routing.SubtreeB
+import com.example.poormansbackstack.composable.SomeChild.Routing.SubtreeC
+import com.example.poormansbackstack.backpress.composable.BackHandler
 
 interface SomeChild {
     /**
@@ -72,60 +68,15 @@ interface SomeChild {
             3 to 2,
             4 to 1
         )
-        private val backPressHandler: Ambient<BackPressHandlers> = Ambient.of { throw IllegalStateException("Handler is not initialized") }
 
         @Composable
-        fun Root(backPress: BackPress, cantPopBackStack: () -> Unit) {
-            RootBackHandler(backPress = backPress, cantPopBackStack = cantPopBackStack) {
-                Content(
-                    level = 0,
-                    id = "Root",
-                    bgColor = R.color.blue_grey_200,
-                    defaultRouting = SubtreeA
-                )
-            }
-        }
-
-        @Composable
-        fun RootBackHandler(backPress: BackPress, cantPopBackStack: () -> Unit, children: @Composable() () -> Unit) {
-            val childrenHandler = +memo { BackPressHandlers() }
-            backPressHandler.Provider(value = childrenHandler) {
-                children()
-            }
-            if (backPress.triggered) {
-                if (!childrenHandler.handleBackClick()) {
-                    cantPopBackStack()
-                }
-                backPress.triggered = false
-            }
-        }
-
-        @Composable
-        fun <T> BackHandler(routing: T, children: @Composable() (State<BackStack<T>>) -> Unit) {
-            val backStackState = +state { BackStack(routing) }
-            val parentHandler = +ambient(backPressHandler)
-            val childrenHandler = +memo { BackPressHandlers() }
-            val handleBackStack = {
-                if (!childrenHandler.handleBackClick()) {
-                    var backStack by backStackState
-                    if (backStack.size > 1) {
-                        println("Popping backstack with size ${backStack.size}")
-                        backStack = backStack.pop()
-                        true
-                    } else {
-                        false
-                    }
-                } else {
-                    true
-                }
-            }
-
-            parentHandler.handlers.add(handleBackStack)
-            +onDispose { parentHandler.handlers.remove(handleBackStack) }
-
-            backPressHandler.Provider(value = childrenHandler) {
-                children(backStackState)
-            }
+        fun Root() {
+            Content(
+                level = 0,
+                id = "Root",
+                bgColor = R.color.blue_grey_200,
+                defaultRouting = SubtreeA
+            )
         }
 
         /**
@@ -145,9 +96,17 @@ interface SomeChild {
             defaultRouting: Routing
         ) {
             if (level >= MAX_NESTING_LEVEL) {
-                Leaf(level, id)
+                Leaf(
+                    level,
+                    id
+                )
             } else {
-                NestedContainerWithRouting(level, id, bgColor, defaultRouting)
+                NestedContainerWithRouting(
+                    level,
+                    id,
+                    bgColor,
+                    defaultRouting
+                )
             }
         }
 
@@ -188,7 +147,10 @@ interface SomeChild {
                 ) {
                     Row {
                         for (i in 1..nbChildren) {
-                            Child(backStack.last(), level)
+                            Child(
+                                backStack.last(),
+                                level
+                            )
                         }
                     }
                 }
