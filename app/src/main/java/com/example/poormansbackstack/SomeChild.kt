@@ -1,7 +1,11 @@
 package com.example.poormansbackstack
 
+import androidx.compose.Ambient
 import androidx.compose.Composable
+import androidx.compose.State
+import androidx.compose.ambient
 import androidx.compose.memo
+import androidx.compose.onDispose
 import androidx.compose.state
 import androidx.compose.unaryPlus
 import androidx.ui.core.Text
@@ -68,17 +72,60 @@ interface SomeChild {
             3 to 2,
             4 to 1
         )
+        private val backPressHandler: Ambient<BackPressHandlers> = Ambient.of { throw IllegalStateException("Handler is not initialized") }
 
         @Composable
         fun Root(backPress: BackPress, cantPopBackStack: () -> Unit) {
-            Content(
-                backPress = backPress,
-                cantPopBackStack = cantPopBackStack,
-                level = 0,
-                id = "Root",
-                bgColor = R.color.blue_grey_200,
-                defaultRouting = SubtreeA
-            )
+            RootBackHandler(backPress = backPress, cantPopBackStack = cantPopBackStack) {
+                Content(
+                    level = 0,
+                    id = "Root",
+                    bgColor = R.color.blue_grey_200,
+                    defaultRouting = SubtreeA
+                )
+            }
+        }
+
+        @Composable
+        fun RootBackHandler(backPress: BackPress, cantPopBackStack: () -> Unit, children: @Composable() () -> Unit) {
+            val childrenHandler = +memo { BackPressHandlers() }
+            backPressHandler.Provider(value = childrenHandler) {
+                children()
+            }
+            if (backPress.triggered) {
+                if (!childrenHandler.handleBackClick()) {
+                    cantPopBackStack()
+                }
+                backPress.triggered = false
+            }
+        }
+
+        @Composable
+        fun <T> BackHandler(routing: T, children: @Composable() (State<BackStack<T>>) -> Unit) {
+            val backStackState = +state { BackStack(routing) }
+            val parentHandler = +ambient(backPressHandler)
+            val childrenHandler = +memo { BackPressHandlers() }
+            val handleBackStack = {
+                if (!childrenHandler.handleBackClick()) {
+                    var backStack by backStackState
+                    if (backStack.size > 1) {
+                        println("Popping backstack with size ${backStack.size}")
+                        backStack = backStack.pop()
+                        true
+                    } else {
+                        false
+                    }
+                } else {
+                    true
+                }
+            }
+
+            parentHandler.handlers.add(handleBackStack)
+            +onDispose { parentHandler.handlers.remove(handleBackStack) }
+
+            backPressHandler.Provider(value = childrenHandler) {
+                children(backStackState)
+            }
         }
 
         /**
@@ -92,31 +139,23 @@ interface SomeChild {
          */
         @Composable
         private fun Content(
-            backPress: BackPress,
-            cantPopBackStack: () -> Unit,
             level: Int,
             id: String,
             bgColor: Int,
             defaultRouting: Routing
         ) {
             if (level >= MAX_NESTING_LEVEL) {
-                Leaf(backPress, cantPopBackStack, level, id)
+                Leaf(level, id)
             } else {
-                NestedContainerWithRouting(backPress, cantPopBackStack, level, id, bgColor, defaultRouting)
+                NestedContainerWithRouting(level, id, bgColor, defaultRouting)
             }
         }
 
         @Composable
         private fun Leaf(
-            backPress: BackPress,
-            cantPopBackStack: () -> Unit,
             level: Int,
             id: String
         ) {
-            if (backPress.triggered) {
-                cantPopBackStack()
-            }
-
             Surface(
                 color = Color.White,
                 shape = RoundedCornerShape(4.dp)
@@ -131,48 +170,26 @@ interface SomeChild {
 
         @Composable
         private fun NestedContainerWithRouting(
-            backPress: BackPress,
-            cantPopBackStack: () -> Unit,
             level: Int,
             id: String,
             bgColor: Int,
             defaultRouting: Routing
         ) {
-            var backStack by +state { BackStack(defaultRouting) }
-            val nbChildren = nbChildrenPerLevel.getOrDefault(level, 1)
-            // Remember how many failed already
-            val nbChildrenDidNotHandleBackPress = +memo { State(0) }
+            BackHandler(defaultRouting) { backStackState ->
+                var backStack by backStackState
+                println("level = $level, backstack = ${backStack.size}, routing = ${backStack.last().javaClass.simpleName}")
 
-            val onChildFailedToHandle = {
-                // All of them failed?
-                if (++nbChildrenDidNotHandleBackPress.value == nbChildren) {
-                    // Pop our own if we can
-                    val newBackStack =  backStack.pop()
+                val nbChildren = nbChildrenPerLevel.getOrDefault(level, 1)
 
-                    // Did we succeed?
-                    if (newBackStack.size < backStack.size) {
-                        // Consider handled
-                        backStack = newBackStack
-                        BackPress.triggered = false
-                    } else {
-                        // Propagate to one level higher if we can't
-                        cantPopBackStack()
-                    }
-
-                    // In any case, don't forget to reset, so that after recompose
-                    // we can start from scratch
-                    nbChildrenDidNotHandleBackPress.value = 0
-                }
-            }
-
-            Container(
-                name = if (level == 0) "Root" else "L$level.$id",
-                bgColor = bgColor,
-                onButtonClick = { backStack = backStack.push(backStack.last().next()) }
-            ) {
-                Row {
-                    for (i in 1..nbChildren) {
-                        Child(backStack.last(), backPress, onChildFailedToHandle, level)
+                Container(
+                    name = if (level == 0) "Root" else "L$level.$id",
+                    bgColor = bgColor,
+                    onButtonClick = { backStack = backStack.push(backStack.last().next()) }
+                ) {
+                    Row {
+                        for (i in 1..nbChildren) {
+                            Child(backStack.last(), level)
+                        }
                     }
                 }
             }
@@ -203,8 +220,6 @@ interface SomeChild {
         @Composable
         private fun Child(
             currentRouting: Routing,
-            backPress: BackPress,
-            cantPopBackStackDelegate: () -> Unit,
             level: Int
         ) {
             when (currentRouting) {
@@ -220,8 +235,6 @@ interface SomeChild {
                  */
                 SubtreeA -> {
                     Content(
-                        backPress,
-                        cantPopBackStackDelegate,
                         level + 1,
                         "A",
                         colorSets[currentRouting]!![level],
@@ -229,16 +242,12 @@ interface SomeChild {
                     )
                 }
                 SubtreeB -> Content(
-                    backPress,
-                    cantPopBackStackDelegate,
                     level + 1,
                     "B",
                     colorSets[currentRouting]!![level],
                     currentRouting
                 )
                 SubtreeC -> Content(
-                    backPress,
-                    cantPopBackStackDelegate,
                     level + 1,
                     "C",
                     colorSets[currentRouting]!![level],

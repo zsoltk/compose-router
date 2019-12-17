@@ -9,12 +9,14 @@ import androidx.ui.material.MaterialTheme
 import androidx.ui.tooling.preview.Preview
 
 class MainActivity : AppCompatActivity() {
+    private val backPress = BackPress()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
                 HorizontalScroller {
-                    SomeChild.Root(BackPress) {
+                    SomeChild.Root(backPress) {
                         finish()
                     }
                 }
@@ -23,8 +25,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        BackPress.triggered = true
+        backPress.triggered = true
     }
+
 }
 
 
@@ -32,6 +35,6 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun DefaultPreview() {
     MaterialTheme {
-        SomeChild.Root(BackPress) {}
+        SomeChild.Root(BackPress()) {}
     }
 }

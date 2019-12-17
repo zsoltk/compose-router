@@ -3,6 +3,6 @@ package com.example.poormansbackstack
 import androidx.compose.Model
 
 @Model
-object BackPress {
+class BackPress {
     var triggered = false
 }
