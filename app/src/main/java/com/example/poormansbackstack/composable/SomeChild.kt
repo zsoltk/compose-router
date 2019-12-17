@@ -134,16 +134,13 @@ interface SomeChild {
             bgColor: Int,
             defaultRouting: Routing
         ) {
-            BackHandler(defaultRouting) { backStackState ->
-                var backStack by backStackState
-                println("level = $level, backstack = ${backStack.size}, routing = ${backStack.last().javaClass.simpleName}")
-
+            BackHandler(defaultRouting) { backStack ->
                 val nbChildren = nbChildrenPerLevel.getOrDefault(level, 1)
 
                 Container(
                     name = if (level == 0) "Root" else "L$level.$id",
                     bgColor = bgColor,
-                    onButtonClick = { backStack = backStack.push(backStack.last().next()) }
+                    onButtonClick = { backStack.push(backStack.last().next()) }
                 ) {
                     Row {
                         for (i in 1..nbChildren) {

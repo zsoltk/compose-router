@@ -1,22 +1,25 @@
 package com.example.poormansbackstack.backstack
 
-data class BackStack<T>(
-    private val defaultElement: T,
-    private val elements: List<T> = listOf(defaultElement)
-) {
-    val size: Int =
-        elements.size
+import androidx.compose.Model
+
+@Model
+class BackStack<T>(defaultElement: T) {
+    private var elements: List<T> = listOf(defaultElement)
+
+    val size: Int
+        get() = elements.size
 
     fun last(): T =
         elements.last()
 
-    fun push(element: T) = copy(
+    fun push(element: T) {
         elements = elements + element
-    )
+    }
 
-    fun pop(): BackStack<T> =
+    fun pop(): Boolean =
         // we won’t let the last item to be popped
-        if (elements.size <= 1) this else copy(
+        if (elements.size <= 1) false else {
             elements = elements.dropLast(1)
-        )
+            true
+        }
 }
