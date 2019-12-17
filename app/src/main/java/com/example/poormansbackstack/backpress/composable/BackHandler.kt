@@ -5,28 +5,21 @@ import androidx.compose.ambient
 import androidx.compose.memo
 import androidx.compose.onDispose
 import androidx.compose.unaryPlus
-import com.example.poormansbackstack.backpress.BackPressHandlers
+import com.example.poormansbackstack.backpress.HandlerList
 import com.example.poormansbackstack.backpress.backPressHandler
 import com.example.poormansbackstack.backstack.BackStack
 
 @Composable
 fun <T> BackHandler(routing: T, children: @Composable() (BackStack<T>) -> Unit) {
+    val upstream = +ambient(backPressHandler)
+    val downstream = +memo { HandlerList() }
+
     val backStack =  BackStack(routing)
-    val parentHandler = +ambient(backPressHandler)
-    val childrenHandler = +memo { BackPressHandlers() }
+    val handleBackPressHere: () -> Boolean = { downstream.handle() || backStack.pop() }
+    upstream.handlers.add(handleBackPressHere)
+    +onDispose { upstream.handlers.remove(handleBackPressHere) }
 
-    val handleBackStack = {
-        if (!childrenHandler.handleBackPress()) {
-            backStack.pop()
-        } else {
-            true
-        }
-    }
-
-    parentHandler.handlers.add(handleBackStack)
-    +onDispose { parentHandler.handlers.remove(handleBackStack) }
-
-    backPressHandler.Provider(value = childrenHandler) {
+    backPressHandler.Provider(value = downstream) {
         children(backStack)
     }
 }
