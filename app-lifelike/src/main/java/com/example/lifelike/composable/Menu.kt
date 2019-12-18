@@ -1,4 +1,4 @@
-package com.example.poormansbackstack.composable
+package com.example.lifelike.composable
 
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
@@ -10,9 +10,9 @@ import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.surface.Surface
-import com.example.poormansbackstack.composable.Menu.MenuItem.Hello
-import com.example.poormansbackstack.composable.Menu.MenuItem.LoremIpsum
-import com.example.poormansbackstack.composable.Menu.MenuItem.Profile
+import com.example.lifelike.composable.Menu.MenuItem.Hello
+import com.example.lifelike.composable.Menu.MenuItem.LoremIpsum
+import com.example.lifelike.composable.Menu.MenuItem.Profile
 
 interface Menu {
 

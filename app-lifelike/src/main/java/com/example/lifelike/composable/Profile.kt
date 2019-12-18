@@ -1,4 +1,4 @@
-package com.example.poormansbackstack.composable
+package com.example.lifelike.composable
 
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
@@ -8,7 +8,7 @@ import androidx.ui.layout.Column
 import androidx.ui.layout.Container
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
-import com.example.poormansbackstack.entity.User
+import com.example.lifelike.entity.User
 
 
 interface Profile {

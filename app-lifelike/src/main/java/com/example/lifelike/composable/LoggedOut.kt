@@ -1,4 +1,4 @@
-package com.example.poormansbackstack.composable
+package com.example.lifelike.composable
 
 import androidx.compose.Composable
 import androidx.compose.state
@@ -7,7 +7,7 @@ import androidx.ui.core.Text
 import androidx.ui.core.TextField
 import androidx.ui.layout.Column
 import androidx.ui.material.Button
-import com.example.poormansbackstack.entity.User
+import com.example.lifelike.entity.User
 
 interface LoggedOut {
 

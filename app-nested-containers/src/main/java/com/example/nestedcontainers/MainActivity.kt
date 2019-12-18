@@ -1,13 +1,15 @@
-package com.example.poormansbackstack
+package com.example.nestedcontainers
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.Composable
 import androidx.ui.core.setContent
+import androidx.ui.foundation.HorizontalScroller
 import androidx.ui.material.MaterialTheme
-import com.example.poormansbackstack.composable.Root
-import com.example.poormansbackstack.composable.Root.Routing.LoggedOut
-import com.github.zsoltk.backtrack.composable.RootBackHandler
+import androidx.ui.tooling.preview.Preview
 import com.github.zsoltk.backtrack.helper.HandlerList
+import com.github.zsoltk.backtrack.composable.RootBackHandler
+import com.example.nestedcontainers.composable.SomeChild
 
 class MainActivity : AppCompatActivity() {
     private val rootHandler = HandlerList()
@@ -16,8 +18,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                RootBackHandler(rootHandler) {
-                    Root.Content(LoggedOut)
+                HorizontalScroller {
+                    RootBackHandler(rootHandler) {
+                        SomeChild.Root()
+                    }
                 }
             }
         }
@@ -27,5 +31,14 @@ class MainActivity : AppCompatActivity() {
         if (!rootHandler.handle()) {
             super.onBackPressed()
         }
+    }
+}
+
+
+@Preview
+@Composable
+fun DefaultPreview() {
+    MaterialTheme {
+        SomeChild.Root()
     }
 }

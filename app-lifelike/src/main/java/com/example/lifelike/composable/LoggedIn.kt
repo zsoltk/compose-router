@@ -1,8 +1,8 @@
-package com.example.poormansbackstack.composable
+package com.example.lifelike.composable
 
 import androidx.compose.Composable
 import androidx.ui.layout.FlexColumn
-import com.example.poormansbackstack.entity.User
+import com.example.lifelike.entity.User
 import com.github.zsoltk.backtrack.composable.BackHandler
 
 interface LoggedIn {

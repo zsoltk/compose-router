@@ -1,4 +1,4 @@
 include ':app-nested-containers'
 include ':app-lifelike'
 include ':backtrack'
-rootProject.name = "Poor man's back stack with Compose"
+rootProject.name = "Backtrack for Compose"

@@ -1,4 +1,4 @@
-package com.example.poormansbackstack.composable
+package com.example.lifelike.composable
 
 import androidx.compose.Composable
 import androidx.ui.core.Text

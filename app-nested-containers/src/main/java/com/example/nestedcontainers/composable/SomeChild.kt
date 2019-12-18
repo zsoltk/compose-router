@@ -1,4 +1,4 @@
-package com.example.poormansbackstack.composable
+package com.example.nestedcontainers.composable
 
 import androidx.compose.Composable
 import androidx.compose.unaryPlus
@@ -14,10 +14,10 @@ import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.surface.Surface
 import androidx.ui.res.colorResource
-import com.example.poormansbackstack.R
-import com.example.poormansbackstack.composable.SomeChild.Routing.SubtreeA
-import com.example.poormansbackstack.composable.SomeChild.Routing.SubtreeB
-import com.example.poormansbackstack.composable.SomeChild.Routing.SubtreeC
+import com.example.nestedcontainers.R
+import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeA
+import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeB
+import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeC
 import com.github.zsoltk.backtrack.composable.BackHandler
 
 interface SomeChild {
