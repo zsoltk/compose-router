@@ -24,4 +24,12 @@ class BackStack<T>(
             elements = elements.dropLast(1)
             true
         }
+
+    fun replace(element: T) {
+        elements = elements.dropLast(1) + element
+    }
+
+    fun newRoot(element: T) {
+        elements = listOf(element)
+    }
 }
