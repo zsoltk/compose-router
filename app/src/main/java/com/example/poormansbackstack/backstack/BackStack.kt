@@ -3,7 +3,9 @@ package com.example.poormansbackstack.backstack
 import androidx.compose.Model
 
 @Model
-class BackStack<T>(defaultElement: T) {
+class BackStack<T>(
+    defaultElement: T
+) {
     private var elements: List<T> = listOf(defaultElement)
 
     val size: Int
