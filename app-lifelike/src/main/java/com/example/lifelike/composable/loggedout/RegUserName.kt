@@ -24,7 +24,7 @@ interface RegUserName {
 
         @Composable
         fun Content(user: User, onNext: () -> Unit) {
-            RegFlowPanel("Your name", onNext) {
+            RegFlowPanel("Your fake name", onNext) {
                 TextField(
                     value = user.name,
                     onValueChange = { user.name = it }

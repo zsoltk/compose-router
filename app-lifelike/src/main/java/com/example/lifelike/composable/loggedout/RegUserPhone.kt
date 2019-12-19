@@ -21,7 +21,7 @@ interface RegUserPhone {
 
         @Composable
         fun Content(user: User, onNext: () -> Unit) {
-            RegFlowPanel("Your phone number", onNext) {
+            RegFlowPanel("Your fake phone number", onNext) {
                 TextField(
                     value = user.phone,
                     onValueChange = { user.phone = it.filter { it.isDigit() } }

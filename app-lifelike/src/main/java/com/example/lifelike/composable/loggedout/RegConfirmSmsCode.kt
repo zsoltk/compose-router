@@ -18,7 +18,7 @@ interface RegConfirmSmsCode {
         fun Content(onNext: () -> Unit) {
             var code by +state { "0000" }
 
-            RegFlowPanel("Confirm SMS code", { if (code.length == 4) onNext() }) {
+            RegFlowPanel("Confirm SMS code that will never arrive", { if (code.length == 4) onNext() }) {
                 TextField(
                     value = code,
                     onValueChange = {

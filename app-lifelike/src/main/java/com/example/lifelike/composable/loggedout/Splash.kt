@@ -35,7 +35,7 @@ interface Splash {
                     alignment = Alignment.Center
                 ) {
                     BigButton(
-                        text = "Create button",
+                        text = "Create account",
                         onClick = onNext
                     )
                 }
