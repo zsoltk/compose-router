@@ -145,6 +145,7 @@ interface SomeChild {
                     Row {
                         for (i in 1..nbChildren) {
                             Child(
+                                i,
                                 backStack.last(),
                                 level
                             )
@@ -178,6 +179,7 @@ interface SomeChild {
          */
         @Composable
         private fun Child(
+            ord: Int,
             currentRouting: Routing,
             level: Int
         ) {
@@ -195,20 +197,20 @@ interface SomeChild {
                 SubtreeA -> {
                     Content(
                         level + 1,
-                        "A",
+                        "A$ord",
                         colorSets[currentRouting]!![level],
                         currentRouting
                     )
                 }
                 SubtreeB -> Content(
                     level + 1,
-                    "B",
+                    "B$ord",
                     colorSets[currentRouting]!![level],
                     currentRouting
                 )
                 SubtreeC -> Content(
                     level + 1,
-                    "C",
+                    "C$ord",
                     colorSets[currentRouting]!![level],
                     currentRouting
                 )
