@@ -9,6 +9,7 @@ import androidx.ui.core.TextField
 import androidx.ui.layout.Column
 import androidx.ui.layout.Container
 import androidx.ui.material.Button
+import com.example.lifelike.composable.loggedout.common.RegFlowPanel
 import com.example.lifelike.entity.User
 
 
@@ -17,13 +18,7 @@ interface RegFinal {
 
         @Composable
         fun Content(onNext: () -> Unit) {
-            Column {
-                Text(text = "Welcome on board!")
-                Button(
-                    text = "Next",
-                    onClick = { onNext() }
-                )
-            }
+            RegFlowPanel("Welcome on board!", onNext)
         }
     }
 }

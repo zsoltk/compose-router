@@ -41,7 +41,7 @@ interface LoggedOut {
                     Routing.Splash -> Splash.Content(onNext = currentRouting.next())
                     Routing.RegUserName -> RegUserName.Content(user = user, onNext = currentRouting.next())
                     Routing.RegUserPhone -> RegUserPhone.Content(user = user, onNext = currentRouting.next())
-                    Routing.RegConfirmSmsCode -> RegConfirmSmsCode.Content(user = user, onNext = currentRouting.next())
+                    Routing.RegConfirmSmsCode -> RegConfirmSmsCode.Content(onNext = currentRouting.next())
                     Routing.RegFinal -> RegFinal.Content(onNext = { onLoggedIn(user) })
                 }
             }
