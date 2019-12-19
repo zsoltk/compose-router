@@ -17,11 +17,10 @@ interface Root {
             BackHandler(defaultRouting) { backStack ->
                 when (val currentRouting = backStack.last()) {
                     is Routing.LoggedOut -> LoggedOut.Content(
+                        defaultRouting = LoggedOut.Routing.Splash,
                         onLoggedIn = { user ->
                             backStack.replace(
-                                Routing.LoggedIn(
-                                    user
-                                )
+                                Routing.LoggedIn(user)
                             )
                         }
                     )
@@ -29,7 +28,9 @@ interface Root {
                         defaultRouting = LoggedIn.Routing.Hello,
                         user = currentRouting.user,
                         onLogout = {
-                            backStack.replace(Routing.LoggedOut)
+                            backStack.replace(
+                                Routing.LoggedOut
+                            )
                         }
                     )
                 }

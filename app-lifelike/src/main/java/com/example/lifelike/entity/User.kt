@@ -1,5 +1,9 @@
 package com.example.lifelike.entity
 
-data class User(
-    val name: String
+import androidx.compose.Model
+
+@Model
+class User(
+    var name: String,
+    var phone: String
 )

@@ -1,4 +1,4 @@
-package com.example.lifelike.composable
+package com.example.lifelike.composable.loggedin
 
 import androidx.compose.Composable
 import androidx.ui.core.Alignment

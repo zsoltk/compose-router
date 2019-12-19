@@ -2,6 +2,10 @@ package com.example.lifelike.composable
 
 import androidx.compose.Composable
 import androidx.ui.layout.FlexColumn
+import com.example.lifelike.composable.loggedin.Hello
+import com.example.lifelike.composable.loggedin.LoremIpsum
+import com.example.lifelike.composable.loggedin.Menu
+import com.example.lifelike.composable.loggedin.Profile
 import com.example.lifelike.entity.User
 import com.github.zsoltk.backtrack.composable.BackHandler
 
