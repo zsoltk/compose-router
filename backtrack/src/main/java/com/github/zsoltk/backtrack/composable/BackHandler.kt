@@ -10,16 +10,19 @@ import com.github.zsoltk.backtrack.helper.backPressHandler
 import com.github.zsoltk.backtrack.helper.BackStack
 
 @Composable
-fun <T> BackHandler(routing: T, children: @Composable() (BackStack<T>) -> Unit) {
+fun <T> BackHandler(id: Any, routing: T, children: @Composable() (BackStack<T>) -> Unit) {
     val upstream = +ambient(backPressHandler)
-    val downstream = +memo { HandlerList() }
+    val saveRestorePoint = upstream.backStack?.lastEntry()?.children
+    val backStack = saveRestorePoint?.get(id) ?: BackStack(routing).also {
+        saveRestorePoint?.set(id, it)
+    }
+    val downstream = +memo { HandlerList(backStack) }
 
-    val backStack = BackStack(routing)
     val handleBackPressHere: () -> Boolean = { downstream.handle() || backStack.pop() }
     upstream.handlers.add(handleBackPressHere)
     +onDispose { upstream.handlers.remove(handleBackPressHere) }
 
     backPressHandler.Provider(value = downstream) {
-        children(backStack)
+        children(backStack as BackStack<T>)
     }
 }

@@ -134,7 +134,7 @@ interface SomeChild {
             bgColor: Int,
             defaultRouting: Routing
         ) {
-            BackHandler(defaultRouting) { backStack ->
+            BackHandler("$level.$id", defaultRouting) { backStack ->
                 val nbChildren = nbChildrenPerLevel.getOrDefault(level, 1)
 
                 Container(

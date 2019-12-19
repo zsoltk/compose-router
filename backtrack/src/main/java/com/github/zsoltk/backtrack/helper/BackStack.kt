@@ -6,16 +6,23 @@ import androidx.compose.Model
 class BackStack<T>(
     defaultElement: T
 ) {
-    private var elements: List<T> = listOf(defaultElement)
+    private var elements: List<Entry<T>> = listOf(Entry(defaultElement))
+
+    class Entry<T>(val element: T) {
+        val children: MutableMap<Any, BackStack<*>> = mutableMapOf()
+    }
 
     val size: Int
         get() = elements.size
 
-    fun last(): T =
+    internal fun lastEntry(): Entry<T> =
         elements.last()
 
+    fun last(): T =
+        elements.last().element
+
     fun push(element: T) {
-        elements = elements + element
+        elements = elements + Entry(element)
     }
 
     fun pop(): Boolean =
@@ -26,10 +33,10 @@ class BackStack<T>(
         }
 
     fun replace(element: T) {
-        elements = elements.dropLast(1) + element
+        elements = elements.dropLast(1) + Entry(element)
     }
 
     fun newRoot(element: T) {
-        elements = listOf(element)
+        elements = listOf(Entry(element))
     }
 }

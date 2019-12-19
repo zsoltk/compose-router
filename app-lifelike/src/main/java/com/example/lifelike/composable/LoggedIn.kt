@@ -19,7 +19,7 @@ interface LoggedIn {
     companion object {
         @Composable
         fun Content(defaultRouting: Routing, user: User, onLogout: () -> Unit) {
-            BackHandler(defaultRouting) { backStack ->
+            BackHandler("LoggedIn", defaultRouting) { backStack ->
                 val routing = backStack.last()
 
                 FlexColumn {

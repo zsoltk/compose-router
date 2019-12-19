@@ -14,7 +14,7 @@ interface Root {
     companion object {
         @Composable
         fun Content(defaultRouting: Routing) {
-            BackHandler(defaultRouting) { backStack ->
+            BackHandler("Root", defaultRouting) { backStack ->
                 when (val currentRouting = backStack.last()) {
                     is Routing.LoggedOut -> LoggedOut.Content(
                         defaultRouting = LoggedOut.Routing.Splash,

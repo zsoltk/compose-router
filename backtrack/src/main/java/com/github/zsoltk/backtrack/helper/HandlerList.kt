@@ -2,7 +2,9 @@ package com.github.zsoltk.backtrack.helper
 
 import androidx.compose.Ambient
 
-class HandlerList {
+class HandlerList(
+    var backStack: BackStack<*>? = null
+) {
     var handlers = mutableListOf<() -> Boolean>()
 
     fun handle(): Boolean =
