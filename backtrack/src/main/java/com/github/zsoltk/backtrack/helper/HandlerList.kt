@@ -11,7 +11,7 @@ class HandlerList(
         handlers.reversed().any { it() }
 }
 
-val backPressHandler: Ambient<HandlerList> =
+internal val backPressHandler: Ambient<HandlerList> =
     Ambient.of { throw IllegalStateException("Handler is not initialized") }
 
 
