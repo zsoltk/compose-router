@@ -21,14 +21,27 @@ interface Profile {
                     text = "You are logged in as:",
                     style = (+MaterialTheme.typography()).h4
                 )
-                Text(
-                    text = user.name,
-                    style = (+MaterialTheme.typography()).h5
-                )
+                Column {
+                    Text(
+                        text = user.name,
+                        style = (+MaterialTheme.typography()).h5
+                    )
+                    HeightSpacer(height = 16.dp)
+                    Text(
+                        text = user.phone,
+                        style = (+MaterialTheme.typography()).h5
+                    )
+                }
                 Button(onClick = onLogout) {
                     Text(text = "Log out")
                 }
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun ProfilePreview() {
+    Profile.Content(user = User("Demo user", "123456789"), onLogout = {})
 }
