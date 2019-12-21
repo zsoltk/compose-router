@@ -1,18 +1,39 @@
 package com.example.lifelike.composable.loggedin
 
 import androidx.compose.Composable
-import androidx.ui.core.Alignment
-import androidx.ui.core.Text
-import androidx.ui.layout.Container
+import com.example.lifelike.entity.Album
+import com.example.lifelike.entity.Photo
+import com.github.zsoltk.backtrack.composable.BackHandler
 
 
 interface Gallery {
-    companion object {
 
+    sealed class Routing {
+        object AlbumList : Routing()
+        data class PhotosOfAlbum(val album: Album) : Routing()
+        data class FullScreenPhoto(val photo: Photo) : Routing()
+    }
+
+    companion object {
         @Composable
-        fun Content() {
-            Container(expanded = true, alignment = Alignment.Center) {
-                Text(text = "Hello Compose!")
+        fun Content(defaultRouting: Routing) {
+            BackHandler("Gallery", defaultRouting) { backStack ->
+                when (val routing = backStack.last()) {
+                    is Routing.AlbumList -> AlbumList.Content(
+                        onAlbumSelected = {
+                            backStack.push(Routing.PhotosOfAlbum(it))
+                        })
+
+                    is Routing.PhotosOfAlbum -> PhotosOfAlbum.Content(
+                        album = routing.album,
+                        onPhotoSelected = {
+                            backStack.push(Routing.FullScreenPhoto(it))
+                        })
+
+                    is Routing.FullScreenPhoto -> FullScreenPhoto.Content(
+                        photo = routing.photo
+                    )
+                }
             }
         }
     }

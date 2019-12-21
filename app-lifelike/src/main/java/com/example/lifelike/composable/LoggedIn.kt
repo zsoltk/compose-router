@@ -3,6 +3,7 @@ package com.example.lifelike.composable
 import androidx.compose.Composable
 import androidx.ui.layout.FlexColumn
 import com.example.lifelike.composable.loggedin.Gallery
+import com.example.lifelike.composable.loggedin.Gallery.Routing.AlbumList
 import com.example.lifelike.composable.loggedin.News
 import com.example.lifelike.composable.loggedin.Menu
 import com.example.lifelike.composable.loggedin.Profile
@@ -44,7 +45,7 @@ interface LoggedIn {
          */
         @Composable
         private fun Routing.toContent(user: User, onLogout: () -> Unit) = when (this) {
-            is Routing.Gallery -> Gallery.Content()
+            is Routing.Gallery -> Gallery.Content(AlbumList)
             is Routing.News -> News.Content()
             is Routing.Profile -> Profile.Content(
                 user,

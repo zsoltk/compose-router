@@ -1,6 +1,8 @@
 package com.example.lifelike.composable
 
 import androidx.compose.Composable
+import com.example.lifelike.composable.LoggedIn.Routing.Gallery
+import com.example.lifelike.composable.LoggedOut.Routing.Splash
 import com.example.lifelike.entity.User
 import com.github.zsoltk.backtrack.composable.BackHandler
 
@@ -17,7 +19,7 @@ interface Root {
             BackHandler("Root", defaultRouting) { backStack ->
                 when (val currentRouting = backStack.last()) {
                     is Routing.LoggedOut -> LoggedOut.Content(
-                        defaultRouting = LoggedOut.Routing.Splash,
+                        defaultRouting = Splash,
                         onLoggedIn = { user ->
                             // play around with other back stack operations here:
                             backStack.newRoot(
@@ -26,7 +28,7 @@ interface Root {
                         }
                     )
                     is Routing.LoggedIn -> LoggedIn.Content(
-                        defaultRouting = LoggedIn.Routing.Gallery,
+                        defaultRouting = Gallery,
                         user = currentRouting.user,
                         onLogout = {
                             // play around with other back stack operations here:
