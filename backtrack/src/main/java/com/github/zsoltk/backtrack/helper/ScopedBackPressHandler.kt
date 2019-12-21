@@ -2,16 +2,16 @@ package com.github.zsoltk.backtrack.helper
 
 import androidx.compose.Ambient
 
-class HandlerList(
+class ScopedBackPressHandler(
     var backStack: BackStack<*>? = null
 ) {
-    var handlers = mutableListOf<() -> Boolean>()
+    var children = mutableListOf<() -> Boolean>()
 
     fun handle(): Boolean =
-        handlers.reversed().any { it() }
+        children.reversed().any { it() }
 }
 
-internal val backPressHandler: Ambient<HandlerList> =
+internal val backPressHandler: Ambient<ScopedBackPressHandler> =
     Ambient.of { throw IllegalStateException("backPressHandler is not initialized") }
 
 

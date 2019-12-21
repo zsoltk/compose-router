@@ -7,12 +7,12 @@ import androidx.ui.core.setContent
 import androidx.ui.foundation.HorizontalScroller
 import androidx.ui.material.MaterialTheme
 import androidx.ui.tooling.preview.Preview
-import com.github.zsoltk.backtrack.helper.HandlerList
+import com.github.zsoltk.backtrack.helper.ScopedBackPressHandler
 import com.github.zsoltk.backtrack.composable.RootBackHandler
 import com.example.nestedcontainers.composable.SomeChild
 
 class MainActivity : AppCompatActivity() {
-    private val rootHandler = HandlerList()
+    private val rootHandler = ScopedBackPressHandler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

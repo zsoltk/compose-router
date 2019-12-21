@@ -5,7 +5,7 @@ import androidx.compose.ambient
 import androidx.compose.memo
 import androidx.compose.onDispose
 import androidx.compose.unaryPlus
-import com.github.zsoltk.backtrack.helper.HandlerList
+import com.github.zsoltk.backtrack.helper.ScopedBackPressHandler
 import com.github.zsoltk.backtrack.helper.backPressHandler
 import com.github.zsoltk.backtrack.helper.BackStack
 
@@ -24,11 +24,11 @@ fun <T> BackHandler(id: Any, routing: T, children: @Composable() (BackStack<T>) 
     val backStack = saveRestorePoint?.get(id) ?: BackStack(routing).also {
         saveRestorePoint?.set(id, it)
     }
-    val downstream = +memo { HandlerList(backStack) }
+    val downstream = +memo { ScopedBackPressHandler(backStack) }
 
     val handleBackPressHere: () -> Boolean = { downstream.handle() || backStack.pop() }
-    upstream.handlers.add(handleBackPressHere)
-    +onDispose { upstream.handlers.remove(handleBackPressHere) }
+    upstream.children.add(handleBackPressHere)
+    +onDispose { upstream.children.remove(handleBackPressHere) }
 
     backPressHandler.Provider(value = downstream) {
         children(backStack as BackStack<T>)
