@@ -2,8 +2,8 @@ package com.example.lifelike.composable
 
 import androidx.compose.Composable
 import androidx.ui.layout.FlexColumn
-import com.example.lifelike.composable.loggedin.Hello
-import com.example.lifelike.composable.loggedin.LoremIpsum
+import com.example.lifelike.composable.loggedin.Gallery
+import com.example.lifelike.composable.loggedin.News
 import com.example.lifelike.composable.loggedin.Menu
 import com.example.lifelike.composable.loggedin.Profile
 import com.example.lifelike.entity.User
@@ -11,8 +11,8 @@ import com.github.zsoltk.backtrack.composable.BackHandler
 
 interface LoggedIn {
     sealed class Routing {
-        object Hello : Routing()
-        object LoremIpsum : Routing()
+        object Gallery : Routing()
+        object News : Routing()
         object Profile : Routing()
     }
 
@@ -44,8 +44,8 @@ interface LoggedIn {
          */
         @Composable
         private fun Routing.toContent(user: User, onLogout: () -> Unit) = when (this) {
-            is Routing.Hello -> Hello.Content()
-            is Routing.LoremIpsum -> LoremIpsum.Content()
+            is Routing.Gallery -> Gallery.Content()
+            is Routing.News -> News.Content()
             is Routing.Profile -> Profile.Content(
                 user,
                 onLogout
@@ -58,8 +58,8 @@ interface LoggedIn {
         private fun Routing.toMenuState() =
             Menu.State(
                 currentSelection = when (this) {
-                    is Routing.Hello -> Menu.MenuItem.Hello
-                    is Routing.LoremIpsum -> Menu.MenuItem.LoremIpsum
+                    is Routing.Gallery -> Menu.MenuItem.Gallery
+                    is Routing.News -> Menu.MenuItem.News
                     is Routing.Profile -> Menu.MenuItem.Profile
                 }
             )
@@ -68,8 +68,8 @@ interface LoggedIn {
          * Maps the MenuItem to the corresponding Routing choice
          */
         private fun Menu.MenuItem.toRouting(): Routing = when (this) {
-            is Menu.MenuItem.Hello -> Routing.Hello
-            is Menu.MenuItem.LoremIpsum -> Routing.LoremIpsum
+            is Menu.MenuItem.Gallery -> Routing.Gallery
+            is Menu.MenuItem.News -> Routing.News
             is Menu.MenuItem.Profile -> Routing.Profile
         }
     }

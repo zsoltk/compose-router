@@ -9,7 +9,7 @@ import androidx.ui.layout.Spacing
 import androidx.ui.tooling.preview.Preview
 
 
-interface LoremIpsum {
+interface News {
 
     companion object {
         @Composable
@@ -35,5 +35,5 @@ interface LoremIpsum {
 @Preview
 @Composable
 fun LoremIpsumPreview() {
-    LoremIpsum.Content()
+    News.Content()
 }

@@ -26,7 +26,7 @@ interface Root {
                         }
                     )
                     is Routing.LoggedIn -> LoggedIn.Content(
-                        defaultRouting = LoggedIn.Routing.Hello,
+                        defaultRouting = LoggedIn.Routing.Gallery,
                         user = currentRouting.user,
                         onLogout = {
                             // play around with other back stack operations here:

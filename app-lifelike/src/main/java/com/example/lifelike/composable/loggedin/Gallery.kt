@@ -6,7 +6,7 @@ import androidx.ui.core.Text
 import androidx.ui.layout.Container
 
 
-interface Hello {
+interface Gallery {
     companion object {
 
         @Composable

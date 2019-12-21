@@ -10,20 +10,20 @@ import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.surface.Surface
-import com.example.lifelike.composable.loggedin.Menu.MenuItem.Hello
-import com.example.lifelike.composable.loggedin.Menu.MenuItem.LoremIpsum
+import com.example.lifelike.composable.loggedin.Menu.MenuItem.Gallery
+import com.example.lifelike.composable.loggedin.Menu.MenuItem.News
 import com.example.lifelike.composable.loggedin.Menu.MenuItem.Profile
 
 interface Menu {
 
     sealed class MenuItem {
-        object Hello : MenuItem()
-        object LoremIpsum : MenuItem()
+        object Gallery : MenuItem()
+        object News : MenuItem()
         object Profile : MenuItem()
     }
 
     data class State(
-        val menuItems: List<MenuItem> = listOf(Hello, LoremIpsum, Profile),
+        val menuItems: List<MenuItem> = listOf(Gallery, News, Profile),
         val currentSelection: MenuItem
     )
 
@@ -55,8 +55,8 @@ interface Menu {
                 Button(onClick = { onClick.invoke(item) }, style = TextButtonStyle()) {
                     Text(
                         text = when (item) {
-                            Hello -> "Hello"
-                            LoremIpsum -> "Lorem ipsum"
+                            Gallery -> "Gallery"
+                            News -> "News"
                             Profile -> "Profile"
                         },
                         style = (+MaterialTheme.typography()).body2.copy(
