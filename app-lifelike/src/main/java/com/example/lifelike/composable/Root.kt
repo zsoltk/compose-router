@@ -19,7 +19,8 @@ interface Root {
                     is Routing.LoggedOut -> LoggedOut.Content(
                         defaultRouting = LoggedOut.Routing.Splash,
                         onLoggedIn = { user ->
-                            backStack.replace(
+                            // play around with other back stack operations here:
+                            backStack.newRoot(
                                 Routing.LoggedIn(user)
                             )
                         }
@@ -28,7 +29,8 @@ interface Root {
                         defaultRouting = LoggedIn.Routing.Hello,
                         user = currentRouting.user,
                         onLogout = {
-                            backStack.replace(
+                            // play around with other back stack operations here:
+                            backStack.newRoot(
                                 Routing.LoggedOut
                             )
                         }

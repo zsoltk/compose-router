@@ -12,6 +12,6 @@ class HandlerList(
 }
 
 internal val backPressHandler: Ambient<HandlerList> =
-    Ambient.of { throw IllegalStateException("Handler is not initialized") }
+    Ambient.of { throw IllegalStateException("backPressHandler is not initialized") }
 
 
