@@ -25,6 +25,11 @@ class BackStack<T>(
         elements = elements + Entry(element)
     }
 
+    fun pushAndDropNested(element: T) {
+        elements.last().children.clear()
+        push(element)
+    }
+
     fun pop(): Boolean =
         // we won’t let the last item to be popped
         if (elements.size <= 1) false else {
