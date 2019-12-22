@@ -39,9 +39,9 @@ interface SomeChild {
                 R.color.red_200,
                 R.color.red_300,
                 R.color.red_400,
-                R.color.red_500,
                 R.color.red_600,
-                R.color.red_700
+                R.color.red_700,
+                R.color.red_800
             ),
             SubtreeB to listOf(
                 R.color.green_200,
@@ -140,6 +140,7 @@ interface SomeChild {
 
                 Container(
                     name = if (level == 0) "Root" else "L$level.$id",
+                    size =  backStack.size,
                     bgColor = bgColor,
                     onButtonClick = { backStack.push(backStack.last().next()) }
                 ) {
@@ -162,6 +163,7 @@ interface SomeChild {
         @Composable
         private fun Container(
             name: String,
+            size: Int,
             bgColor: Int,
             onButtonClick: () -> Unit,
             children: @Composable() () -> Unit
@@ -171,7 +173,7 @@ interface SomeChild {
                     Ripple(bounded = true) {
                         Button(text = "$name.NEXT", onClick = onButtonClick)
                     }
-                    HeightSpacer(height = 16.dp)
+                    Text("Back stack: $size")
                     children()
                 }
             }
