@@ -12,6 +12,7 @@ import androidx.ui.layout.Row
 import androidx.ui.layout.Spacing
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Surface
 import androidx.ui.res.colorResource
 import com.example.nestedcontainers.R
@@ -167,7 +168,9 @@ interface SomeChild {
         ) {
             Surface(color = +colorResource(bgColor)) {
                 Column(modifier = Spacing(16.dp)) {
-                    Button(text = "$name.NEXT", onClick = onButtonClick)
+                    Ripple(bounded = true) {
+                        Button(text = "$name.NEXT", onClick = onButtonClick)
+                    }
                     HeightSpacer(height = 16.dp)
                     children()
                 }

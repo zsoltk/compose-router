@@ -9,6 +9,7 @@ import androidx.ui.foundation.DrawImage
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.*
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.ripple.Ripple
 import androidx.ui.res.imageResource
 import androidx.ui.text.font.FontWeight
 import androidx.ui.tooling.preview.Preview
@@ -36,15 +37,22 @@ interface AlbumList {
             val image = +imageResource(R.drawable.placeholder)
             val typography = +MaterialTheme.typography()
 
-            Clickable(onClick = { onAlbumSelected(album) }) {
-                Row(modifier = Spacing(all = 16.dp)) {
-                    Container(modifier = Size(40.dp, 40.dp)) {
-                        DrawImage(image)
-                    }
-                    WidthSpacer(width = 16.dp)
-                    Column {
-                        Text(album.name, style = typography.subtitle1.copy(fontWeight = FontWeight.Bold))
-                        Text("${album.photos.size} photos", style = typography.body1)
+            Ripple(bounded = true) {
+                Clickable(onClick = { onAlbumSelected(album) }) {
+                    FlexRow(modifier = Spacing(all = 16.dp)) {
+                        inflexible {
+                            Container(modifier = Size(40.dp, 40.dp)) {
+                                DrawImage(image)
+                            }
+                            WidthSpacer(width = 16.dp)
+                            Column {
+                                Text(album.name, style = typography.subtitle1.copy(fontWeight = FontWeight.Bold))
+                                Text("${album.photos.size} photos", style = typography.body1)
+                            }
+                        }
+                        flexible(0f) {
+                            Container(expanded = true) {}
+                        }
                     }
                 }
             }

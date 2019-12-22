@@ -10,7 +10,10 @@ import androidx.ui.material.MaterialTheme
 fun BigButton(text: String, onClick: () -> Unit) {
     Button(
         text = text.toUpperCase(),
-        style = ContainedButtonStyle().copy(textStyle = (+MaterialTheme.typography()).body1),
+        style = ContainedButtonStyle().copy(
+            textStyle = (+MaterialTheme.typography()).body1,
+            rippleColor = (+MaterialTheme.colors()).onSurface
+        ),
         onClick = onClick
     )
 }
