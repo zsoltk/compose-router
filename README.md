@@ -33,7 +33,7 @@ allprojects {
 
 Add the dependency:
 ```groovy
-implementation 'com.github.zsoltk.backtrack:backtrack:{latest-version}'
+implementation 'com.github.zsoltk:backtrack:{latest-version}'
 ```
 
 ## Setup
