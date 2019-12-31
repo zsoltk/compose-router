@@ -39,7 +39,7 @@ interface SomeChild {
         private const val MAX_NESTING_LEVEL = 5
 
         private val colorSets = mapOf(
-            SubtreeA to listOf(
+            Color.Red to listOf(
                 R.color.red_200,
                 R.color.red_300,
                 R.color.red_400,
@@ -47,7 +47,7 @@ interface SomeChild {
                 R.color.red_700,
                 R.color.red_800
             ),
-            SubtreeB to listOf(
+            Color.Green to listOf(
                 R.color.green_200,
                 R.color.green_300,
                 R.color.green_400,
@@ -55,7 +55,7 @@ interface SomeChild {
                 R.color.green_600,
                 R.color.green_700
             ),
-            SubtreeC to listOf(
+            Color.Blue to listOf(
                 R.color.blue_200,
                 R.color.blue_300,
                 R.color.blue_400,
@@ -216,24 +216,24 @@ interface SomeChild {
                  * ("Profile", "Settings", "Chat", "Gallery", etc.) with different
                  * Composables on the right side.
                  */
-                SubtreeA -> {
+                is SubtreeA -> {
                     Content(
                         level + 1,
                         "A$ord",
-                        colorSets[currentRouting]!![level],
+                        colorSets[Color.Red]!![level],
                         currentRouting
                     )
                 }
-                SubtreeB -> Content(
+                is SubtreeB -> Content(
                     level + 1,
                     "B$ord",
-                    colorSets[currentRouting]!![level],
+                    colorSets[Color.Green]!![level],
                     currentRouting
                 )
-                SubtreeC -> Content(
+                is SubtreeC -> Content(
                     level + 1,
                     "C$ord",
-                    colorSets[currentRouting]!![level],
+                    colorSets[Color.Blue]!![level],
                     currentRouting
                 )
             }
@@ -241,9 +241,9 @@ interface SomeChild {
 
         private fun Routing.next(): Routing =
             when (this) {
-                SubtreeA -> SubtreeB
-                SubtreeB -> SubtreeC
-                SubtreeC -> SubtreeA
+                is SubtreeA -> SubtreeB
+                is SubtreeB -> SubtreeC
+                is SubtreeC -> SubtreeA
             }
     }
 }
