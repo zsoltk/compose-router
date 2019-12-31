@@ -4,7 +4,7 @@ import androidx.compose.Composable
 import com.example.lifelike.composable.LoggedIn.Routing.Gallery
 import com.example.lifelike.composable.LoggedOut.Routing.Splash
 import com.example.lifelike.entity.User
-import com.github.zsoltk.compose.router.transient.BackHandler
+import com.github.zsoltk.compose.router.BackHandler
 
 interface Root {
 

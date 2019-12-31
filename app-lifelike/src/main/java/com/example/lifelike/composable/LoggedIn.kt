@@ -8,7 +8,7 @@ import com.example.lifelike.composable.loggedin.News
 import com.example.lifelike.composable.loggedin.Menu
 import com.example.lifelike.composable.loggedin.Profile
 import com.example.lifelike.entity.User
-import com.github.zsoltk.compose.router.transient.BackHandler
+import com.github.zsoltk.compose.router.BackHandler
 
 interface LoggedIn {
     sealed class Routing {

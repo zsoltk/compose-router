@@ -1,4 +1,4 @@
-package com.github.zsoltk.compose.router.transient
+package com.github.zsoltk.compose.router
 
 import androidx.compose.Ambient
 import androidx.compose.Composable

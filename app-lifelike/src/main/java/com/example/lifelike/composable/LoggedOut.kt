@@ -7,7 +7,7 @@ import com.example.lifelike.composable.loggedout.RegUserName
 import com.example.lifelike.composable.loggedout.RegUserPhone
 import com.example.lifelike.composable.loggedout.Splash
 import com.example.lifelike.entity.User
-import com.github.zsoltk.compose.router.transient.BackHandler
+import com.github.zsoltk.compose.router.BackHandler
 
 interface LoggedOut {
 
