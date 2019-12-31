@@ -6,10 +6,10 @@ import androidx.ui.core.setContent
 import androidx.ui.material.MaterialTheme
 import com.example.lifelike.composable.Root
 import com.example.lifelike.composable.Root.Routing.LoggedOut
-import com.github.zsoltk.backtrack.helper.ScopedBackPressHandler
+import com.github.zsoltk.compose.backpress.BackPressHandler
 
 class MainActivity : AppCompatActivity() {
-    private val backPressHandler = ScopedBackPressHandler()
+    private val backPressHandler = BackPressHandler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

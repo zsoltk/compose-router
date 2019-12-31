@@ -6,9 +6,10 @@ import androidx.compose.ambient
 import androidx.compose.memo
 import androidx.compose.onCommit
 import androidx.compose.unaryPlus
-import com.github.zsoltk.backtrack.helper.ScopedBackPressHandler
-import com.github.zsoltk.backtrack.helper.backPressHandler
+import com.github.zsoltk.compose.backpress.BackPressHandler
+import com.github.zsoltk.compose.backpress.backPressHandler
 import com.github.zsoltk.backtrack.helper.BackStack
+import com.github.zsoltk.compose.savedinstancestate.savedInstanceState
 import java.io.Serializable
 
 private const val KEY_BACK_STACK = "backStack"
@@ -27,7 +28,7 @@ private fun keyForRouting(masterKey: String, indexOfRoutingInBackStack: Int) =
 fun <T : Serializable> BackHandler(contextId: String, defaultRouting: T, children: @Composable() (BackStack<T>) -> Unit) {
     val upstreamBundle = +ambient(savedInstanceState)
     val upstreamHandler = +ambient(backPressHandler)
-    val localHandler = +memo { ScopedBackPressHandler("${upstreamHandler.id}.$contextId") }
+    val localHandler = +memo { BackPressHandler("${upstreamHandler.id}.$contextId") }
     val localBundle = fetchLocalBundle(upstreamBundle, localHandler.id)
     val backStack = fetchBackStack(localBundle, localHandler.id, defaultRouting)
     val handleBackPressHere: () -> Boolean = { localHandler.handle() || backStack.pop() }

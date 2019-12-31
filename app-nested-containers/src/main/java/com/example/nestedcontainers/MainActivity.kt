@@ -7,12 +7,12 @@ import androidx.ui.core.setContent
 import androidx.ui.foundation.HorizontalScroller
 import androidx.ui.material.MaterialTheme
 import androidx.ui.tooling.preview.Preview
-import com.github.zsoltk.backtrack.helper.ScopedBackPressHandler
+import com.github.zsoltk.compose.backpress.BackPressHandler
 import com.example.nestedcontainers.composable.SomeChild
-import com.github.zsoltk.backtrack.composable.TimeCapsule
+import com.github.zsoltk.compose.savedinstancestate.TimeCapsule
 
 class MainActivity : AppCompatActivity() {
-    private val backPressHandler = ScopedBackPressHandler()
+    private val backPressHandler = BackPressHandler()
     private val timeCapsule = TimeCapsule()
 
     override fun onCreate(savedInstanceState: Bundle?) {

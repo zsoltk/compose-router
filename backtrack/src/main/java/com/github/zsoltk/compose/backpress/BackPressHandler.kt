@@ -1,13 +1,13 @@
-package com.github.zsoltk.backtrack.helper
+package com.github.zsoltk.compose.backpress
 
 import androidx.compose.Ambient
 import androidx.compose.Composable
 
-internal val backPressHandler: Ambient<ScopedBackPressHandler> =
+internal val backPressHandler: Ambient<BackPressHandler> =
     Ambient.of { throw IllegalStateException("backPressHandler is not initialized") }
 
 
-class ScopedBackPressHandler(
+class BackPressHandler(
     val id: String = "Root"
 ) {
     var children = mutableListOf<() -> Boolean>()

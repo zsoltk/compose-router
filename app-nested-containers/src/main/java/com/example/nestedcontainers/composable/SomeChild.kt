@@ -22,7 +22,7 @@ import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeA
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeB
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeC
 import com.github.zsoltk.backtrack.composable.BackHandler
-import com.github.zsoltk.backtrack.composable.savedInstanceState
+import com.github.zsoltk.compose.savedinstancestate.savedInstanceState
 import java.io.Serializable
 
 interface SomeChild {
