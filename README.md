@@ -5,13 +5,14 @@
 ## What's this?
 Routing functionality for Jetpack Compose with back stack:
 
-- Helps to map your whole app structure on Compose, not just the UI parts
-- Branch on current routing and compose any other @Composable
+- Helps to map your whole app structure using Compose — not just the UI parts
+- Supports a single-Activity approach — no Fragments, no Navigation component needed
+- Simply branch on current routing and compose any other @Composable
 - Back stack saves the history of routing
 - Can be integrated with automatic back press handling to go back in screen history
 - Can be integrated with automatic scoped `savedInstanceState` persistence
 
-Compatible with version **0.1.0-dev03**
+Compatible with Compose version **0.1.0-dev03**
 
 ## Sample apps
 
@@ -82,6 +83,8 @@ fun GalleryView(defaultRouting: Routing) {
     }
 }
 ```
+
+For more usage examples see the example apps.
 
 To go back in the back stack, you can either call the `.pop()` method programmatically, or just press the back button on the device (see next section for back press integration).
 
