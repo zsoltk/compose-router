@@ -5,11 +5,9 @@ import java.io.Serializable
 
 @Model
 class BackStack<T : Serializable> internal constructor(
-    internal var elements: ArrayList<T> // ArrayList for Serializable temporarily
+    internal var elements: ArrayList<T>, // ArrayList for Serializable temporarily
+    private var onElementRemoved: ((Int) -> Unit)
 ) {
-    @Transient
-    internal var onElementRemoved: ((Int) -> Unit)? = null
-
     val lastIndex: Int
         get() = elements.lastIndex
 
@@ -24,14 +22,14 @@ class BackStack<T : Serializable> internal constructor(
     }
 
     fun pushAndDropNested(element: T) {
-        onElementRemoved?.invoke(lastIndex)
+        onElementRemoved.invoke(lastIndex)
         push(element)
     }
 
     fun pop(): Boolean =
         // we won’t let the last item to be popped
         if (size <= 1) false else {
-            onElementRemoved?.invoke(lastIndex)
+            onElementRemoved.invoke(lastIndex)
             elements = ArrayList(
                 elements.subList(0, lastIndex) // exclusive
             )
@@ -39,7 +37,7 @@ class BackStack<T : Serializable> internal constructor(
         }
 
     fun replace(element: T) {
-        onElementRemoved?.invoke(lastIndex)
+        onElementRemoved.invoke(lastIndex)
         elements = ArrayList(
             elements
                 .subList(0, elements.lastIndex - 1)
@@ -49,7 +47,7 @@ class BackStack<T : Serializable> internal constructor(
 
     fun newRoot(element: T) {
         elements.indices.reversed().forEach { index ->
-            onElementRemoved?.invoke(index)
+            onElementRemoved.invoke(index)
         }
         elements = arrayListOf(element)
     }
