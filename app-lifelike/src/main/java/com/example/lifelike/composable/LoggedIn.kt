@@ -8,7 +8,7 @@ import com.example.lifelike.composable.loggedin.News
 import com.example.lifelike.composable.loggedin.Menu
 import com.example.lifelike.composable.loggedin.Profile
 import com.example.lifelike.entity.User
-import com.github.zsoltk.compose.router.BackHandler
+import com.github.zsoltk.compose.router.Router
 
 interface LoggedIn {
     sealed class Routing {
@@ -20,7 +20,7 @@ interface LoggedIn {
     companion object {
         @Composable
         fun Content(defaultRouting: Routing, user: User, onLogout: () -> Unit) {
-            BackHandler("LoggedIn", defaultRouting) { backStack ->
+            Router("LoggedIn", defaultRouting) { backStack ->
                 val routing = backStack.last()
 
                 FlexColumn {

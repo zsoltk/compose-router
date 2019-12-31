@@ -3,7 +3,7 @@ package com.example.lifelike.composable.loggedin
 import androidx.compose.Composable
 import com.example.lifelike.entity.Album
 import com.example.lifelike.entity.Photo
-import com.github.zsoltk.compose.router.BackHandler
+import com.github.zsoltk.compose.router.Router
 
 interface Gallery {
 
@@ -16,7 +16,7 @@ interface Gallery {
     companion object {
         @Composable
         fun Content(defaultRouting: Routing) {
-            BackHandler("Gallery", defaultRouting) { backStack ->
+            Router("Gallery", defaultRouting) { backStack ->
                 when (val routing = backStack.last()) {
                     is Routing.AlbumList -> AlbumList.Content(
                         onAlbumSelected = {

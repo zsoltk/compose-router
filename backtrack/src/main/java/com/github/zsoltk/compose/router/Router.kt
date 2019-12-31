@@ -18,6 +18,17 @@ private val backStackMap = Ambient.of<MutableMap<Any, BackStack<*>>> {
     mutableMapOf()
 }
 
+@Deprecated(
+    message = "Use Router instead",
+    replaceWith = ReplaceWith(
+        "Router(contextId, defaultRouting, children)",
+        "com.github.zsoltk.compose.router.Router"),
+    level = DeprecationLevel.ERROR
+)
+fun <T> BackHandler(contextId: String, defaultRouting: T, children: @Composable() (BackStack<T>) -> Unit) {
+    Router(contextId, defaultRouting, children)
+}
+
 /**
  * Adds back stack functionality with bubbling up fallbacks if the back stack cannot be popped
  * on this level.
@@ -26,7 +37,7 @@ private val backStackMap = Ambient.of<MutableMap<Any, BackStack<*>>> {
  * @param children  The @Composable to wrap with this BackHandler. It will have access to the back stack.
  */
 @Composable
-fun <T> BackHandler(contextId: String, defaultRouting: T, children: @Composable() (BackStack<T>) -> Unit) {
+fun <T> Router(contextId: String, defaultRouting: T, children: @Composable() (BackStack<T>) -> Unit) {
     val upstreamHandler = +ambient(backPressHandler)
     val localHandler = +memo { BackPressHandler("${upstreamHandler.id}.$contextId") }
     val backStack = fetchBackStack(localHandler.id, defaultRouting)

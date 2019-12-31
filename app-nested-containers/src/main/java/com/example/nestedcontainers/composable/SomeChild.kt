@@ -21,7 +21,7 @@ import com.example.nestedcontainers.R
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeA
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeB
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeC
-import com.github.zsoltk.compose.router.BackHandler
+import com.github.zsoltk.compose.router.Router
 import com.github.zsoltk.compose.savedinstancestate.savedInstanceState
 
 interface SomeChild {
@@ -138,7 +138,7 @@ interface SomeChild {
             bgColor: Int,
             defaultRouting: Routing
         ) {
-            BackHandler("$level.$id", defaultRouting) { backStack ->
+            Router("$level.$id", defaultRouting) { backStack ->
                 val nbChildren = nbChildrenPerLevel.getOrDefault(level, 1)
 
                 Container(

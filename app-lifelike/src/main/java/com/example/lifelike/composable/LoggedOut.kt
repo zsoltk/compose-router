@@ -7,7 +7,7 @@ import com.example.lifelike.composable.loggedout.RegUserName
 import com.example.lifelike.composable.loggedout.RegUserPhone
 import com.example.lifelike.composable.loggedout.Splash
 import com.example.lifelike.entity.User
-import com.github.zsoltk.compose.router.BackHandler
+import com.github.zsoltk.compose.router.Router
 
 interface LoggedOut {
 
@@ -24,7 +24,7 @@ interface LoggedOut {
         fun Content(defaultRouting: Routing, onLoggedIn: (User) -> Unit) {
             val user = User("Demo user", "123456789")
 
-            BackHandler("LoggedOut", defaultRouting) { backStack ->
+            Router("LoggedOut", defaultRouting) { backStack ->
                 fun Routing.next(): () -> Unit = {
                     when (this) {
                         Routing.Splash -> Routing.RegUserName

@@ -4,7 +4,7 @@ import androidx.compose.Composable
 import com.example.lifelike.composable.LoggedIn.Routing.Gallery
 import com.example.lifelike.composable.LoggedOut.Routing.Splash
 import com.example.lifelike.entity.User
-import com.github.zsoltk.compose.router.BackHandler
+import com.github.zsoltk.compose.router.Router
 
 interface Root {
 
@@ -16,7 +16,7 @@ interface Root {
     companion object {
         @Composable
         fun Content(defaultRouting: Routing) {
-            BackHandler("Root", defaultRouting) { backStack ->
+            Router("Root", defaultRouting) { backStack ->
                 when (val currentRouting = backStack.last()) {
                     is Routing.LoggedOut -> LoggedOut.Content(
                         defaultRouting = Splash,
