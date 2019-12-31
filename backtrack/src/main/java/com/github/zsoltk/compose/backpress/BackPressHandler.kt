@@ -16,7 +16,7 @@ class BackPressHandler(
         children.reversed().any { it() }
 
     @Composable
-    fun Provide(children: @Composable() () -> Unit) {
+    fun Provider(children: @Composable() () -> Unit) {
         backPressHandler.Provider(value = this) {
             children()
         }

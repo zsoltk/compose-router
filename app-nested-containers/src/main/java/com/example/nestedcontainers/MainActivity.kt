@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
             MaterialTheme {
                 HorizontalScroller {
                     timeCapsule.Provider(savedInstanceState) {
-                        backPressHandler.Provide {
+                        backPressHandler.Provider {
                             SomeChild.Root()
                         }
                     }
