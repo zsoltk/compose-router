@@ -7,16 +7,21 @@ import androidx.ui.material.MaterialTheme
 import com.example.lifelike.composable.Root
 import com.example.lifelike.composable.Root.Routing.LoggedOut
 import com.github.zsoltk.compose.backpress.BackPressHandler
+import com.github.zsoltk.compose.savedinstancestate.TimeCapsule
 
 class MainActivity : AppCompatActivity() {
     private val backPressHandler = BackPressHandler()
+    private val timeCapsule = TimeCapsule()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                backPressHandler.Provide {
-                    Root.Content(LoggedOut)
+                backPressHandler.Provider {
+                    timeCapsule.Provider(savedInstanceState) {
+                        Root.Content(LoggedOut)
+                    }
+
                 }
             }
         }
@@ -26,5 +31,10 @@ class MainActivity : AppCompatActivity() {
         if (!backPressHandler.handle()) {
             super.onBackPressed()
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        timeCapsule.onSaveInstanceState(outState)
     }
 }
