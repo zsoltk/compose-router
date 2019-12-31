@@ -1,6 +1,8 @@
-# Backtrack
+![compose-router](https://i.imgur.com/Ali4NJi.png)
+
 [![Version](https://jitpack.io/v/zsoltk/compose-router.svg)](https://jitpack.io/#zsoltk/backtrack)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+
 
 ## What's this?
 Routing functionality for Jetpack Compose with back stack:
