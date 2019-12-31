@@ -8,7 +8,7 @@ import com.example.lifelike.composable.loggedin.News
 import com.example.lifelike.composable.loggedin.Menu
 import com.example.lifelike.composable.loggedin.Profile
 import com.example.lifelike.entity.User
-import com.github.zsoltk.backtrack.composable.BackHandler
+import com.github.zsoltk.compose.router.serializable.BackHandler
 import java.io.Serializable
 
 interface LoggedIn {

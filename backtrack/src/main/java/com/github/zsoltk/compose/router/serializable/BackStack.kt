@@ -1,4 +1,4 @@
-package com.github.zsoltk.backtrack.helper
+package com.github.zsoltk.compose.router.serializable
 
 import androidx.compose.Model
 import java.io.Serializable

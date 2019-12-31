@@ -1,4 +1,4 @@
-package com.github.zsoltk.backtrack.composable
+package com.github.zsoltk.compose.router.serializable
 
 import android.os.Bundle
 import androidx.compose.Composable
@@ -6,7 +6,6 @@ import androidx.compose.ambient
 import androidx.compose.memo
 import androidx.compose.onCommit
 import androidx.compose.unaryPlus
-import com.github.zsoltk.backtrack.helper.BackStack
 import com.github.zsoltk.compose.backpress.BackPressHandler
 import com.github.zsoltk.compose.backpress.backPressHandler
 import com.github.zsoltk.compose.savedinstancestate.BundleScope

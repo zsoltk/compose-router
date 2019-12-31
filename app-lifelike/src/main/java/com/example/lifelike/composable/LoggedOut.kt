@@ -7,7 +7,7 @@ import com.example.lifelike.composable.loggedout.RegUserName
 import com.example.lifelike.composable.loggedout.RegUserPhone
 import com.example.lifelike.composable.loggedout.RegFinal
 import com.example.lifelike.entity.User
-import com.github.zsoltk.backtrack.composable.BackHandler
+import com.github.zsoltk.compose.router.serializable.BackHandler
 import java.io.Serializable
 
 interface LoggedOut {
