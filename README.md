@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 ## What's this?
-Back stack functionality with back press handling for Jetpack Compose.
+Routing functionality for Jetpack Compose with back stack. Can be integrated with automatic back press handling to go back in screen history.
 
 Compatible with version **0.1.0-dev03**
 
