@@ -3,7 +3,13 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 ## What's this?
-Routing functionality for Jetpack Compose with back stack. Can be integrated with automatic back press handling to go back in screen history.
+Routing functionality for Jetpack Compose with back stack:
+
+- Helps to map your whole app structure on Compose, not just the UI parts
+- Branch on current routing and compose any other @Composable
+- Back stack saves the history of routing
+- Can be integrated with automatic back press handling to go back in screen history
+- Can be integrated with automatic scoped `savedInstanceState` persistence
 
 Compatible with version **0.1.0-dev03**
 
