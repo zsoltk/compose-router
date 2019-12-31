@@ -39,7 +39,12 @@ fun <T : Serializable> BackHandler(contextId: String, defaultRouting: T, childre
     }
 
     backPressHandler.Provider(value = localHandler) {
-        BundleScope(backStack, localBundle, localHandler.id, children)
+        BackStackPersistence(backStack, localBundle) {
+            val key = keyForRouting(localHandler.id, backStack.lastIndex)
+            SaveInstanceStateScope(localBundle, key) {
+                children(backStack)
+            }
+        }
     }
 }
 
@@ -59,19 +64,30 @@ private fun <T : Serializable> fetchBackStack(bundle: Bundle, masterKey: String,
     }}
 }
 
+/**
+ * Since BackStack<T> is @Model, this block will recompose every time the back stack is
+ * manipulated. We use this to save back stack in savedInstanceState.
+ */
 @Composable
-private fun <T : Serializable> BundleScope(
+private fun <T : Serializable> BackStackPersistence(
     backStack: BackStack<T>,
     bundle: Bundle,
-    masterKey: String,
     children: @Composable() (BackStack<T>) -> Unit
 ) {
     bundle.putSerializable(KEY_BACK_STACK, backStack.elements)
-    val key = keyForRouting(masterKey, backStack.lastIndex)
+    children(backStack)
+}
+
+@Composable
+private fun SaveInstanceStateScope(
+    bundle: Bundle,
+    key: String,
+    children: @Composable() () -> Unit
+) {
     val restored = bundle.getBundle(key)
     val bundleForChildren = restored ?: Bundle().also { bundle.putBundle(key, it) }
 
     savedInstanceState.Provider(value = bundleForChildren) {
-        children(backStack)
+        children()
     }
 }
