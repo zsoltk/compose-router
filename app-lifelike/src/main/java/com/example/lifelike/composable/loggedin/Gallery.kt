@@ -3,8 +3,7 @@ package com.example.lifelike.composable.loggedin
 import androidx.compose.Composable
 import com.example.lifelike.entity.Album
 import com.example.lifelike.entity.Photo
-import com.github.zsoltk.backtrack.composable.BackHandler
-
+import com.github.zsoltk.compose.router.BackHandler
 
 interface Gallery {
 

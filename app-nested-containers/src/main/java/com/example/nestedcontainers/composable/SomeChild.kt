@@ -1,17 +1,19 @@
 package com.example.nestedcontainers.composable
 
 import androidx.compose.Composable
+import androidx.compose.ambient
+import androidx.compose.stateFor
 import androidx.compose.unaryPlus
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Column
-import androidx.ui.layout.HeightSpacer
 import androidx.ui.layout.Row
 import androidx.ui.layout.Spacing
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Surface
 import androidx.ui.res.colorResource
@@ -19,7 +21,8 @@ import com.example.nestedcontainers.R
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeA
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeB
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeC
-import com.github.zsoltk.backtrack.composable.BackHandler
+import com.github.zsoltk.compose.router.BackHandler
+import com.github.zsoltk.compose.savedinstancestate.savedInstanceState
 
 interface SomeChild {
     /**
@@ -35,7 +38,7 @@ interface SomeChild {
         private const val MAX_NESTING_LEVEL = 5
 
         private val colorSets = mapOf(
-            SubtreeA to listOf(
+            Color.Red to listOf(
                 R.color.red_200,
                 R.color.red_300,
                 R.color.red_400,
@@ -43,7 +46,7 @@ interface SomeChild {
                 R.color.red_700,
                 R.color.red_800
             ),
-            SubtreeB to listOf(
+            Color.Green to listOf(
                 R.color.green_200,
                 R.color.green_300,
                 R.color.green_400,
@@ -51,7 +54,7 @@ interface SomeChild {
                 R.color.green_600,
                 R.color.green_700
             ),
-            SubtreeC to listOf(
+            Color.Blue to listOf(
                 R.color.blue_200,
                 R.color.blue_300,
                 R.color.blue_400,
@@ -140,7 +143,7 @@ interface SomeChild {
 
                 Container(
                     name = if (level == 0) "Root" else "L$level.$id",
-                    size =  backStack.size,
+                    size = backStack.size,
                     bgColor = bgColor,
                     onButtonClick = { backStack.push(backStack.last().next()) }
                 ) {
@@ -168,12 +171,25 @@ interface SomeChild {
             onButtonClick: () -> Unit,
             children: @Composable() () -> Unit
         ) {
+            val bundle = +ambient(savedInstanceState)
+            var counter by +stateFor(this) {
+                bundle.getInt("counter", 0)
+            }
+
             Surface(color = +colorResource(bgColor)) {
                 Column(modifier = Spacing(16.dp)) {
                     Ripple(bounded = true) {
                         Button(text = "$name.NEXT", onClick = onButtonClick)
                     }
                     Text("Back stack: $size")
+                    Ripple(bounded = true) {
+                        Button(
+                            text = "Local data: $counter",
+                            style = TextButtonStyle(contentColor = Color.White),
+                            onClick = {
+                                bundle.putInt("counter", ++counter)
+                            })
+                    }
                     children()
                 }
             }
@@ -199,24 +215,24 @@ interface SomeChild {
                  * ("Profile", "Settings", "Chat", "Gallery", etc.) with different
                  * Composables on the right side.
                  */
-                SubtreeA -> {
+                is SubtreeA -> {
                     Content(
                         level + 1,
                         "A$ord",
-                        colorSets[currentRouting]!![level],
+                        colorSets[Color.Red]!![level],
                         currentRouting
                     )
                 }
-                SubtreeB -> Content(
+                is SubtreeB -> Content(
                     level + 1,
                     "B$ord",
-                    colorSets[currentRouting]!![level],
+                    colorSets[Color.Green]!![level],
                     currentRouting
                 )
-                SubtreeC -> Content(
+                is SubtreeC -> Content(
                     level + 1,
                     "C$ord",
-                    colorSets[currentRouting]!![level],
+                    colorSets[Color.Blue]!![level],
                     currentRouting
                 )
             }
@@ -224,9 +240,9 @@ interface SomeChild {
 
         private fun Routing.next(): Routing =
             when (this) {
-                SubtreeA -> SubtreeB
-                SubtreeB -> SubtreeC
-                SubtreeC -> SubtreeA
+                is SubtreeA -> SubtreeB
+                is SubtreeB -> SubtreeC
+                is SubtreeC -> SubtreeA
             }
     }
 }

@@ -6,26 +6,35 @@ import androidx.ui.core.setContent
 import androidx.ui.material.MaterialTheme
 import com.example.lifelike.composable.Root
 import com.example.lifelike.composable.Root.Routing.LoggedOut
-import com.github.zsoltk.backtrack.composable.RootBackHandler
-import com.github.zsoltk.backtrack.helper.ScopedBackPressHandler
+import com.github.zsoltk.compose.backpress.BackPressHandler
+import com.github.zsoltk.compose.savedinstancestate.TimeCapsule
 
 class MainActivity : AppCompatActivity() {
-    private val rootHandler = ScopedBackPressHandler()
+    private val backPressHandler = BackPressHandler()
+    private val timeCapsule = TimeCapsule()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                RootBackHandler(rootHandler) {
-                    Root.Content(LoggedOut)
+                backPressHandler.Provider {
+                    timeCapsule.Provider(savedInstanceState) {
+                        Root.Content(LoggedOut)
+                    }
+
                 }
             }
         }
     }
 
     override fun onBackPressed() {
-        if (!rootHandler.handle()) {
+        if (!backPressHandler.handle()) {
             super.onBackPressed()
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        timeCapsule.onSaveInstanceState(outState)
     }
 }

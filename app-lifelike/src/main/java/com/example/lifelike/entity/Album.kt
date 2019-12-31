@@ -5,7 +5,6 @@ data class Album(
     val photos: List<Photo>
 )
 
-
 val albums = listOf(
     Album("Trip to Budapest", MutableList(19) { i -> Photo(i) }),
     Album("Cats", MutableList(39) { i -> Photo(i) }),
