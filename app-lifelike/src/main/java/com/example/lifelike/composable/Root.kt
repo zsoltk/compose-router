@@ -5,10 +5,11 @@ import com.example.lifelike.composable.LoggedIn.Routing.Gallery
 import com.example.lifelike.composable.LoggedOut.Routing.Splash
 import com.example.lifelike.entity.User
 import com.github.zsoltk.backtrack.composable.BackHandler
+import java.io.Serializable
 
 interface Root {
 
-    sealed class Routing {
+    sealed class Routing : Serializable {
         object LoggedOut: Routing()
         data class LoggedIn(val user: User): Routing()
     }

@@ -6,17 +6,16 @@ import androidx.ui.core.setContent
 import androidx.ui.material.MaterialTheme
 import com.example.lifelike.composable.Root
 import com.example.lifelike.composable.Root.Routing.LoggedOut
-import com.github.zsoltk.backtrack.composable.RootBackHandler
 import com.github.zsoltk.backtrack.helper.ScopedBackPressHandler
 
 class MainActivity : AppCompatActivity() {
-    private val rootHandler = ScopedBackPressHandler()
+    private val backPressHandler = ScopedBackPressHandler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                RootBackHandler(rootHandler) {
+                backPressHandler.Provide {
                     Root.Content(LoggedOut)
                 }
             }
@@ -24,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (!rootHandler.handle()) {
+        if (!backPressHandler.handle()) {
             super.onBackPressed()
         }
     }

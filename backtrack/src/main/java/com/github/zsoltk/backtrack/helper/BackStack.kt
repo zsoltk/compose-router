@@ -1,47 +1,56 @@
 package com.github.zsoltk.backtrack.helper
 
 import androidx.compose.Model
+import java.io.Serializable
 
 @Model
-class BackStack<T>(
-    defaultElement: T
+class BackStack<T : Serializable> internal constructor(
+    internal var elements: ArrayList<T> // ArrayList for Serializable temporarily
 ) {
-    private var elements: List<Entry<T>> = listOf(Entry(defaultElement))
+    @Transient
+    internal var onElementRemoved: ((Int) -> Unit)? = null
 
-    class Entry<T>(val element: T) {
-        val children: MutableMap<Any, BackStack<*>> = mutableMapOf()
-    }
+    val lastIndex: Int
+        get() = elements.lastIndex
 
     val size: Int
         get() = elements.size
 
-    internal fun lastEntry(): Entry<T> =
+    fun last(): T =
         elements.last()
 
-    fun last(): T =
-        elements.last().element
-
     fun push(element: T) {
-        elements = elements + Entry(element)
+        elements = ArrayList(elements.plus(element))
     }
 
     fun pushAndDropNested(element: T) {
-        elements.last().children.clear()
+        onElementRemoved?.invoke(lastIndex)
         push(element)
     }
 
     fun pop(): Boolean =
         // we won’t let the last item to be popped
-        if (elements.size <= 1) false else {
-            elements = elements.dropLast(1)
+        if (size <= 1) false else {
+            onElementRemoved?.invoke(lastIndex)
+            elements = ArrayList(
+                elements.subList(0, lastIndex) // exclusive
+            )
             true
         }
 
     fun replace(element: T) {
-        elements = elements.dropLast(1) + Entry(element)
+        onElementRemoved?.invoke(lastIndex)
+        elements = ArrayList(
+            elements
+                .subList(0, elements.lastIndex - 1)
+                .plus(element)
+        )
     }
 
     fun newRoot(element: T) {
-        elements = listOf(Entry(element))
+        elements.indices.reversed().forEach { index ->
+            onElementRemoved?.invoke(index)
+        }
+        elements = arrayListOf(element)
     }
 }

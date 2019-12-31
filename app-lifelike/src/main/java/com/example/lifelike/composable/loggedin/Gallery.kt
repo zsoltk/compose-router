@@ -4,11 +4,12 @@ import androidx.compose.Composable
 import com.example.lifelike.entity.Album
 import com.example.lifelike.entity.Photo
 import com.github.zsoltk.backtrack.composable.BackHandler
+import java.io.Serializable
 
 
 interface Gallery {
 
-    sealed class Routing {
+    sealed class Routing : Serializable {
         object AlbumList : Routing()
         data class PhotosOfAlbum(val album: Album) : Routing()
         data class FullScreenPhoto(val photo: Photo) : Routing()

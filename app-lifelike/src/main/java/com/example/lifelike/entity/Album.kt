@@ -1,9 +1,11 @@
 package com.example.lifelike.entity
 
+import java.io.Serializable
+
 data class Album(
     val name: String,
     val photos: List<Photo>
-)
+)  : Serializable
 
 
 val albums = listOf(

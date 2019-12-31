@@ -9,9 +9,10 @@ import com.example.lifelike.composable.loggedin.Menu
 import com.example.lifelike.composable.loggedin.Profile
 import com.example.lifelike.entity.User
 import com.github.zsoltk.backtrack.composable.BackHandler
+import java.io.Serializable
 
 interface LoggedIn {
-    sealed class Routing {
+    sealed class Routing : Serializable {
         object Gallery : Routing()
         object News : Routing()
         object Profile : Routing()

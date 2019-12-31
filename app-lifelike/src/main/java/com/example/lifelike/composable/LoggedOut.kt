@@ -8,10 +8,11 @@ import com.example.lifelike.composable.loggedout.RegUserPhone
 import com.example.lifelike.composable.loggedout.RegFinal
 import com.example.lifelike.entity.User
 import com.github.zsoltk.backtrack.composable.BackHandler
+import java.io.Serializable
 
 interface LoggedOut {
 
-    sealed class Routing {
+    sealed class Routing : Serializable {
         object Splash : Routing()
         object RegUserName : Routing()
         object RegUserPhone : Routing()
