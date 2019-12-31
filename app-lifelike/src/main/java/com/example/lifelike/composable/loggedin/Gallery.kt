@@ -3,13 +3,11 @@ package com.example.lifelike.composable.loggedin
 import androidx.compose.Composable
 import com.example.lifelike.entity.Album
 import com.example.lifelike.entity.Photo
-import com.github.zsoltk.compose.router.serializable.BackHandler
-import java.io.Serializable
-
+import com.github.zsoltk.compose.router.transient.BackHandler
 
 interface Gallery {
 
-    sealed class Routing : Serializable {
+    sealed class Routing {
         object AlbumList : Routing()
         data class PhotosOfAlbum(val album: Album) : Routing()
         data class FullScreenPhoto(val photo: Photo) : Routing()

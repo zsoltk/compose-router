@@ -21,7 +21,7 @@ import com.example.nestedcontainers.R
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeA
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeB
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeC
-import com.github.zsoltk.compose.router.serializable.BackHandler
+import com.github.zsoltk.compose.router.transient.BackHandler
 import com.github.zsoltk.compose.savedinstancestate.savedInstanceState
 import java.io.Serializable
 
@@ -29,7 +29,7 @@ interface SomeChild {
     /**
      * Describes which subtree we compose locally. Imagine these are more meaningful names :)
      */
-    sealed class Routing : Serializable {
+    sealed class Routing {
         object SubtreeA : Routing()
         object SubtreeB : Routing()
         object SubtreeC : Routing()

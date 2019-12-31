@@ -4,12 +4,11 @@ import androidx.compose.Composable
 import com.example.lifelike.composable.LoggedIn.Routing.Gallery
 import com.example.lifelike.composable.LoggedOut.Routing.Splash
 import com.example.lifelike.entity.User
-import com.github.zsoltk.compose.router.serializable.BackHandler
-import java.io.Serializable
+import com.github.zsoltk.compose.router.transient.BackHandler
 
 interface Root {
 
-    sealed class Routing : Serializable {
+    sealed class Routing {
         object LoggedOut: Routing()
         data class LoggedIn(val user: User): Routing()
     }

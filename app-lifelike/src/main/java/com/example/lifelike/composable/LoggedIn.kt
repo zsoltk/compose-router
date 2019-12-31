@@ -8,11 +8,10 @@ import com.example.lifelike.composable.loggedin.News
 import com.example.lifelike.composable.loggedin.Menu
 import com.example.lifelike.composable.loggedin.Profile
 import com.example.lifelike.entity.User
-import com.github.zsoltk.compose.router.serializable.BackHandler
-import java.io.Serializable
+import com.github.zsoltk.compose.router.transient.BackHandler
 
 interface LoggedIn {
-    sealed class Routing : Serializable {
+    sealed class Routing {
         object Gallery : Routing()
         object News : Routing()
         object Profile : Routing()
