@@ -36,32 +36,9 @@ Add the dependency:
 implementation 'com.github.zsoltk:backtrack:{latest-version}'
 ```
 
-## Setup
-
-In your Activity:
-```kotlin
-class MainActivity : AppCompatActivity() {
-    private val rootHandler = ScopedBackPressHandler()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            RootBackHandler(rootHandler) {
-                // Your root composable goes here
-            }
-        }
-    }
-
-    override fun onBackPressed() {
-        if (!rootHandler.handle()) {
-            super.onBackPressed()
-        }
-    }
-}
-```
 
 ## How to use
-On any level where back stack functionality is needed, create a sealed class to represent your routing:
+On any level where routing functionality is needed, create a sealed class to represent your routing:
 
 ```kotlin
 sealed class Routing {
@@ -71,12 +48,12 @@ sealed class Routing {
 }
 ```
 
-Use the `BackHandler` Composable and enjoy back stack functionality:
+Use the `Router` Composable and enjoy back stack functionality:
 
 ```kotlin
 @Composable
 fun GalleryView(defaultRouting: Routing) {
-    BackHandler("GalleryView", defaultRouting) { backStack ->
+    Router("GalleryView", defaultRouting) { backStack ->
         // compose further based on current routing:
         when (val routing = backStack.last()) {
             is Routing.AlbumList -> AlbumList.Content(
@@ -100,7 +77,7 @@ fun GalleryView(defaultRouting: Routing) {
 }
 ```
 
-To go back in the back stack, you can either call the `.pop()` method programmatically, or just press the back button on the device.
+To go back in the back stack, you can either call the `.pop()` method programmatically, or just press the back button on the device (see next section for back press integration).
 
 Back stack operations:
 - **push()**
@@ -109,3 +86,71 @@ Back stack operations:
 - **replace()**
 - **newRoot()**
 
+
+## Connect it to back press event
+
+To ensure that back press automatically pops the back stack and restores history, add this to your Activity:
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    private val backPressHandler = BackPressHandler()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            backPressHandler.Provider {
+                // Your root composable goes here
+            }
+        }
+    }
+
+    override fun onBackPressed() {
+        if (!backPressHandler.handle()) {
+            super.onBackPressed()
+        }
+    }
+}
+```
+
+## Connect it to savedInstanceState
+
+Router can automatically add scoped Bundle support for your client code.
+
+Minimal setup:
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    private val backPressHandler = BackPressHandler()
+    private val timeCapsule = TimeCapsule()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MaterialTheme {
+                timeCapsule.Provider(savedInstanceState) {
+                    Root.Content(LoggedOut)
+                }
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        timeCapsule.onSaveInstanceState(outState)
+    }
+}
+```
+
+In client code you can now use:
+
+```kotlin
+@Composable
+fun Content() {
+    val bundle = +ambient(savedInstanceState)
+    var counter by +state { bundle.getInt(KEY_COUNTER, 0) }
+
+    Button(text = "Counter: $counter", onClick = {
+        bundle.putInt(KEY_COUNTER, ++counter)
+    })
+}
+```
