@@ -131,7 +131,6 @@ Minimal setup:
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    private val backPressHandler = BackPressHandler()
     private val timeCapsule = TimeCapsule()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -139,7 +138,7 @@ class MainActivity : AppCompatActivity() {
         setContent {
             MaterialTheme {
                 timeCapsule.Provider(savedInstanceState) {
-                    Root.Content(LoggedOut)
+                    // Your root composable goes here
                 }
             }
         }
