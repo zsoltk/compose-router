@@ -18,13 +18,13 @@ fun Intent.deepLinkRoute(): List<Any> =
 private fun parseDefaultDeepLink(path: String?): List<Any> =
     // TODO: implement your own validation / conversion
     path
-        ?.take(3)
+        ?.take(4)
         ?.toCharArray()
         ?.map {
-            when (it) {
-                'a' -> SomeChild.Routing.SubtreeA
-                'b' -> SomeChild.Routing.SubtreeB
-                'c' -> SomeChild.Routing.SubtreeC
+            when (it.toUpperCase()) {
+                'R' -> SomeChild.Routing.SubtreeRed
+                'G' -> SomeChild.Routing.SubtreeGreen
+                'B' -> SomeChild.Routing.SubtreeBlue
                 else -> Unit.also {
                     Log.e("compose-router", "Unexpected deep link path: $path")
                 }

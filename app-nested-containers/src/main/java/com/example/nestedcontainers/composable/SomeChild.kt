@@ -18,9 +18,9 @@ import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Surface
 import androidx.ui.res.colorResource
 import com.example.nestedcontainers.R
-import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeA
-import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeB
-import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeC
+import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeRed
+import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeGreen
+import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeBlue
 import com.github.zsoltk.compose.router.Router
 import com.github.zsoltk.compose.savedinstancestate.savedInstanceState
 
@@ -29,9 +29,9 @@ interface SomeChild {
      * Describes which subtree we compose locally. Imagine these are more meaningful names :)
      */
     sealed class Routing {
-        object SubtreeA : Routing()
-        object SubtreeB : Routing()
-        object SubtreeC : Routing()
+        object SubtreeRed : Routing()
+        object SubtreeGreen : Routing()
+        object SubtreeBlue : Routing()
     }
 
     companion object {
@@ -79,7 +79,7 @@ interface SomeChild {
                 level = 0,
                 id = "Root",
                 bgColor = R.color.blue_grey_200,
-                defaultRouting = SubtreeA
+                defaultRouting = SubtreeRed
             )
         }
 
@@ -215,23 +215,23 @@ interface SomeChild {
                  * ("Profile", "Settings", "Chat", "Gallery", etc.) with different
                  * Composables on the right side.
                  */
-                is SubtreeA -> {
+                is SubtreeRed -> {
                     Content(
                         level + 1,
-                        "A$ord",
+                        "R$ord",
                         colorSets[Color.Red]!![level],
                         currentRouting
                     )
                 }
-                is SubtreeB -> Content(
+                is SubtreeGreen -> Content(
                     level + 1,
-                    "B$ord",
+                    "G$ord",
                     colorSets[Color.Green]!![level],
                     currentRouting
                 )
-                is SubtreeC -> Content(
+                is SubtreeBlue -> Content(
                     level + 1,
-                    "C$ord",
+                    "B$ord",
                     colorSets[Color.Blue]!![level],
                     currentRouting
                 )
@@ -240,9 +240,9 @@ interface SomeChild {
 
         private fun Routing.next(): Routing =
             when (this) {
-                is SubtreeA -> SubtreeB
-                is SubtreeB -> SubtreeC
-                is SubtreeC -> SubtreeA
+                is SubtreeRed -> SubtreeGreen
+                is SubtreeGreen -> SubtreeBlue
+                is SubtreeBlue -> SubtreeRed
             }
     }
 }
