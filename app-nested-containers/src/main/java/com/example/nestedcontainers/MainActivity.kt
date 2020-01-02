@@ -7,8 +7,9 @@ import androidx.ui.core.setContent
 import androidx.ui.foundation.HorizontalScroller
 import androidx.ui.material.MaterialTheme
 import androidx.ui.tooling.preview.Preview
-import com.github.zsoltk.compose.backpress.BackPressHandler
 import com.example.nestedcontainers.composable.SomeChild
+import com.github.zsoltk.compose.backpress.BackPressHandler
+import com.github.zsoltk.compose.router.routing
 import com.github.zsoltk.compose.savedinstancestate.TimeCapsule
 
 class MainActivity : AppCompatActivity() {
@@ -21,9 +22,11 @@ class MainActivity : AppCompatActivity() {
         setContent {
             MaterialTheme {
                 HorizontalScroller {
-                    timeCapsule.Provider(savedInstanceState) {
-                        backPressHandler.Provider {
-                            SomeChild.Root()
+                    routing.Provider(intent.deepLinkRoute()) {
+                        timeCapsule.Provider(savedInstanceState) {
+                            backPressHandler.Provider {
+                                SomeChild.Root()
+                            }
                         }
                     }
                 }
