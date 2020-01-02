@@ -7,6 +7,7 @@ import androidx.ui.material.MaterialTheme
 import com.example.lifelike.composable.Root
 import com.example.lifelike.composable.Root.Routing.LoggedOut
 import com.github.zsoltk.compose.backpress.BackPressHandler
+import com.github.zsoltk.compose.router.routing
 import com.github.zsoltk.compose.savedinstancestate.TimeCapsule
 
 class MainActivity : AppCompatActivity() {
@@ -19,7 +20,9 @@ class MainActivity : AppCompatActivity() {
             MaterialTheme {
                 backPressHandler.Provider {
                     timeCapsule.Provider(savedInstanceState) {
-                        Root.Content(LoggedOut)
+                        routing.Provider(intent.deepLinkRoute()) {
+                            Root.Content(LoggedOut)
+                        }
                     }
 
                 }

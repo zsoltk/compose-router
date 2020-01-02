@@ -7,7 +7,7 @@ import com.example.nestedcontainers.composable.SomeChild
 // TODO: implement your own validation / conversion
 fun Intent.deepLinkRoute(): List<Any> =
     when (data?.host) {
-        //  adb shell am start -a "android.intent.action.VIEW" -d "app-nested://default/abcd"
+        //  adb shell 'am start -a "android.intent.action.VIEW" -d "app-nested://default/abcd"'
         "default" -> parseDefaultDeepLink(data?.path)
         null -> emptyList()
         else -> emptyList<Any>().also {
