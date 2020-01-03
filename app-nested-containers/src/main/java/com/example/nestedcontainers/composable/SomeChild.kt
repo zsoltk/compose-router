@@ -104,7 +104,8 @@ interface SomeChild {
             Content(
                 level = 0,
                 id = "Root",
-                defaultRouting = SubtreeRed
+                defaultRouting = SubtreeRed,
+                bgColor = Color.White
             )
         }
 
@@ -121,6 +122,7 @@ interface SomeChild {
         private fun Content(
             level: Int,
             id: String,
+            bgColor: Color,
             defaultRouting: Routing
         ) {
             if (level >= MAX_NESTING_LEVEL) {
@@ -132,6 +134,7 @@ interface SomeChild {
                 NestedContainerWithRouting(
                     level,
                     id,
+                    bgColor,
                     defaultRouting
                 )
             }
@@ -158,27 +161,24 @@ interface SomeChild {
         private fun NestedContainerWithRouting(
             level: Int,
             id: String,
+            bgColor: Color,
             defaultRouting: Routing
         ) {
             Router("$level.$id", defaultRouting) { backStack ->
                 val nbChildren = nbChildrenPerLevel.getOrDefault(level, 1)
-
-                Transition(definition = defs[level]!!, toState = backStack.last()) { state ->
-                    val bgColor = state[colorPropKey]
-                    Container(
-                        name = if (level == 0) "Root" else "L$level.$id",
-                        size = backStack.size,
-                        bgColor = bgColor,
-                        onButtonClick = { backStack.push(backStack.last().next()) }
-                    ) {
-                        Row {
-                            for (i in 1..nbChildren) {
-                                Child(
-                                    i,
-                                    backStack.last(),
-                                    level
-                                )
-                            }
+                Container(
+                    name = if (level == 0) "Root" else "L$level.$id",
+                    size = backStack.size,
+                    bgColor = bgColor,
+                    onButtonClick = { backStack.push(backStack.last().next()) }
+                ) {
+                    Row {
+                        for (i in 1..nbChildren) {
+                            Child(
+                                i,
+                                backStack.last(),
+                                level
+                            )
                         }
                     }
                 }
@@ -229,34 +229,44 @@ interface SomeChild {
             currentRouting: Routing,
             level: Int
         ) {
-            when (currentRouting) {
-                /**
-                 * Now these branches below are almost the same, so you could of course
-                 * get rid of the when expression and parameterize the whole thing (only
-                 * the id labels "A" are different).
-                 *
-                 * But I thought that would remove the demonstration value imagining that in
-                 * real life circumstances these branches would have more meaningful names
-                 * ("Profile", "Settings", "Chat", "Gallery", etc.) with different
-                 * Composables on the right side.
-                 */
-                is SubtreeRed -> {
-                    Content(
-                        level + 1,
-                        "R$ord",
-                        currentRouting
-                    )
+            Transition(definition = defs[level]!!, toState = currentRouting) { state ->
+                val bgColor = state[colorPropKey]
+                when (currentRouting) {
+                    /**
+                     * Now these branches below are almost the same, so you could of course
+                     * get rid of the when expression and parameterize the whole thing (only
+                     * the id labels "A" are different).
+                     *
+                     * But I thought that would remove the demonstration value imagining that in
+                     * real life circumstances these branches would have more meaningful names
+                     * ("Profile", "Settings", "Chat", "Gallery", etc.) with different
+                     * Composables on the right side.
+                     */
+                    is SubtreeRed -> {
+                        Content(
+                            level + 1,
+                            "R$ord",
+                            bgColor,
+                            currentRouting
+                        )
+                    }
+                    is SubtreeGreen -> {
+                        Content(
+                            level + 1,
+                            "G$ord",
+                            bgColor,
+                            currentRouting
+                        )
+                    }
+                    is SubtreeBlue -> {
+                        Content(
+                            level + 1,
+                            "B$ord",
+                            bgColor,
+                            currentRouting
+                        )
+                    }
                 }
-                is SubtreeGreen -> Content(
-                    level + 1,
-                    "G$ord",
-                    currentRouting
-                )
-                is SubtreeBlue -> Content(
-                    level + 1,
-                    "B$ord",
-                    currentRouting
-                )
             }
         }
 
