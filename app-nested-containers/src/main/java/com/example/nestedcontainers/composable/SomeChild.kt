@@ -1,9 +1,12 @@
 package com.example.nestedcontainers.composable
 
+import androidx.animation.transitionDefinition
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.stateFor
 import androidx.compose.unaryPlus
+import androidx.ui.animation.ColorPropKey
+import androidx.ui.animation.Transition
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
@@ -18,9 +21,9 @@ import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Surface
 import androidx.ui.res.colorResource
 import com.example.nestedcontainers.R
-import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeRed
-import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeGreen
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeBlue
+import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeGreen
+import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeRed
 import com.github.zsoltk.compose.router.Router
 import com.github.zsoltk.compose.savedinstancestate.savedInstanceState
 
@@ -36,6 +39,29 @@ interface SomeChild {
 
     companion object {
         private const val MAX_NESTING_LEVEL = 5
+
+        val colorPropKey = ColorPropKey()
+        val defs by lazy {
+            (0 .. MAX_NESTING_LEVEL).associateWith { level ->
+                transitionDefinition {
+                    state(SubtreeRed) {
+                        this[colorPropKey] = +colorResource(colorSets[Color.Red]!![level])
+                    }
+                    state(SubtreeBlue) {
+                        this[colorPropKey] = +colorResource(colorSets[Color.Blue]!![level])
+                    }
+                    state(SubtreeGreen) {
+                        this[colorPropKey] = +colorResource(colorSets[Color.Green]!![level])
+                    }
+
+                    transition {
+                        colorPropKey using tween {
+                            duration = 2000
+                        }
+                    }
+                }
+            }
+        }
 
         private val colorSets = mapOf(
             Color.Red to listOf(
@@ -78,7 +104,6 @@ interface SomeChild {
             Content(
                 level = 0,
                 id = "Root",
-                bgColor = R.color.blue_grey_200,
                 defaultRouting = SubtreeRed
             )
         }
@@ -96,7 +121,6 @@ interface SomeChild {
         private fun Content(
             level: Int,
             id: String,
-            bgColor: Int,
             defaultRouting: Routing
         ) {
             if (level >= MAX_NESTING_LEVEL) {
@@ -108,7 +132,6 @@ interface SomeChild {
                 NestedContainerWithRouting(
                     level,
                     id,
-                    bgColor,
                     defaultRouting
                 )
             }
@@ -135,25 +158,27 @@ interface SomeChild {
         private fun NestedContainerWithRouting(
             level: Int,
             id: String,
-            bgColor: Int,
             defaultRouting: Routing
         ) {
             Router("$level.$id", defaultRouting) { backStack ->
                 val nbChildren = nbChildrenPerLevel.getOrDefault(level, 1)
 
-                Container(
-                    name = if (level == 0) "Root" else "L$level.$id",
-                    size = backStack.size,
-                    bgColor = bgColor,
-                    onButtonClick = { backStack.push(backStack.last().next()) }
-                ) {
-                    Row {
-                        for (i in 1..nbChildren) {
-                            Child(
-                                i,
-                                backStack.last(),
-                                level
-                            )
+                Transition(definition = defs[level]!!, toState = backStack.last()) { state ->
+                    val bgColor = state[colorPropKey]
+                    Container(
+                        name = if (level == 0) "Root" else "L$level.$id",
+                        size = backStack.size,
+                        bgColor = bgColor,
+                        onButtonClick = { backStack.push(backStack.last().next()) }
+                    ) {
+                        Row {
+                            for (i in 1..nbChildren) {
+                                Child(
+                                    i,
+                                    backStack.last(),
+                                    level
+                                )
+                            }
                         }
                     }
                 }
@@ -167,7 +192,7 @@ interface SomeChild {
         private fun Container(
             name: String,
             size: Int,
-            bgColor: Int,
+            bgColor: Color,
             onButtonClick: () -> Unit,
             children: @Composable() () -> Unit
         ) {
@@ -176,7 +201,7 @@ interface SomeChild {
                 bundle.getInt("counter", 0)
             }
 
-            Surface(color = +colorResource(bgColor)) {
+            Surface(color = bgColor) {
                 Column(modifier = Spacing(16.dp)) {
                     Ripple(bounded = true) {
                         Button(text = "$name.NEXT", onClick = onButtonClick)
@@ -219,20 +244,17 @@ interface SomeChild {
                     Content(
                         level + 1,
                         "R$ord",
-                        colorSets[Color.Red]!![level],
                         currentRouting
                     )
                 }
                 is SubtreeGreen -> Content(
                     level + 1,
                     "G$ord",
-                    colorSets[Color.Green]!![level],
                     currentRouting
                 )
                 is SubtreeBlue -> Content(
                     level + 1,
                     "B$ord",
-                    colorSets[Color.Blue]!![level],
                     currentRouting
                 )
             }
