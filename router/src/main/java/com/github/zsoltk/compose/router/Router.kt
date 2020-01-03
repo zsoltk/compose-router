@@ -18,6 +18,10 @@ private val backStackMap = Ambient.of<MutableMap<Any, BackStack<*>>> {
     mutableMapOf()
 }
 
+val routing = Ambient.of {
+    listOf<Any>()
+}
+
 @Deprecated(
     message = "Use Router instead",
     replaceWith = ReplaceWith(
@@ -38,9 +42,13 @@ fun <T> BackHandler(contextId: String, defaultRouting: T, children: @Composable(
  */
 @Composable
 fun <T> Router(contextId: String, defaultRouting: T, children: @Composable() (BackStack<T>) -> Unit) {
+    val route = +ambient(routing)
+    val routingFromAmbient = route.firstOrNull() as? T
+    val downStreamRoute = if (route.size > 1) route.takeLast(route.size - 1) else emptyList()
+
     val upstreamHandler = +ambient(backPressHandler)
     val localHandler = +memo { BackPressHandler("${upstreamHandler.id}.$contextId") }
-    val backStack = fetchBackStack(localHandler.id, defaultRouting)
+    val backStack = fetchBackStack(localHandler.id, defaultRouting, routingFromAmbient)
     val handleBackPressHere: () -> Boolean = { localHandler.handle() || backStack.pop() }
 
     +onCommit {
@@ -50,19 +58,26 @@ fun <T> Router(contextId: String, defaultRouting: T, children: @Composable() (Ba
 
     BundleScope(key(backStack.lastIndex), autoDispose = false) {
         backPressHandler.Provider(value = localHandler) {
-            children(backStack)
+            routing.Provider(value = downStreamRoute) {
+                children(backStack)
+            }
         }
     }
 }
 
-private fun <T> fetchBackStack(key: String, defaultRouting: T): BackStack<T> {
+private fun <T> fetchBackStack(key: String, defaultElement: T, override: T?): BackStack<T> {
     val upstreamBundle = +ambient(savedInstanceState)
     val onElementRemoved: (Int) -> Unit = { upstreamBundle.remove(key(it)) }
 
     val upstreamBackStacks = +ambient(backStackMap)
     val existing = upstreamBackStacks[key] as BackStack<T>?
 
-    return existing ?: BackStack(defaultRouting, onElementRemoved).also {
+    return when {
+        override != null -> BackStack(override, onElementRemoved)
+        existing != null -> existing
+        else -> BackStack(defaultElement, onElementRemoved)
+
+    }.also {
         upstreamBackStacks[key] = it
     }
 }
