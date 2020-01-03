@@ -1,8 +1,9 @@
-![compose-router](https://i.imgur.com/1bEJkc0.png)
+# compose-router
 
 [![Version](https://jitpack.io/v/zsoltk/compose-router.svg)](https://jitpack.io/#zsoltk/backtrack)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
+![logo](https://i.imgur.com/kKcAHa3.png)
 
 ## What's this?
 Routing functionality for Jetpack Compose with back stack:
@@ -13,6 +14,7 @@ Routing functionality for Jetpack Compose with back stack:
 - Back stack saves the history of routing
 - Can be integrated with automatic back press handling to go back in screen history
 - Can be integrated with automatic scoped `savedInstanceState` persistence
+- Supports routing based on deep links (POC impl)
 
 Compatible with Compose version **0.1.0-dev03**
 
@@ -164,3 +166,26 @@ fun Content() {
     })
 }
 ```
+
+## Routing from deep links
+
+_Note: this is even more of a proof-of-concept only implementation than the other parts_
+
+Build and install `app-lifelike` and `app-nested-containers` on your device.
+
+Open a console and type:
+```
+adb shell 'am start -a "android.intent.action.VIEW" -d "app-lifelike://go-to-profile?name=fake&phone=123123"'
+```
+To open `app-lifelike` with skipped registration flow and go directly to Profile screen with fake user:
+
+![](https://i.imgur.com/XomlkS3.png)
+
+```
+adb shell 'am start -a "android.intent.action.VIEW" -d "app-nested://default/BGR"'
+```
+To open `app-nested-containers` with (B)lue / (G)reen / (R)ed subtrees pre-selected as routing:
+
+![](https://i.imgur.com/d7agB8D.png)
+
+See `MainActivity.kt`, `AndroidManifest.xml`, and `DeepLink.kt` in both sample apps to see usage example.
