@@ -22,9 +22,9 @@ class MainActivity : AppCompatActivity() {
         setContent {
             MaterialTheme {
                 HorizontalScroller {
-                    routing.Provider(intent.deepLinkRoute()) {
-                        timeCapsule.Provider(savedInstanceState) {
-                            backPressHandler.Provider {
+                    timeCapsule.Provider(savedInstanceState) {
+                        backPressHandler.Provider {
+                            routing.Provider(intent.deepLinkRoute()) {
                                 SomeChild.Root()
                             }
                         }
