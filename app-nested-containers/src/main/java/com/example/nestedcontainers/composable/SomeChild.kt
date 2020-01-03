@@ -1,5 +1,6 @@
 package com.example.nestedcontainers.composable
 
+import androidx.animation.Spring.Companion.DampingRatioHighBouncy
 import androidx.animation.transitionDefinition
 import androidx.compose.Composable
 import androidx.compose.ambient
@@ -57,6 +58,12 @@ interface SomeChild {
                     transition {
                         colorPropKey using tween {
                             duration = 2000
+                        }
+                    }
+
+                    transition(fromState = SubtreeRed, toState = SubtreeGreen) {
+                        colorPropKey using physics {
+                            dampingRatio = DampingRatioHighBouncy
                         }
                     }
                 }
@@ -267,7 +274,8 @@ interface SomeChild {
                         )
                     }
                 }
-            }
+
+            } // Transition
         }
 
         private fun Routing.next(): Routing =
