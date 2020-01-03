@@ -169,22 +169,33 @@ fun Content() {
 
 ## Routing from deep links
 
-_Note: this is even more of a proof-of-concept only implementation than the other parts_
+_Note: this is even more of a proof-of-concept only implementation than the other parts._
 
-Build and install `app-lifelike` and `app-nested-containers` on your device.
+### Example 1
+
+Build and install `app-lifelike` on your device.
 
 Open a console and type:
+
 ```
 adb shell 'am start -a "android.intent.action.VIEW" -d "app-lifelike://go-to-profile?name=fake&phone=123123"'
 ```
-To open `app-lifelike` with skipped registration flow and go directly to Profile screen with fake user:
+
+This will open `app-lifelike` with skipped registration flow and go directly to Profile screen with fake user:
 
 ![](https://i.imgur.com/XomlkS3.png)
+
+### Example 2
+
+Build and install `app-nested-containers` on your device.
+
+Open a console and type:
 
 ```
 adb shell 'am start -a "android.intent.action.VIEW" -d "app-nested://default/BGR"'
 ```
-To open `app-nested-containers` with (B)lue / (G)reen / (R)ed subtrees pre-selected as routing:
+
+This will open `app-nested-containers` with (B)lue / (G)reen / (R)ed subtrees pre-selected as routing:
 
 ![](https://i.imgur.com/d7agB8D.png)
 
