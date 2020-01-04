@@ -7,7 +7,7 @@ import androidx.compose.ambient
 import androidx.compose.stateFor
 import androidx.compose.unaryPlus
 import androidx.ui.animation.ColorPropKey
-import androidx.ui.animation.Transition
+import androidx.ui.animation.Crossfade
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
@@ -236,9 +236,18 @@ interface SomeChild {
             currentRouting: Routing,
             level: Int
         ) {
-            Transition(definition = defs[level]!!, toState = currentRouting) { state ->
-                val bgColor = state[colorPropKey]
-                when (currentRouting) {
+            Crossfade(current = currentRouting) {
+                when (it) {
+                    /**
+                     * Now these branches below are almost the same, so you could of course
+                     * get rid of the when expression and parameterize the whole thing (only
+                     * the id labels "A" are different).
+                     *
+                     * But I thought that would remove the demonstration value imagining that in
+                     * real life circumstances these branches would have more meaningful names
+                     * ("Profile", "Settings", "Chat", "Gallery", etc.) with different
+                     * Composables on the right side.
+                     */
                     /**
                      * Now these branches below are almost the same, so you could of course
                      * get rid of the when expression and parameterize the whole thing (only
@@ -253,7 +262,7 @@ interface SomeChild {
                         Content(
                             level + 1,
                             "R$ord",
-                            bgColor,
+                            +colorResource(colorSets[Color.Red]!![level + 1]),
                             currentRouting
                         )
                     }
@@ -261,7 +270,7 @@ interface SomeChild {
                         Content(
                             level + 1,
                             "G$ord",
-                            bgColor,
+                            +colorResource(colorSets[Color.Green]!![level + 1]),
                             currentRouting
                         )
                     }
@@ -269,13 +278,13 @@ interface SomeChild {
                         Content(
                             level + 1,
                             "B$ord",
-                            bgColor,
+                            +colorResource(colorSets[Color.Blue]!![level + 1]),
                             currentRouting
                         )
                     }
                 }
 
-            } // Transition
+            }
         }
 
         private fun Routing.next(): Routing =
