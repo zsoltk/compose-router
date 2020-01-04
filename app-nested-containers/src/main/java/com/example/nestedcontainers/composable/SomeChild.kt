@@ -7,7 +7,6 @@ import androidx.compose.ambient
 import androidx.compose.stateFor
 import androidx.compose.unaryPlus
 import androidx.ui.animation.ColorPropKey
-import androidx.ui.animation.Crossfade
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
@@ -22,6 +21,7 @@ import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Surface
 import androidx.ui.res.colorResource
 import com.example.nestedcontainers.R
+import com.example.nestedcontainers.TranslateLeft
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeBlue
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeGreen
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeRed
@@ -236,7 +236,7 @@ interface SomeChild {
             currentRouting: Routing,
             level: Int
         ) {
-            Crossfade(current = currentRouting) {
+            TranslateLeft(current = currentRouting) {
                 when (it) {
                     /**
                      * Now these branches below are almost the same, so you could of course
