@@ -172,20 +172,22 @@ interface SomeChild {
             defaultRouting: Routing
         ) {
             Router("$level.$id", defaultRouting) { backStack ->
-                val nbChildren = nbChildrenPerLevel.getOrDefault(level, 1)
-                Container(
-                    name = if (level == 0) "Root" else "L$level.$id",
-                    size = backStack.size,
-                    bgColor = bgColor,
-                    onButtonClick = { backStack.push(backStack.last().next()) }
-                ) {
-                    Row {
-                        for (i in 1..nbChildren) {
-                            Child(
-                                i,
-                                backStack.last(),
-                                level
-                            )
+                TranslateLeft(current = backStack.last()) {
+                    val nbChildren = nbChildrenPerLevel.getOrDefault(level, 1)
+                    Container(
+                        name = if (level == 0) "Root" else "L$level.$id",
+                        size = backStack.size,
+                        bgColor = bgColor,
+                        onButtonClick = { backStack.push(backStack.last().next()) }
+                    ) {
+                        Row {
+                            for (i in 1..nbChildren) {
+                                Child(
+                                    i,
+                                    it,
+                                    level
+                                )
+                            }
                         }
                     }
                 }
@@ -236,54 +238,51 @@ interface SomeChild {
             currentRouting: Routing,
             level: Int
         ) {
-            TranslateLeft(current = currentRouting) {
-                when (it) {
-                    /**
-                     * Now these branches below are almost the same, so you could of course
-                     * get rid of the when expression and parameterize the whole thing (only
-                     * the id labels "A" are different).
-                     *
-                     * But I thought that would remove the demonstration value imagining that in
-                     * real life circumstances these branches would have more meaningful names
-                     * ("Profile", "Settings", "Chat", "Gallery", etc.) with different
-                     * Composables on the right side.
-                     */
-                    /**
-                     * Now these branches below are almost the same, so you could of course
-                     * get rid of the when expression and parameterize the whole thing (only
-                     * the id labels "A" are different).
-                     *
-                     * But I thought that would remove the demonstration value imagining that in
-                     * real life circumstances these branches would have more meaningful names
-                     * ("Profile", "Settings", "Chat", "Gallery", etc.) with different
-                     * Composables on the right side.
-                     */
-                    is SubtreeRed -> {
-                        Content(
-                            level + 1,
-                            "R$ord",
-                            +colorResource(colorSets[Color.Red]!![level + 1]),
-                            currentRouting
-                        )
-                    }
-                    is SubtreeGreen -> {
-                        Content(
-                            level + 1,
-                            "G$ord",
-                            +colorResource(colorSets[Color.Green]!![level + 1]),
-                            currentRouting
-                        )
-                    }
-                    is SubtreeBlue -> {
-                        Content(
-                            level + 1,
-                            "B$ord",
-                            +colorResource(colorSets[Color.Blue]!![level + 1]),
-                            currentRouting
-                        )
-                    }
+            when (currentRouting) {
+                /**
+                 * Now these branches below are almost the same, so you could of course
+                 * get rid of the when expression and parameterize the whole thing (only
+                 * the id labels "A" are different).
+                 *
+                 * But I thought that would remove the demonstration value imagining that in
+                 * real life circumstances these branches would have more meaningful names
+                 * ("Profile", "Settings", "Chat", "Gallery", etc.) with different
+                 * Composables on the right side.
+                 */
+                /**
+                 * Now these branches below are almost the same, so you could of course
+                 * get rid of the when expression and parameterize the whole thing (only
+                 * the id labels "A" are different).
+                 *
+                 * But I thought that would remove the demonstration value imagining that in
+                 * real life circumstances these branches would have more meaningful names
+                 * ("Profile", "Settings", "Chat", "Gallery", etc.) with different
+                 * Composables on the right side.
+                 */
+                is SubtreeRed -> {
+                    Content(
+                        level + 1,
+                        "R$ord",
+                        +colorResource(colorSets[Color.Red]!![level + 1]),
+                        currentRouting
+                    )
                 }
-
+                is SubtreeGreen -> {
+                    Content(
+                        level + 1,
+                        "G$ord",
+                        +colorResource(colorSets[Color.Green]!![level + 1]),
+                        currentRouting
+                    )
+                }
+                is SubtreeBlue -> {
+                    Content(
+                        level + 1,
+                        "B$ord",
+                        +colorResource(colorSets[Color.Blue]!![level + 1]),
+                        currentRouting
+                    )
+                }
             }
         }
 
