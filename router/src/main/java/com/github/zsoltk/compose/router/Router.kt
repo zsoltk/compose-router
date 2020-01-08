@@ -18,6 +18,16 @@ private val backStackMap = Ambient.of<MutableMap<Any, BackStack<*>>> {
     mutableMapOf()
 }
 
+/**
+ * Currently only used for deep link based Routing.
+ *
+ * Can be set to store a list of Routing elements of different types.
+ * The idea is that when we walk through this list in sequence - provided that the sequence
+ * is correct - we can set the app into any state that is a combination of Routing on different levels.
+ *
+ * See [com.example.lifelike.DeepLinkKt.parseProfileDeepLink] in :app-lifelike module for usage
+ * example.
+ */
 val routing = Ambient.of {
     listOf<Any>()
 }
