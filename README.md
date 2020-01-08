@@ -1,6 +1,6 @@
 # compose-router
 
-[![Version](https://jitpack.io/v/zsoltk/compose-router.svg)](https://jitpack.io/#zsoltk/backtrack)
+[![Version](https://jitpack.io/v/zsoltk/compose-router.svg)](https://jitpack.io/#zsoltk/compose-router)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 ![logo](https://i.imgur.com/kKcAHa3.png)
@@ -44,7 +44,7 @@ allprojects {
 
 Add the dependency:
 ```groovy
-implementation 'com.github.zsoltk:backtrack:{latest-version}'
+implementation 'com.github.zsoltk:compose-router:{latest-version}'
 ```
 
 
