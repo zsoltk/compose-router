@@ -21,7 +21,7 @@ import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Surface
 import androidx.ui.res.colorResource
 import com.example.nestedcontainers.R
-import com.example.nestedcontainers.TranslateLeft
+import com.example.nestedcontainers.Translate
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeBlue
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeGreen
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeRed
@@ -172,14 +172,14 @@ interface SomeChild {
             defaultRouting: Routing
         ) {
             Router("$level.$id", defaultRouting) { backStack ->
-                TranslateLeft(current = backStack.last()) {
-                    val nbChildren = nbChildrenPerLevel.getOrDefault(level, 1)
-                    Container(
-                        name = if (level == 0) "Root" else "L$level.$id",
-                        size = backStack.size,
-                        bgColor = bgColor,
-                        onButtonClick = { backStack.push(backStack.last().next()) }
-                    ) {
+                val nbChildren = nbChildrenPerLevel.getOrDefault(level, 1)
+                Container(
+                    name = if (level == 0) "Root" else "L$level.$id",
+                    size = backStack.size,
+                    bgColor = bgColor,
+                    onButtonClick = { backStack.push(backStack.last().next()) }
+                ) {
+                    Translate(current = backStack.last()) {
                         Row {
                             for (i in 1..nbChildren) {
                                 Child(

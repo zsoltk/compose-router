@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
 import androidx.ui.core.setContent
-import androidx.ui.foundation.HorizontalScroller
+import androidx.ui.foundation.VerticalScroller
 import androidx.ui.material.MaterialTheme
 import androidx.ui.tooling.preview.Preview
 import com.example.nestedcontainers.composable.SomeChild
@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             MaterialTheme {
-                HorizontalScroller {
+                VerticalScroller {
                     timeCapsule.Provider(savedInstanceState) {
                         backPressHandler.Provider {
                             routing.Provider(intent.deepLinkRoute()) {
