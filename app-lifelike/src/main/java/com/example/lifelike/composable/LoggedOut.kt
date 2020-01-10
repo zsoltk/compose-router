@@ -8,6 +8,7 @@ import com.example.lifelike.composable.loggedout.RegUserPhone
 import com.example.lifelike.composable.loggedout.Splash
 import com.example.lifelike.entity.User
 import com.github.zsoltk.compose.router.Router
+import com.github.zsoltk.compose.transition.Tranlate
 
 interface LoggedOut {
 
@@ -37,12 +38,14 @@ interface LoggedOut {
                     }
                 }
 
-                when (val currentRouting = backStack.last()) {
-                    Routing.Splash -> Splash.Content(onNext = currentRouting.next())
-                    Routing.RegUserName -> RegUserName.Content(user = user, onNext = currentRouting.next())
-                    Routing.RegUserPhone -> RegUserPhone.Content(user = user, onNext = currentRouting.next())
-                    Routing.RegConfirmSmsCode -> RegConfirmSmsCode.Content(onNext = currentRouting.next())
-                    Routing.RegFinal -> RegFinal.Content(onNext = { onLoggedIn(user) })
+                Tranlate(current = backStack.last()) { currentRouting ->
+                    when (currentRouting) {
+                        Routing.Splash -> Splash.Content(onNext = currentRouting.next())
+                        Routing.RegUserName -> RegUserName.Content(user = user, onNext = currentRouting.next())
+                        Routing.RegUserPhone -> RegUserPhone.Content(user = user, onNext = currentRouting.next())
+                        Routing.RegConfirmSmsCode -> RegConfirmSmsCode.Content(onNext = currentRouting.next())
+                        Routing.RegFinal -> RegFinal.Content(onNext = { onLoggedIn(user) })
+                    }
                 }
             }
         }

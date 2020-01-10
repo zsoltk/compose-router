@@ -1,4 +1,4 @@
-package com.example.nestedcontainers
+package com.github.zsoltk.compose.transition
 
 import androidx.animation.AnimationClockObservable
 import androidx.animation.PropKey

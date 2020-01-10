@@ -4,11 +4,12 @@ import androidx.compose.Composable
 import androidx.ui.layout.FlexColumn
 import com.example.lifelike.composable.loggedin.Gallery
 import com.example.lifelike.composable.loggedin.Gallery.Routing.AlbumList
-import com.example.lifelike.composable.loggedin.News
 import com.example.lifelike.composable.loggedin.Menu
+import com.example.lifelike.composable.loggedin.News
 import com.example.lifelike.composable.loggedin.Profile
 import com.example.lifelike.entity.User
 import com.github.zsoltk.compose.router.Router
+import com.github.zsoltk.compose.transition.Tranlate
 
 interface LoggedIn {
     sealed class Routing {
@@ -25,7 +26,9 @@ interface LoggedIn {
 
                 FlexColumn {
                     expanded(1f) {
-                        routing.toContent(user, onLogout)
+                        Tranlate(current = routing) {
+                            it.toContent(user, onLogout)
+                        }
                     }
 
                     inflexible {
