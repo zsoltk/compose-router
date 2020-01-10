@@ -14,7 +14,6 @@ import androidx.compose.unaryPlus
 import androidx.ui.animation.animatedFloat
 import androidx.ui.core.Alignment.TopLeft
 import androidx.ui.core.Draw
-import androidx.ui.engine.geometry.Rect
 import androidx.ui.layout.Stack
 import com.example.nestedcontainers.TransitionStates.Finish
 import com.example.nestedcontainers.TransitionStates.Start
@@ -25,7 +24,7 @@ fun <T : Any> Tranlate(current: T, children: @Composable() (T) -> Unit) {
     val transitionDefinition = +memo {
         TransitionDef(
             enterTransition = transitionDef(TranslateParams(startX = 1f, endX = 0f)),
-            exitTransition = transitionDef(TranslateParams(startX = 0f, endX = -1f))
+            exitTransition = transitionDef(TranslateParams(startY = 0f, endY = -1f))
         )
     }
     if (animState.current != current) {
@@ -37,9 +36,15 @@ fun <T : Any> Tranlate(current: T, children: @Composable() (T) -> Unit) {
                 Transition(
                     definition = transitionDefinition.exitTransition,
                     initState = Start,
-                    toState = Finish
+                    toState = Finish,
+                    onStateChangeFinished = {
+                        if (it == Finish && animState.current == current) {
+//                        println("Cleanup for ${current.javaClass.simpleName}")
+                            animState.items.removeAll { it.key != animState.current }
+                        }
+                    }
                 ) {
-//                    println("Render exit children for ${key.javaClass.simpleName} ${animState.items.size} ${it[X]}")
+                    //                    println("Render exit children for ${key.javaClass.simpleName} ${animState.items.size} ${it[X]}")
                     children(it)
                 }
             }
@@ -49,15 +54,9 @@ fun <T : Any> Tranlate(current: T, children: @Composable() (T) -> Unit) {
             Transition(
                 definition = transitionDefinition.enterTransition,
                 initState = if (animState.items.size == 1) Finish else Start,
-                toState = Finish,
-                onStateChangeFinished = {
-                    if (it == Finish && animState.current == current) {
-//                        println("Cleanup for ${current.javaClass.simpleName}")
-                        animState.items.removeAll { it.key != animState.current }
-                    }
-                }
+                toState = Finish
             ) {
-//                println("Render enter children for ${current.javaClass.simpleName} ${animState.items.size} ${it[X]}")
+                //                println("Render enter children for ${current.javaClass.simpleName} ${animState.items.size} ${it[X]}")
                 children(it)
             }
         }
@@ -71,14 +70,15 @@ fun <T : Any> Tranlate(current: T, children: @Composable() (T) -> Unit) {
                         val composable = @Composable() {
                             children(item.key)
                         }
-                        val floatValue = it[X]
+                        val xFraction = it[X]
+                        val yFraction = it[Y]
                         Draw(children = composable) { canvas, parentSize ->
                             canvas.save()
                             val startX = parentSize.width.value
-                            val endX = 0f
+                            val startY = parentSize.width.value
 //            println("$startX $endX $floatValue ${(endX - startX) * floatValue}")
-                            canvas.clipRect(Rect(0f, 0f, parentSize.width.value, parentSize.height.value))
-                            canvas.translate(startX * floatValue, 0f)
+                            canvas.nativeCanvas.clipRect(0f, 0f, parentSize.width.value, parentSize.height.value)
+                            canvas.translate(startX * xFraction, startY * yFraction)
                             drawChildren()
                             canvas.restore()
                         }
@@ -86,6 +86,7 @@ fun <T : Any> Tranlate(current: T, children: @Composable() (T) -> Unit) {
                 }
             }
         }
+
     }
 }
 
