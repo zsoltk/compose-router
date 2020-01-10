@@ -2,6 +2,8 @@ package com.example.nestedcontainers
 
 import androidx.animation.AnimationEndReason.TargetReached
 import androidx.animation.FloatPropKey
+import androidx.animation.TransitionDefinition
+import androidx.animation.TransitionState
 import androidx.animation.transitionDefinition
 import androidx.compose.Composable
 import androidx.compose.Key
@@ -10,65 +12,78 @@ import androidx.compose.memo
 import androidx.compose.onCommit
 import androidx.compose.unaryPlus
 import androidx.ui.animation.animatedFloat
+import androidx.ui.core.Alignment.TopLeft
 import androidx.ui.core.Draw
-import androidx.ui.core.Layout
-import androidx.ui.core.ipx
-import androidx.ui.core.px
 import androidx.ui.engine.geometry.Rect
-import com.example.nestedcontainers.T.Finish
-import com.example.nestedcontainers.T.Start
+import androidx.ui.layout.Stack
+import com.example.nestedcontainers.TransitionStates.Finish
+import com.example.nestedcontainers.TransitionStates.Start
 
 @Composable
-fun <T> Translate(current: T, children: @Composable() (T) -> Unit) {
+fun <T : Any> Tranlate(current: T, children: @Composable() (T) -> Unit) {
     val animState = +memo { AnimationState<T>() }
+    val transitionDefinition = +memo {
+        TransitionDef(
+            enterTransition = transitionDef(TranslateParams(startX = 1f, endX = 0f)),
+            exitTransition = transitionDef(TranslateParams(startX = 0f, endX = -1f))
+        )
+    }
     if (animState.current != current) {
         animState.current = current
-        val keys = animState.items.map { it.key }.toMutableSet() + current
+        val keys = animState.items.map { it.key }.toMutableSet()
         animState.items.clear()
         keys.mapTo(animState.items) { key ->
-            AnimationItem(key) { children -> children() }
+            AnimationItem(key) { children ->
+                Transition(
+                    definition = transitionDefinition.exitTransition,
+                    initState = Start,
+                    toState = Finish
+                ) {
+//                    println("Render exit children for ${key.javaClass.simpleName} ${animState.items.size} ${it[X]}")
+                    children(it)
+                }
+            }
         }
-    }
 
-    val composable = @Composable() {
-        LayoutItems {
-            animState.items.forEach {
-                it.animApplication { children(it.key) }
+        animState.items += AnimationItem(current) { children ->
+            Transition(
+                definition = transitionDefinition.enterTransition,
+                initState = if (animState.items.size == 1) Finish else Start,
+                toState = Finish,
+                onStateChangeFinished = {
+                    if (it == Finish && animState.current == current) {
+//                        println("Cleanup for ${current.javaClass.simpleName}")
+                        animState.items.removeAll { it.key != animState.current }
+                    }
+                }
+            ) {
+//                println("Render enter children for ${current.javaClass.simpleName} ${animState.items.size} ${it[X]}")
+                children(it)
             }
         }
     }
 
-    Key(key = current) {
-        val floatValue = +animated(init = 0f, target = 1f, snap = animState.items.size == 1) {
-            if (animState.current == current) {
-                animState.items.removeAll { it.key != animState.current }
-            }
-        }
-        Draw(children = composable) { canvas, parentSize ->
-            canvas.save()
-            val itemSize = (parentSize.width / animState.items.size).value
-            val startX = itemSize * (animState.items.size - 1)
-            val endX = itemSize * animState.items.size
-            println("$startX $endX $floatValue ${(endX - startX) * floatValue}")
-            canvas.clipRect(Rect(0f, 0f, itemSize, parentSize.height.value))
-            canvas.translate(-startX + (endX - startX) * (1 - floatValue), 0f)
-            drawChildren()
-            canvas.restore()
-        }
-    }
-}
-
-@Composable
-private fun LayoutItems(children: @Composable() () -> Unit) {
-    Layout(children = children) { measurables, constraints ->
-        val placeables = measurables.map { it.measure(constraints) }
-        val width = placeables.sumBy { it.width.value }
-        val height = placeables.firstOrNull()?.height ?: 0.ipx
-        layout(width.ipx, height) {
-            var width = 0
-            placeables.forEach {
-                it.place(width.px, 0.px)
-                width += it.width.value
+    Stack {
+        aligned(TopLeft) {
+            animState.items.forEach { item ->
+                Key(item.key) {
+                    item.transition {
+                        val composable = @Composable() {
+                            children(item.key)
+                        }
+                        val floatValue = it[X]
+                        Draw(children = composable) { canvas, parentSize ->
+                            canvas.save()
+                            val startX = parentSize.width.value
+                            val endX = 0f
+//            println("$startX $endX $floatValue ${(endX - startX) * floatValue}")
+                            canvas.clipRect(Rect(0f, 0f, parentSize.width.value, parentSize.height.value))
+                            canvas.translate(startX * floatValue, 0f)
+                            drawChildren()
+                            canvas.restore()
+                        }
+                    }
+                }
             }
         }
     }
@@ -88,13 +103,13 @@ private class AnimationState<T> {
 
 private class AnimationItem<T>(
     val key: T,
-    val animApplication: @Composable() (@Composable() () -> Unit) -> Unit
+    val transition: @Composable() (@Composable() (TransitionState) -> Unit) -> Unit
 )
 
 private val X = FloatPropKey()
 private val Y = FloatPropKey()
 
-private enum class T {
+private enum class TransitionStates {
     Start, Finish
 }
 
@@ -132,3 +147,8 @@ private fun animated(init: Float, target: Float, snap: Boolean, onFinish: () -> 
 
     float.value
 }
+
+private class TransitionDef(
+    val enterTransition: TransitionDefinition<TransitionStates>,
+    val exitTransition: TransitionDefinition<TransitionStates>
+)
