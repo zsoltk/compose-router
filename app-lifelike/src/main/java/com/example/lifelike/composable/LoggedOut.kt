@@ -10,10 +10,7 @@ import com.example.lifelike.composable.loggedout.Splash
 import com.example.lifelike.entity.User
 import com.github.zsoltk.compose.router.Router
 import com.github.zsoltk.compose.transition.AnimateChange
-import com.github.zsoltk.compose.transition.AnimationParams.Opacity
-import com.github.zsoltk.compose.transition.AnimationParams.Rotation
 import com.github.zsoltk.compose.transition.AnimationParams.X
-import com.github.zsoltk.compose.transition.AnimationParams.Y
 import com.github.zsoltk.compose.transition.TransitionStates.Finish
 import com.github.zsoltk.compose.transition.TransitionStates.Start
 
@@ -60,16 +57,10 @@ interface LoggedOut {
         private val enterAnim = transitionDefinition {
             state(Start) {
                 this[X] = 1f
-                this[Y] = 0f
-                this[Opacity] = 1f
-                this[Rotation] = 0f
             }
 
             state(Finish) {
                 this[X] = 0f
-                this[Y] = 0f
-                this[Opacity] = 1f
-                this[Rotation] = 0f
             }
 
             transition {
@@ -80,16 +71,10 @@ interface LoggedOut {
         private val exitAnim = transitionDefinition {
             state(Start) {
                 this[X] = 0f
-                this[Y] = 0f
-                this[Opacity] = 1f
-                this[Rotation] = 0f
             }
 
             state(Finish) {
                 this[X] = -1f
-                this[Y] = 0f
-                this[Opacity] = 1f
-                this[Rotation] = 0f
             }
 
             transition {

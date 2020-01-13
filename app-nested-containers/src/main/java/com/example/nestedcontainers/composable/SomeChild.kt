@@ -84,16 +84,10 @@ interface SomeChild {
         private val alphaEnterAnim = transitionDefinition {
             state(Start) {
                 this[Opacity] = 0f
-                this[X] = 0f
-                this[Y] = 0f
-                this[Rotation] = 0f
             }
 
             state(Finish) {
                 this[Opacity] = 1f
-                this[X] = 0f
-                this[Y] = 0f
-                this[Rotation] = 0f
             }
 
             transition {

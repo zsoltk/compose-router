@@ -1,6 +1,7 @@
 package com.github.zsoltk.compose.transition
 
 import androidx.animation.FloatPropKey
+import androidx.animation.MutableTransitionState
 import androidx.animation.TransitionDefinition
 import androidx.animation.TransitionState
 import androidx.animation.transitionDefinition
@@ -40,8 +41,8 @@ fun <T : Any> AnimateChange(
     val animState = +memo { AnimationState<T>() }
     val transitionDefinition = +memo {
         TransitionDef(
-            enterTransition = enterAnim,
-            exitTransition = exitAnim
+            enterTransition = enterAnim.fillDefault(),
+            exitTransition = exitAnim.fillDefault()
         )
     }
     if (animState.current != current) {
@@ -137,6 +138,28 @@ private class TransitionDef(
     val enterTransition: TransitionDefinition<TransitionStates>,
     val exitTransition: TransitionDefinition<TransitionStates>
 )
+
+private val Defaults = listOf(
+    X to 0f,
+    Y to 0f,
+    Opacity to 1f,
+    Rotation to 0f
+)
+
+private fun TransitionDefinition<TransitionStates>.fillDefault(): TransitionDefinition<TransitionStates> {
+    TransitionStates.values().forEach {
+        val oldState = getStateFor(it) as MutableTransitionState
+        // hack state
+        Defaults.forEach { (key, value) ->
+            try {
+                oldState[key] = value
+            } catch (e: IllegalArgumentException) {
+                // value exists
+            }
+        }
+    }
+    return this
+}
 
 /**
  * Example
