@@ -1,5 +1,6 @@
 package com.example.lifelike.composable
 
+import androidx.animation.transitionDefinition
 import androidx.compose.Composable
 import com.example.lifelike.composable.loggedout.RegConfirmSmsCode
 import com.example.lifelike.composable.loggedout.RegFinal
@@ -8,7 +9,13 @@ import com.example.lifelike.composable.loggedout.RegUserPhone
 import com.example.lifelike.composable.loggedout.Splash
 import com.example.lifelike.entity.User
 import com.github.zsoltk.compose.router.Router
-import com.github.zsoltk.compose.transition.Tranlate
+import com.github.zsoltk.compose.transition.AnimateChange
+import com.github.zsoltk.compose.transition.AnimationParams.Opacity
+import com.github.zsoltk.compose.transition.AnimationParams.Rotation
+import com.github.zsoltk.compose.transition.AnimationParams.X
+import com.github.zsoltk.compose.transition.AnimationParams.Y
+import com.github.zsoltk.compose.transition.TransitionStates.Finish
+import com.github.zsoltk.compose.transition.TransitionStates.Start
 
 interface LoggedOut {
 
@@ -38,7 +45,7 @@ interface LoggedOut {
                     }
                 }
 
-                Tranlate(current = backStack.last()) { currentRouting ->
+                AnimateChange(current = backStack.last(), enterAnim = enterAnim, exitAnim = exitAnim) { currentRouting ->
                     when (currentRouting) {
                         Routing.Splash -> Splash.Content(onNext = currentRouting.next())
                         Routing.RegUserName -> RegUserName.Content(user = user, onNext = currentRouting.next())
@@ -47,6 +54,46 @@ interface LoggedOut {
                         Routing.RegFinal -> RegFinal.Content(onNext = { onLoggedIn(user) })
                     }
                 }
+            }
+        }
+
+        private val enterAnim = transitionDefinition {
+            state(Start) {
+                this[X] = 1f
+                this[Y] = 0f
+                this[Opacity] = 1f
+                this[Rotation] = 0f
+            }
+
+            state(Finish) {
+                this[X] = 0f
+                this[Y] = 0f
+                this[Opacity] = 1f
+                this[Rotation] = 0f
+            }
+
+            transition {
+                X using tween { duration = 300 }
+            }
+        }
+
+        private val exitAnim = transitionDefinition {
+            state(Start) {
+                this[X] = 0f
+                this[Y] = 0f
+                this[Opacity] = 1f
+                this[Rotation] = 0f
+            }
+
+            state(Finish) {
+                this[X] = -1f
+                this[Y] = 0f
+                this[Opacity] = 1f
+                this[Rotation] = 0f
+            }
+
+            transition {
+                X using tween { duration = 300 }
             }
         }
     }

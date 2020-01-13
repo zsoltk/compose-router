@@ -1,5 +1,6 @@
 package com.example.nestedcontainers.composable
 
+import androidx.animation.transitionDefinition
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.stateFor
@@ -23,7 +24,13 @@ import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeGreen
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeRed
 import com.github.zsoltk.compose.router.Router
 import com.github.zsoltk.compose.savedinstancestate.savedInstanceState
-import com.github.zsoltk.compose.transition.Tranlate
+import com.github.zsoltk.compose.transition.AnimateChange
+import com.github.zsoltk.compose.transition.AnimationParams.Opacity
+import com.github.zsoltk.compose.transition.AnimationParams.Rotation
+import com.github.zsoltk.compose.transition.AnimationParams.X
+import com.github.zsoltk.compose.transition.AnimationParams.Y
+import com.github.zsoltk.compose.transition.TransitionStates.Finish
+import com.github.zsoltk.compose.transition.TransitionStates.Start
 
 interface SomeChild {
     /**
@@ -73,6 +80,46 @@ interface SomeChild {
             3 to 2,
             4 to 1
         )
+
+        private val alphaEnterAnim = transitionDefinition {
+            state(Start) {
+                this[Opacity] = 0f
+                this[X] = 0f
+                this[Y] = 0f
+                this[Rotation] = 0f
+            }
+
+            state(Finish) {
+                this[Opacity] = 1f
+                this[X] = 0f
+                this[Y] = 0f
+                this[Rotation] = 0f
+            }
+
+            transition {
+                Opacity using tween { duration = 300 }
+            }
+        }
+
+        private val alphaExitAnim = transitionDefinition {
+            state(Start) {
+                this[Opacity] = 1f
+                this[X] = 0f
+                this[Y] = 0f
+                this[Rotation] = 0f
+            }
+
+            state(Finish) {
+                this[Opacity] = 0f
+                this[X] = 0f
+                this[Y] = 0f
+                this[Rotation] = 0f
+            }
+
+            transition {
+                Opacity using tween { duration = 300 }
+            }
+        }
 
         @Composable
         fun Root() {
@@ -147,7 +194,7 @@ interface SomeChild {
                     bgColor = bgColor,
                     onButtonClick = { backStack.push(backStack.last().next()) }
                 ) {
-                    Tranlate(current = backStack.last()) {
+                    AnimateChange(current = backStack.last(), enterAnim = alphaEnterAnim, exitAnim = alphaExitAnim) {
                         Row {
                             for (i in 1..nbChildren) {
                                 Child(

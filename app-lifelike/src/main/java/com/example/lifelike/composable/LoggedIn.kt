@@ -1,5 +1,6 @@
 package com.example.lifelike.composable
 
+import androidx.animation.transitionDefinition
 import androidx.compose.Composable
 import androidx.ui.layout.FlexColumn
 import com.example.lifelike.composable.loggedin.Gallery
@@ -9,7 +10,12 @@ import com.example.lifelike.composable.loggedin.News
 import com.example.lifelike.composable.loggedin.Profile
 import com.example.lifelike.entity.User
 import com.github.zsoltk.compose.router.Router
-import com.github.zsoltk.compose.transition.Tranlate
+import com.github.zsoltk.compose.transition.AnimateChange
+import com.github.zsoltk.compose.transition.AnimationParams.Opacity
+import com.github.zsoltk.compose.transition.AnimationParams.Rotation
+import com.github.zsoltk.compose.transition.AnimationParams.X
+import com.github.zsoltk.compose.transition.AnimationParams.Y
+import com.github.zsoltk.compose.transition.TransitionStates
 
 interface LoggedIn {
     sealed class Routing {
@@ -19,6 +25,46 @@ interface LoggedIn {
     }
 
     companion object {
+        private val enterAnim = transitionDefinition {
+            state(TransitionStates.Start) {
+                this[X] = 1f
+                this[Y] = 0f
+                this[Opacity] = 1f
+                this[Rotation] = 0f
+            }
+
+            state(TransitionStates.Finish) {
+                this[X] = 0f
+                this[Y] = 0f
+                this[Opacity] = 1f
+                this[Rotation] = 0f
+            }
+
+            transition {
+                X using tween { duration = 300 }
+            }
+        }
+
+        private val exitAnim = transitionDefinition {
+            state(TransitionStates.Start) {
+                this[X] = 0f
+                this[Y] = 0f
+                this[Opacity] = 1f
+                this[Rotation] = 0f
+            }
+
+            state(TransitionStates.Finish) {
+                this[X] = -1f
+                this[Y] = 0f
+                this[Opacity] = 1f
+                this[Rotation] = 0f
+            }
+
+            transition {
+                X using tween { duration = 300 }
+            }
+        }
+
         @Composable
         fun Content(defaultRouting: Routing, user: User, onLogout: () -> Unit) {
             Router("LoggedIn", defaultRouting) { backStack ->
@@ -26,7 +72,7 @@ interface LoggedIn {
 
                 FlexColumn {
                     expanded(1f) {
-                        Tranlate(current = routing) {
+                        AnimateChange(current = routing, enterAnim = enterAnim, exitAnim = exitAnim) {
                             it.toContent(user, onLogout)
                         }
                     }
