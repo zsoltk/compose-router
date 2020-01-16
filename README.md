@@ -20,10 +20,17 @@ Compatible with Compose version **0.1.0-dev03**
 
 ## Sample apps
 
-- in this repo: [app-lifelike](app-lifelike) module displays a registration flow + logged in content with back stack
-- in this repo: [app-nested-containers](app-nested-containers) module displays nested routing on generated levels (each level has 3 possible routing between Red, Green, Blue states)
-- [fork of Jetnews](https://github.com/zsoltk/compose-samples) using **compose-router** to achieve proper screen history 
-- [compose-pokedex](https://github.com/zsoltk/compose-pokedex) using **compose-router**
+#### Sample module #1 - [app-lifelike](app-lifelike)
+Displays a registration flow + logged in content with back stack
+
+#### Sample module #2 - [app-nested-containers](app-nested-containers)
+Displays nested screen history on generated levels.
+
+#### Jetnews - [fork](https://github.com/zsoltk/compose-samples)
+Built with **compose-router** that adds proper screen history functionality.
+
+#### Pokedex - [compose-pokedex](https://github.com/zsoltk/compose-pokedex)
+Using **compose-router** for app structure.
 
 
 ## Download
