@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.onCommit
-import androidx.compose.unaryPlus
 
 
 @Composable
@@ -25,10 +24,10 @@ fun BundleScope(
     autoDispose: Boolean = true,
     children: @Composable() (Bundle) -> Unit
 ) {
-    val upstream = +ambient(savedInstanceState)
+    val upstream = ambient(savedInstanceState)
     val downstream = upstream.getBundle(key) ?: Bundle()
 
-    +onCommit {
+    onCommit {
         upstream.putBundle(key, downstream)
         if (autoDispose) {
             onDispose { upstream.remove(key) }

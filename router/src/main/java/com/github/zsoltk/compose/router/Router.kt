@@ -3,9 +3,8 @@ package com.github.zsoltk.compose.router
 import androidx.compose.Ambient
 import androidx.compose.Composable
 import androidx.compose.ambient
-import androidx.compose.memo
 import androidx.compose.onCommit
-import androidx.compose.unaryPlus
+import androidx.compose.remember
 import com.github.zsoltk.compose.backpress.BackPressHandler
 import com.github.zsoltk.compose.backpress.backPressHandler
 import com.github.zsoltk.compose.savedinstancestate.BundleScope
@@ -39,6 +38,7 @@ val routing = Ambient.of {
         "com.github.zsoltk.compose.router.Router"),
     level = DeprecationLevel.ERROR
 )
+@Composable
 fun <T> BackHandler(contextId: String, defaultRouting: T, children: @Composable() (BackStack<T>) -> Unit) {
     Router(contextId, defaultRouting, children)
 }
@@ -52,16 +52,16 @@ fun <T> BackHandler(contextId: String, defaultRouting: T, children: @Composable(
  */
 @Composable
 fun <T> Router(contextId: String, defaultRouting: T, children: @Composable() (BackStack<T>) -> Unit) {
-    val route = +ambient(routing)
+    val route = ambient(routing)
     val routingFromAmbient = route.firstOrNull() as? T
     val downStreamRoute = if (route.size > 1) route.takeLast(route.size - 1) else emptyList()
 
-    val upstreamHandler = +ambient(backPressHandler)
-    val localHandler = +memo { BackPressHandler("${upstreamHandler.id}.$contextId") }
+    val upstreamHandler = ambient(backPressHandler)
+    val localHandler = remember { BackPressHandler("${upstreamHandler.id}.$contextId") }
     val backStack = fetchBackStack(localHandler.id, defaultRouting, routingFromAmbient)
     val handleBackPressHere: () -> Boolean = { localHandler.handle() || backStack.pop() }
 
-    +onCommit {
+    onCommit {
         upstreamHandler.children.add(handleBackPressHere)
         onDispose { upstreamHandler.children.remove(handleBackPressHere) }
     }
@@ -76,10 +76,10 @@ fun <T> Router(contextId: String, defaultRouting: T, children: @Composable() (Ba
 }
 
 private fun <T> fetchBackStack(key: String, defaultElement: T, override: T?): BackStack<T> {
-    val upstreamBundle = +ambient(savedInstanceState)
+    val upstreamBundle = ambient(savedInstanceState)
     val onElementRemoved: (Int) -> Unit = { upstreamBundle.remove(key(it)) }
 
-    val upstreamBackStacks = +ambient(backStackMap)
+    val upstreamBackStacks = ambient(backStackMap)
     val existing = upstreamBackStacks[key] as BackStack<T>?
 
     return when {

@@ -3,24 +3,23 @@ package com.example.nestedcontainers.composable
 import androidx.compose.Composable
 import androidx.compose.ambient
 import androidx.compose.stateFor
-import androidx.compose.unaryPlus
 import androidx.ui.core.Text
-import androidx.ui.core.dp
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Column
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.Row
-import androidx.ui.layout.Spacing
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Surface
 import androidx.ui.res.colorResource
+import androidx.ui.unit.dp
 import com.example.nestedcontainers.R
-import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeRed
-import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeGreen
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeBlue
+import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeGreen
+import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeRed
 import com.github.zsoltk.compose.router.Router
 import com.github.zsoltk.compose.savedinstancestate.savedInstanceState
 
@@ -125,8 +124,8 @@ interface SomeChild {
             ) {
                 Text(
                     text = "Leaf $level.$id",
-                    style = (+MaterialTheme.typography()).body1,
-                    modifier = Spacing(16.dp)
+                    style = MaterialTheme.typography().body1,
+                    modifier = LayoutPadding(16.dp)
                 )
             }
         }
@@ -171,13 +170,13 @@ interface SomeChild {
             onButtonClick: () -> Unit,
             children: @Composable() () -> Unit
         ) {
-            val bundle = +ambient(savedInstanceState)
-            var counter by +stateFor(this) {
+            val bundle = ambient(savedInstanceState)
+            var counter by stateFor(this) {
                 bundle.getInt("counter", 0)
             }
 
-            Surface(color = +colorResource(bgColor)) {
-                Column(modifier = Spacing(16.dp)) {
+            Surface(color = colorResource(bgColor)) {
+                Column(modifier = LayoutPadding(16.dp)) {
                     Ripple(bounded = true) {
                         Button(text = "$name.NEXT", onClick = onButtonClick)
                     }

@@ -1,16 +1,21 @@
 package com.example.lifelike.composable.loggedin
 
 import androidx.compose.Composable
-import androidx.compose.unaryPlus
 import androidx.ui.core.Text
-import androidx.ui.core.dp
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.DrawImage
 import androidx.ui.foundation.VerticalScroller
-import androidx.ui.layout.*
+import androidx.ui.layout.Column
+import androidx.ui.layout.Container
+import androidx.ui.layout.LayoutAspectRatio
+import androidx.ui.layout.LayoutPadding
+import androidx.ui.layout.Padding
+import androidx.ui.layout.Table
+import androidx.ui.layout.TableColumnWidth
 import androidx.ui.material.MaterialTheme
 import androidx.ui.res.imageResource
 import androidx.ui.tooling.preview.Preview
+import androidx.ui.unit.dp
 import com.example.lifelike.R
 import com.example.lifelike.entity.Album
 import com.example.lifelike.entity.Photo
@@ -49,23 +54,23 @@ interface PhotosOfAlbum {
 
         @Composable
         fun AlbumTitle(album: Album) {
-            val typography = +MaterialTheme.typography()
+            val typography = MaterialTheme.typography()
 
             Text(
                 text = album.name,
                 style = typography.h4,
-                modifier = Spacing(left = 8.dp, right = 8.dp, top = 16.dp, bottom = 4.dp)
+                modifier = LayoutPadding(left = 8.dp, top = 16.dp, right = 8.dp, bottom = 4.dp)
             )
         }
 
         @Composable
         fun PhotoCount(album: Album) {
-            val typography = +MaterialTheme.typography()
+            val typography = MaterialTheme.typography()
 
             Text(
                 text = "${album.photos.size} photos",
                 style = typography.body1,
-                modifier = Spacing(left = 8.dp, right = 8.dp, bottom = 16.dp)
+                modifier = LayoutPadding(left = 8.dp, right = 8.dp, bottom = 16.dp)
             )
         }
 
@@ -75,7 +80,7 @@ interface PhotosOfAlbum {
             val lastIndex = album.photos.lastIndex
             val cols = 4
             val rows = nbPhotos / cols
-            val image = +imageResource(R.drawable.placeholder)
+            val image = imageResource(R.drawable.placeholder)
 
 
             Padding(4.dp) {
@@ -89,7 +94,7 @@ interface PhotosOfAlbum {
                             for (j in startIndex..endIndex) {
                                 Padding(4.dp) {
                                     Clickable(onClick = { onPhotoSelected(album.photos[j]) }) {
-                                        Container(expanded = true, modifier = AspectRatio(1f)) {
+                                        Container(expanded = true, modifier = LayoutAspectRatio(1f)) {
                                             DrawImage(image)
                                         }
                                     }

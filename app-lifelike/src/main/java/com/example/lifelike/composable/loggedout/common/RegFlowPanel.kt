@@ -1,12 +1,15 @@
 package com.example.lifelike.composable.loggedout.common
 
 import androidx.compose.Composable
-import androidx.compose.unaryPlus
 import androidx.ui.core.Alignment
 import androidx.ui.core.Text
-import androidx.ui.core.dp
-import androidx.ui.layout.*
+import androidx.ui.layout.Arrangement
+import androidx.ui.layout.Column
+import androidx.ui.layout.Container
+import androidx.ui.layout.DpConstraints
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.material.MaterialTheme
+import androidx.ui.unit.dp
 import com.example.lifelike.composable.common.BigButton
 
 @Composable
@@ -15,10 +18,10 @@ fun RegFlowPanel(
     onNext: () -> Unit,
     content: @Composable() () -> Unit = {}
 ) {
-    Column(modifier = Spacing(40.dp), arrangement = Arrangement.SpaceAround) {
+    Column(modifier = LayoutPadding(40.dp), arrangement = Arrangement.SpaceAround) {
         Text(
             text = title,
-            style = (+MaterialTheme.typography()).h5
+            style = MaterialTheme.typography().h5
         )
         content()
         Container(
