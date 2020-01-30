@@ -4,8 +4,8 @@ import androidx.compose.Composable
 import androidx.ui.core.Text
 import androidx.ui.foundation.DrawImage
 import androidx.ui.graphics.Color
+import androidx.ui.layout.Column
 import androidx.ui.layout.Container
-import androidx.ui.layout.FlexColumn
 import androidx.ui.layout.LayoutHeight
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.Spacer
@@ -28,22 +28,18 @@ interface FullScreenPhoto {
 
             Surface(color = Color.DarkGray) {
                 Container(modifier = LayoutPadding(32.dp)) {
-                    FlexColumn {
-                        flexible(0.8f) {
-                            Container(expanded = true) {
-                                DrawImage(image = image)
-                            }
+                    Column {
+                        Container(modifier = LayoutFlexible(0.8f), expanded = true) {
+                            DrawImage(image = image)
                         }
 
-                        inflexible {
-                            Spacer(modifier = LayoutHeight(32.dp))
-                            Text(
-                                text = photo.title,
-                                style = typography.subtitle1.copy(
-                                    color = Color.White
-                                )
+                        Spacer(modifier = LayoutHeight(32.dp))
+                        Text(
+                            text = photo.title,
+                            style = typography.subtitle1.copy(
+                                color = Color.White
                             )
-                        }
+                        )
                     }
                 }
             }

@@ -19,7 +19,10 @@ interface Profile {
     companion object {
         @Composable
         fun Content(user: User, onLogout: () -> Unit) {
-            Column(modifier = LayoutPadding(40.dp), arrangement = Arrangement.SpaceAround) {
+            Column(
+                modifier = LayoutHeight.Fill + LayoutPadding(40.dp),
+                arrangement = Arrangement.SpaceAround
+            ) {
                 Text(
                     text = "You are logged in as:",
                     style = MaterialTheme.typography().h4

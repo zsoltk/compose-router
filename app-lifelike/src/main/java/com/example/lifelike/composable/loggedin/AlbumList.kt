@@ -7,9 +7,9 @@ import androidx.ui.foundation.DrawImage
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Column
 import androidx.ui.layout.Container
-import androidx.ui.layout.FlexRow
 import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
+import androidx.ui.layout.Row
 import androidx.ui.layout.Spacer
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.Ripple
@@ -43,8 +43,7 @@ interface AlbumList {
 
             Ripple(bounded = true) {
                 Clickable(onClick = { onAlbumSelected(album) }) {
-                    FlexRow(modifier = LayoutPadding(all = 16.dp)) {
-                        inflexible {
+                    Row(modifier = LayoutPadding(all = 16.dp)) {
                             Container(width = 40.dp, height = 40.dp) {
                                 DrawImage(image)
                             }
@@ -53,10 +52,6 @@ interface AlbumList {
                                 Text(album.name, style = typography.subtitle1.copy(fontWeight = FontWeight.Bold))
                                 Text("${album.photos.size} photos", style = typography.body1)
                             }
-                        }
-                        flexible(0f) {
-                            Container(expanded = true) {}
-                        }
                     }
                 }
             }

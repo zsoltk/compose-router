@@ -3,7 +3,9 @@ package com.example.lifelike.composable.loggedin
 import androidx.compose.Composable
 import androidx.ui.core.Text
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.layout.FlexRow
+import androidx.ui.layout.Container
+import androidx.ui.layout.LayoutWidth
+import androidx.ui.layout.Row
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.TextButtonStyle
@@ -29,9 +31,9 @@ interface Menu {
     companion object {
         @Composable
         fun Content(state: State, onMenuItemClicked: (MenuItem) -> Unit) {
-            FlexRow {
+            Row {
                 state.menuItems.forEach { item ->
-                    expanded(1f) {
+                    Container(modifier = LayoutFlexible(1f)) {
                         MenuItem(
                             item,
                             item == state.currentSelection
@@ -51,7 +53,11 @@ interface Menu {
                 color = if (isSelected) color.secondary else color.surface,
                 shape = RoundedCornerShape(topLeft = 4.dp, topRight = 4.dp)
             ) {
-                Button(onClick = { onClick.invoke(item) }, style = TextButtonStyle()) {
+                Button(
+                    modifier = LayoutWidth.Fill,
+                    onClick = { onClick.invoke(item) },
+                    style = TextButtonStyle()
+                ) {
                     Text(
                         text = when (item) {
                             Gallery -> "Gallery"
