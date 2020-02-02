@@ -16,7 +16,7 @@ Routing functionality for Jetpack Compose with back stack:
 - Can be integrated with automatic scoped `savedInstanceState` persistence
 - Supports routing based on deep links (POC impl)
 
-Compatible with Compose version **0.1.0-dev03**
+Compatible with Compose version **0.1.0-dev04**
 
 ## Sample apps
 
@@ -159,8 +159,8 @@ In client code you can now use:
 ```kotlin
 @Composable
 fun Content() {
-    val bundle = +ambient(savedInstanceState)
-    var counter by +state { bundle.getInt(KEY_COUNTER, 0) }
+    val bundle = ambient(savedInstanceState)
+    var counter by state { bundle.getInt(KEY_COUNTER, 0) }
 
     Button(text = "Counter: $counter", onClick = {
         bundle.putInt(KEY_COUNTER, ++counter)
