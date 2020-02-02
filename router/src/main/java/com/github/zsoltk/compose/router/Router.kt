@@ -31,18 +31,6 @@ val routing = Ambient.of {
     listOf<Any>()
 }
 
-@Deprecated(
-    message = "Use Router instead",
-    replaceWith = ReplaceWith(
-        "Router(contextId, defaultRouting, children)",
-        "com.github.zsoltk.compose.router.Router"),
-    level = DeprecationLevel.ERROR
-)
-@Composable
-fun <T> BackHandler(contextId: String, defaultRouting: T, children: @Composable() (BackStack<T>) -> Unit) {
-    Router(contextId, defaultRouting, children)
-}
-
 /**
  * Adds back stack functionality with bubbling up fallbacks if the back stack cannot be popped
  * on this level.
