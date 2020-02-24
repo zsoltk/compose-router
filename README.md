@@ -16,7 +16,7 @@ Routing functionality for Jetpack Compose with back stack:
 - Can be integrated with automatic scoped `savedInstanceState` persistence
 - Supports routing based on deep links (POC impl)
 
-Compatible with Compose version **0.1.0-dev04**
+Compatible with Compose version **0.1.0-dev05**
 
 ## Sample apps
 
@@ -112,7 +112,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            backPressHandler.Provider {
+            Providers(
+                AmbientBackPressHandler provides backPressHandler
+            ) {
                 // Your root composable goes here
             }
         }
@@ -134,13 +136,11 @@ Minimal setup:
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    private val timeCapsule = TimeCapsule()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                timeCapsule.Provider(savedInstanceState) {
+                BundleScope(savedInstanceState) {
                     // Your root composable goes here
                 }
             }
@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        timeCapsule.onSaveInstanceState(outState)
+        outState.saveAmbient()
     }
 }
 ```
@@ -159,12 +159,11 @@ In client code you can now use:
 ```kotlin
 @Composable
 fun Content() {
-    val bundle = ambient(savedInstanceState)
-    var counter by state { bundle.getInt(KEY_COUNTER, 0) }
+    var counter by persistentInt("counter", 0)
 
-    Button(text = "Counter: $counter", onClick = {
-        bundle.putInt(KEY_COUNTER, ++counter)
-    })
+    Clickable(onClick = { counter++ }) {
+        Text("Counter value saved/restored from bundle: $counter")
+    }
 }
 ```
 
