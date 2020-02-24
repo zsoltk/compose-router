@@ -1,19 +1,17 @@
 package com.github.zsoltk.compose.savedinstancestate
 
 import android.os.Bundle
-import androidx.compose.Composable
+import androidx.compose.ProvidableAmbient
+import androidx.compose.ambientOf
 
-class TimeCapsule {
-    private var savedInstanceState: Bundle = Bundle()
+val AmbientTimeCapsule: ProvidableAmbient<TimeCapsule> = ambientOf {
+    TimeCapsule(null)
+}
 
-    @Composable
-    fun Provider(savedInstanceState: Bundle?, children: @Composable() () -> Unit) {
-        this.savedInstanceState = savedInstanceState?.getBundle(KEY) ?: Bundle()
-
-        com.github.zsoltk.compose.savedinstancestate.savedInstanceState.Provider(value = this.savedInstanceState) {
-            children()
-        }
-    }
+class TimeCapsule(
+    savedInstanceState: Bundle?
+) {
+    private var savedInstanceState: Bundle = savedInstanceState?.getBundle(KEY) ?: Bundle()
 
     fun onSaveInstanceState(outState: Bundle) {
         outState.putBundle(KEY, savedInstanceState)

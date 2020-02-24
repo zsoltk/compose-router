@@ -1,8 +1,9 @@
 package com.github.zsoltk.compose.savedinstancestate
 
 import android.os.Bundle
-import androidx.compose.Ambient
+import androidx.compose.ProvidableAmbient
+import androidx.compose.ambientOf
 
-val savedInstanceState: Ambient<Bundle> =
-    Ambient.of { Bundle() }
+val ActiveSavedInstanceState: ProvidableAmbient<Bundle> =
+    ambientOf { Bundle() }
 

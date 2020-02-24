@@ -2,7 +2,7 @@ package com.github.zsoltk.compose.savedinstancestate
 
 import android.os.Bundle
 import androidx.compose.Composable
-import androidx.compose.ambient
+import androidx.compose.Providers
 import androidx.compose.onCommit
 
 
@@ -15,7 +15,7 @@ fun BundleScope(
 }
 
 /**
- * Scopes a new Bundle with [key] under ambient [savedInstanceState] and provides it
+ * Scopes a new Bundle with [key] under ambient [ActiveSavedInstanceState] and provides it
  * to [children].
  */
 @Composable
@@ -24,7 +24,7 @@ fun BundleScope(
     autoDispose: Boolean = true,
     children: @Composable() (Bundle) -> Unit
 ) {
-    val upstream = ambient(savedInstanceState)
+    val upstream = ActiveSavedInstanceState.current
     val downstream = upstream.getBundle(key) ?: Bundle()
 
     onCommit {
@@ -34,7 +34,7 @@ fun BundleScope(
         }
     }
 
-    savedInstanceState.Provider(value = downstream) {
+    Providers(ActiveSavedInstanceState provides downstream) {
         children(downstream)
     }
 }

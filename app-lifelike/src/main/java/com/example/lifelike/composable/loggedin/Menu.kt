@@ -2,14 +2,18 @@ package com.example.lifelike.composable.loggedin
 
 import androidx.compose.Composable
 import androidx.ui.core.Text
+import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.Container
+import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Row
-import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.surface.Surface
+import androidx.ui.text.AnnotatedString
+import androidx.ui.text.ParagraphStyle
+import androidx.ui.text.style.TextAlign
+import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
 import com.example.lifelike.composable.loggedin.Menu.MenuItem.Gallery
 import com.example.lifelike.composable.loggedin.Menu.MenuItem.News
@@ -53,17 +57,21 @@ interface Menu {
                 color = if (isSelected) color.secondary else color.surface,
                 shape = RoundedCornerShape(topLeft = 4.dp, topRight = 4.dp)
             ) {
-                Button(
-                    modifier = LayoutWidth.Fill,
-                    onClick = { onClick.invoke(item) },
-                    style = TextButtonStyle()
+                Clickable(
+                    onClick = { onClick.invoke(item) }
                 ) {
                     Text(
-                        text = when (item) {
-                            Gallery -> "Gallery"
-                            News -> "News"
-                            Profile -> "Profile"
-                        },
+                        modifier = LayoutWidth.Fill + LayoutPadding(8.dp),
+                        text = AnnotatedString(
+                            text = when (item) {
+                                Gallery -> "Gallery"
+                                News -> "News"
+                                Profile -> "Profile"
+                            },
+                            paragraphStyle = ParagraphStyle(
+                                textAlign = TextAlign.Center
+                            )
+                        ),
                         style = MaterialTheme.typography().body2.copy(
                             color = if (isSelected) color.onSecondary else color.onSurface
                         )
@@ -72,4 +80,10 @@ interface Menu {
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun PreviewMenu() {
+    Menu.Content(Menu.State(currentSelection = Gallery), onMenuItemClicked = {})
 }

@@ -9,7 +9,6 @@ import androidx.ui.layout.Column
 import androidx.ui.layout.Container
 import androidx.ui.layout.LayoutAspectRatio
 import androidx.ui.layout.LayoutPadding
-import androidx.ui.layout.Padding
 import androidx.ui.layout.Table
 import androidx.ui.layout.TableColumnWidth
 import androidx.ui.material.MaterialTheme
@@ -83,7 +82,7 @@ interface PhotosOfAlbum {
             val image = imageResource(R.drawable.placeholder)
 
 
-            Padding(4.dp) {
+            Container(modifier = LayoutPadding(4.dp)) {
                 Table(columns = cols, columnWidth = { TableColumnWidth.Fraction(1.0f / cols) }) {
                     for (i in 0..rows) {
                         tableRow {
@@ -92,7 +91,7 @@ interface PhotosOfAlbum {
                             val endIndex = if (maxIndex > lastIndex) lastIndex else maxIndex
 
                             for (j in startIndex..endIndex) {
-                                Padding(4.dp) {
+                                Container(modifier = LayoutPadding(4.dp)) {
                                     Clickable(onClick = { onPhotoSelected(album.photos[j]) }) {
                                         Container(expanded = true, modifier = LayoutAspectRatio(1f)) {
                                             DrawImage(image)

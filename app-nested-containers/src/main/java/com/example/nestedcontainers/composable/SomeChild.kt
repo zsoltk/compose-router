@@ -1,9 +1,9 @@
 package com.example.nestedcontainers.composable
 
 import androidx.compose.Composable
-import androidx.compose.ambient
 import androidx.compose.stateFor
 import androidx.ui.core.Text
+import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 import androidx.ui.layout.Column
@@ -11,7 +11,6 @@ import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.Row
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.TextButtonStyle
 import androidx.ui.material.ripple.Ripple
 import androidx.ui.material.surface.Surface
 import androidx.ui.res.colorResource
@@ -21,7 +20,7 @@ import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeBlue
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeGreen
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeRed
 import com.github.zsoltk.compose.router.Router
-import com.github.zsoltk.compose.savedinstancestate.savedInstanceState
+import com.github.zsoltk.compose.savedinstancestate.ActiveSavedInstanceState
 
 interface SomeChild {
     /**
@@ -170,7 +169,7 @@ interface SomeChild {
             onButtonClick: () -> Unit,
             children: @Composable() () -> Unit
         ) {
-            val bundle = ambient(savedInstanceState)
+            val bundle = ActiveSavedInstanceState.current
             var counter by stateFor(this) {
                 bundle.getInt("counter", 0)
             }
@@ -178,16 +177,17 @@ interface SomeChild {
             Surface(color = colorResource(bgColor)) {
                 Column(modifier = LayoutPadding(16.dp)) {
                     Ripple(bounded = true) {
-                        Button(text = "$name.NEXT", onClick = onButtonClick)
+                        Button(onClick = onButtonClick) {
+                            Text("$name.NEXT")
+                        }
                     }
                     Text("Back stack: $size")
                     Ripple(bounded = true) {
-                        Button(
-                            text = "Local data: $counter",
-                            style = TextButtonStyle(contentColor = Color.White),
-                            onClick = {
-                                bundle.putInt("counter", ++counter)
-                            })
+                        Clickable(onClick = {
+                            bundle.putInt("counter", ++counter)
+                        }) {
+                            Text("Local data: $counter")
+                        }
                     }
                     children()
                 }
