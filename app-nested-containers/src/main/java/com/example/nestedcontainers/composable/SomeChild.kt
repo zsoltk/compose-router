@@ -1,7 +1,6 @@
 package com.example.nestedcontainers.composable
 
 import androidx.compose.Composable
-import androidx.compose.stateFor
 import androidx.ui.core.Text
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
@@ -20,7 +19,7 @@ import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeBlue
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeGreen
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeRed
 import com.github.zsoltk.compose.router.Router
-import com.github.zsoltk.compose.savedinstancestate.ActiveSavedInstanceState
+import com.github.zsoltk.compose.savedinstancestate.persistentInt
 
 interface SomeChild {
     /**
@@ -169,10 +168,7 @@ interface SomeChild {
             onButtonClick: () -> Unit,
             children: @Composable() () -> Unit
         ) {
-            val bundle = ActiveSavedInstanceState.current
-            var counter by stateFor(this) {
-                bundle.getInt("counter", 0)
-            }
+            var counter by persistentInt("counter")
 
             Surface(color = colorResource(bgColor)) {
                 Column(modifier = LayoutPadding(16.dp)) {
@@ -183,9 +179,7 @@ interface SomeChild {
                     }
                     Text("Back stack: $size")
                     Ripple(bounded = true) {
-                        Clickable(onClick = {
-                            bundle.putInt("counter", ++counter)
-                        }) {
+                        Clickable(onClick = { counter++ }) {
                             Text("Local data: $counter")
                         }
                     }
