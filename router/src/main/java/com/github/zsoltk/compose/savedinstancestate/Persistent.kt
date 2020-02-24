@@ -7,7 +7,6 @@ import androidx.compose.state
 @Composable
 fun persistentInt(key: String): MutableState<Int> {
     val bundle = AmbientSavedInstanceState.current
-    val timeCapsule = AmbientTimeCapsule.current
 
     val state: MutableState<Int> = state {
         bundle.getInt(key, 0)
