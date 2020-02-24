@@ -12,26 +12,24 @@ import com.example.nestedcontainers.composable.SomeChild
 import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
 import com.github.zsoltk.compose.backpress.BackPressHandler
 import com.github.zsoltk.compose.router.AmbientRouting
-import com.github.zsoltk.compose.savedinstancestate.AmbientTimeCapsule
-import com.github.zsoltk.compose.savedinstancestate.TimeCapsule
+import com.github.zsoltk.compose.savedinstancestate.BundleScope
+import com.github.zsoltk.compose.savedinstancestate.saveAmbient
 
 class MainActivity : AppCompatActivity() {
     private val backPressHandler = BackPressHandler()
-    private lateinit var timeCapsule: TimeCapsule
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        timeCapsule = TimeCapsule(savedInstanceState)
-
         setContent {
             MaterialTheme {
                 HorizontalScroller {
                     Providers(
                         AmbientBackPressHandler provides backPressHandler,
-                        AmbientTimeCapsule provides timeCapsule,
                         AmbientRouting provides intent.deepLinkRoute()
                     ) {
-                        SomeChild.Root()
+                        BundleScope(savedInstanceState) {
+                            SomeChild.Root()
+                        }
                     }
                 }
             }
@@ -46,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        timeCapsule.onSaveInstanceState(outState)
+        outState.saveAmbient()
     }
 }
 

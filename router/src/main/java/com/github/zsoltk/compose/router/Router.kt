@@ -8,7 +8,7 @@ import androidx.compose.onCommit
 import androidx.compose.remember
 import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
 import com.github.zsoltk.compose.backpress.BackPressHandler
-import com.github.zsoltk.compose.savedinstancestate.ActiveSavedInstanceState
+import com.github.zsoltk.compose.savedinstancestate.AmbientSavedInstanceState
 import com.github.zsoltk.compose.savedinstancestate.BundleScope
 
 private fun key(backStackIndex: Int) =
@@ -66,7 +66,7 @@ fun <T> Router(contextId: String, defaultRouting: T, children: @Composable() (Ba
 }
 
 private fun <T> fetchBackStack(key: String, defaultElement: T, override: T?): BackStack<T> {
-    val upstreamBundle = ActiveSavedInstanceState.current
+    val upstreamBundle = AmbientSavedInstanceState.current
     val onElementRemoved: (Int) -> Unit = { upstreamBundle.remove(key(it)) }
 
     val upstreamBackStacks = BackStackMap.current
