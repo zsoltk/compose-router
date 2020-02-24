@@ -14,9 +14,8 @@ import com.github.zsoltk.compose.savedinstancestate.BundleScope
 private fun key(backStackIndex: Int) =
     "K$backStackIndex"
 
-private val BackStackMap = ambientOf<MutableMap<Any, BackStack<*>>> {
+private val backStackMap: MutableMap<Any, BackStack<*>> =
     mutableMapOf()
-}
 
 /**
  * Currently only used for deep link based Routing.
@@ -69,8 +68,7 @@ private fun <T> fetchBackStack(key: String, defaultElement: T, override: T?): Ba
     val upstreamBundle = AmbientSavedInstanceState.current
     val onElementRemoved: (Int) -> Unit = { upstreamBundle.remove(key(it)) }
 
-    val upstreamBackStacks = BackStackMap.current
-    val existing = upstreamBackStacks[key] as BackStack<T>?
+    val existing = backStackMap[key] as BackStack<T>?
 
     return when {
         override != null -> BackStack(override, onElementRemoved)
@@ -78,7 +76,7 @@ private fun <T> fetchBackStack(key: String, defaultElement: T, override: T?): Ba
         else -> BackStack(defaultElement, onElementRemoved)
 
     }.also {
-        upstreamBackStacks[key] = it
+        backStackMap[key] = it
     }
 }
 
