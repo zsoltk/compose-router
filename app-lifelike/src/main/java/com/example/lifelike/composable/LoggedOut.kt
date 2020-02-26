@@ -24,7 +24,7 @@ interface LoggedOut {
         fun Content(defaultRouting: Routing, onLoggedIn: (User) -> Unit) {
             val user = User("Demo user", "123456789")
 
-            Router("LoggedOut", defaultRouting) { backStack ->
+            Router(defaultRouting) { backStack ->
                 fun Routing.next(): () -> Unit = {
                     when (this) {
                         Routing.Splash -> Routing.RegUserName
