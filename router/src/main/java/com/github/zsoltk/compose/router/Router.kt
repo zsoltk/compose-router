@@ -1,6 +1,7 @@
 package com.github.zsoltk.compose.router
 
 import androidx.compose.Composable
+import androidx.compose.Observe
 import androidx.compose.ProvidableAmbient
 import androidx.compose.Providers
 import androidx.compose.ambientOf
@@ -54,12 +55,15 @@ fun <T> Router(contextId: String, defaultRouting: T, children: @Composable() (Ba
         onDispose { upstreamHandler.children.remove(handleBackPressHere) }
     }
 
-    BundleScope(key(backStack.lastIndex), autoDispose = false) {
-        Providers(
-            AmbientBackPressHandler provides localHandler,
-            AmbientRouting provides downStreamRoute
-        ) {
-            children(backStack)
+    Observe {
+        // Not recomposing router on backstack operation
+        BundleScope(key(backStack.lastIndex), autoDispose = false) {
+            Providers(
+                AmbientBackPressHandler provides localHandler,
+                AmbientRouting provides downStreamRoute
+            ) {
+                children(backStack)
+            }
         }
     }
 }
