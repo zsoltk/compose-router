@@ -20,6 +20,7 @@ import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeBlue
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeGreen
 import com.example.nestedcontainers.composable.SomeChild.Routing.SubtreeRed
 import com.github.zsoltk.compose.router.Router
+import com.github.zsoltk.compose.savedinstancestate.persistentInt
 import com.github.zsoltk.compose.transition.AnimateChange
 import com.github.zsoltk.compose.transition.AnimationParams.Opacity
 import com.github.zsoltk.compose.transition.AnimationParams.Rotation
@@ -27,7 +28,6 @@ import com.github.zsoltk.compose.transition.AnimationParams.X
 import com.github.zsoltk.compose.transition.AnimationParams.Y
 import com.github.zsoltk.compose.transition.TransitionStates.Finish
 import com.github.zsoltk.compose.transition.TransitionStates.Start
-import com.github.zsoltk.compose.savedinstancestate.persistentInt
 
 interface SomeChild {
     /**
@@ -213,7 +213,7 @@ interface SomeChild {
         ) {
             var counter by persistentInt("counter")
 
-            Surface(color = colorResource(bgColor)) {
+            Surface(color = bgColor) {
                 Column(modifier = LayoutPadding(16.dp)) {
                     Ripple(bounded = true) {
                         Button(onClick = onButtonClick) {
@@ -265,7 +265,7 @@ interface SomeChild {
                     Content(
                         level + 1,
                         "R$ord",
-                        +colorResource(colorSets[Color.Red]!![level + 1]),
+                        colorResource(colorSets[Color.Red]!![level + 1]),
                         currentRouting
                     )
                 }
@@ -273,7 +273,7 @@ interface SomeChild {
                     Content(
                         level + 1,
                         "G$ord",
-                        +colorResource(colorSets[Color.Green]!![level + 1]),
+                        colorResource(colorSets[Color.Green]!![level + 1]),
                         currentRouting
                     )
                 }
@@ -281,7 +281,7 @@ interface SomeChild {
                     Content(
                         level + 1,
                         "B$ord",
-                        +colorResource(colorSets[Color.Blue]!![level + 1]),
+                        colorResource(colorSets[Color.Blue]!![level + 1]),
                         currentRouting
                     )
                 }

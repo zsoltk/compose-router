@@ -6,12 +6,12 @@ import androidx.animation.TransitionDefinition
 import androidx.animation.TransitionState
 import androidx.animation.transitionDefinition
 import androidx.compose.Composable
-import androidx.compose.Key
-import androidx.compose.memo
-import androidx.compose.unaryPlus
+import androidx.compose.key
+import androidx.compose.remember
+import androidx.ui.animation.Transition
 import androidx.ui.core.Draw
 import androidx.ui.core.Layout
-import androidx.ui.core.px
+import androidx.ui.unit.px
 import com.github.zsoltk.compose.transition.AnimationParams.Opacity
 import com.github.zsoltk.compose.transition.AnimationParams.Rotation
 import com.github.zsoltk.compose.transition.AnimationParams.X
@@ -38,8 +38,8 @@ fun <T : Any> AnimateChange(
     exitAnim: TransitionDefinition<TransitionStates>,
     children: @Composable() (T) -> Unit
 ) {
-    val animState = +memo { AnimationState<T>() }
-    val transitionDefinition = +memo {
+    val animState = remember { AnimationState<T>() }
+    val transitionDefinition = remember {
         TransitionDef(
             enterTransition = enterAnim.fillDefault(),
             exitTransition = exitAnim.fillDefault()
@@ -79,7 +79,7 @@ fun <T : Any> AnimateChange(
 
     val layoutContent = @Composable() {
         animState.items.forEach { item ->
-            Key(item.key) {
+            key(item.key) {
                 item.transition { transitionState ->
                     val composable = @Composable() {
                         children(item.key)
