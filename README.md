@@ -1,6 +1,6 @@
 # compose-router
 
-[![Version](https://jitpack.io/v/zsoltk/compose-router.svg)](https://jitpack.io/#zsoltk/backtrack)
+[![Version](https://jitpack.io/v/zsoltk/compose-router.svg)](https://jitpack.io/#zsoltk/compose-router)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 ![logo](https://i.imgur.com/kKcAHa3.png)
@@ -16,17 +16,18 @@ Routing functionality for Jetpack Compose with back stack:
 - Can be integrated with automatic scoped `savedInstanceState` persistence
 - Supports routing based on deep links (POC impl)
 
-Compatible with Compose version **0.1.0-dev03**
+Compatible with Compose version **0.1.0-dev05**
 
 ## Sample apps
 
-#1 in `app-nested-containers` module:
+1. **Sample module #1** - [app-lifelike](app-lifelike) — Displays a registration flow + logged in content with back stack
 
-![](https://i.imgur.com/w3Lr2IE.gif)
+2. **Sample module #2** - [app-nested-containers](app-nested-containers) — Displays nested screen history on generated levels.
 
-#2 in `app-lifelike` module:
+3. **Jetnews** - [fork](https://github.com/zsoltk/compose-samples) — Built with `compose-router`, adding proper screen history functionality.
 
-![](https://i.imgur.com/4h22NyZ.gif)
+4. **Pokedex** - [compose-pokedex](https://github.com/zsoltk/compose-pokedex) — Using `compose-router` for app structure.
+
 
 ## Download
 
@@ -44,7 +45,7 @@ allprojects {
 
 Add the dependency:
 ```groovy
-implementation 'com.github.zsoltk:backtrack:{latest-version}'
+implementation 'com.github.zsoltk:compose-router:{latest-version}'
 ```
 
 
@@ -111,7 +112,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            backPressHandler.Provider {
+            Providers(
+                AmbientBackPressHandler provides backPressHandler
+            ) {
                 // Your root composable goes here
             }
         }
@@ -133,13 +136,11 @@ Minimal setup:
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    private val timeCapsule = TimeCapsule()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                timeCapsule.Provider(savedInstanceState) {
+                BundleScope(savedInstanceState) {
                     // Your root composable goes here
                 }
             }
@@ -148,7 +149,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        timeCapsule.onSaveInstanceState(outState)
+        outState.saveAmbient()
     }
 }
 ```
@@ -158,12 +159,11 @@ In client code you can now use:
 ```kotlin
 @Composable
 fun Content() {
-    val bundle = +ambient(savedInstanceState)
-    var counter by +state { bundle.getInt(KEY_COUNTER, 0) }
+    var counter by persistentInt("counter", 0)
 
-    Button(text = "Counter: $counter", onClick = {
-        bundle.putInt(KEY_COUNTER, ++counter)
-    })
+    Clickable(onClick = { counter++ }) {
+        Text("Counter value saved/restored from bundle: $counter")
+    }
 }
 ```
 

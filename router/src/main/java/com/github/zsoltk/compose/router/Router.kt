@@ -1,36 +1,35 @@
 package com.github.zsoltk.compose.router
 
-import androidx.compose.Ambient
 import androidx.compose.Composable
-import androidx.compose.ambient
-import androidx.compose.memo
+import androidx.compose.Observe
+import androidx.compose.ProvidableAmbient
+import androidx.compose.Providers
+import androidx.compose.ambientOf
 import androidx.compose.onCommit
-import androidx.compose.unaryPlus
+import androidx.compose.remember
+import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
 import com.github.zsoltk.compose.backpress.BackPressHandler
-import com.github.zsoltk.compose.backpress.backPressHandler
+import com.github.zsoltk.compose.savedinstancestate.AmbientSavedInstanceState
 import com.github.zsoltk.compose.savedinstancestate.BundleScope
-import com.github.zsoltk.compose.savedinstancestate.savedInstanceState
 
 private fun key(backStackIndex: Int) =
     "K$backStackIndex"
 
-private val backStackMap = Ambient.of<MutableMap<Any, BackStack<*>>> {
+private val backStackMap: MutableMap<Any, BackStack<*>> =
     mutableMapOf()
-}
 
-val routing = Ambient.of {
+/**
+ * Currently only used for deep link based Routing.
+ *
+ * Can be set to store a list of Routing elements of different types.
+ * The idea is that when we walk through this list in sequence - provided that the sequence
+ * is correct - we can set the app into any state that is a combination of Routing on different levels.
+ *
+ * See [com.example.lifelike.DeepLinkKt.parseProfileDeepLink] in :app-lifelike module for usage
+ * example.
+ */
+val AmbientRouting: ProvidableAmbient<List<Any>> = ambientOf {
     listOf<Any>()
-}
-
-@Deprecated(
-    message = "Use Router instead",
-    replaceWith = ReplaceWith(
-        "Router(contextId, defaultRouting, children)",
-        "com.github.zsoltk.compose.router.Router"),
-    level = DeprecationLevel.ERROR
-)
-fun <T> BackHandler(contextId: String, defaultRouting: T, children: @Composable() (BackStack<T>) -> Unit) {
-    Router(contextId, defaultRouting, children)
 }
 
 /**
@@ -42,23 +41,27 @@ fun <T> BackHandler(contextId: String, defaultRouting: T, children: @Composable(
  */
 @Composable
 fun <T> Router(contextId: String, defaultRouting: T, children: @Composable() (BackStack<T>) -> Unit) {
-    val route = +ambient(routing)
+    val route = AmbientRouting.current
     val routingFromAmbient = route.firstOrNull() as? T
     val downStreamRoute = if (route.size > 1) route.takeLast(route.size - 1) else emptyList()
 
-    val upstreamHandler = +ambient(backPressHandler)
-    val localHandler = +memo { BackPressHandler("${upstreamHandler.id}.$contextId") }
+    val upstreamHandler = AmbientBackPressHandler.current
+    val localHandler = remember { BackPressHandler("${upstreamHandler.id}.$contextId") }
     val backStack = fetchBackStack(localHandler.id, defaultRouting, routingFromAmbient)
     val handleBackPressHere: () -> Boolean = { localHandler.handle() || backStack.pop() }
 
-    +onCommit {
+    onCommit {
         upstreamHandler.children.add(handleBackPressHere)
         onDispose { upstreamHandler.children.remove(handleBackPressHere) }
     }
 
-    BundleScope(key(backStack.lastIndex), autoDispose = false) {
-        backPressHandler.Provider(value = localHandler) {
-            routing.Provider(value = downStreamRoute) {
+    Observe {
+        // Not recomposing router on backstack operation
+        BundleScope(key(backStack.lastIndex), autoDispose = false) {
+            Providers(
+                AmbientBackPressHandler provides localHandler,
+                AmbientRouting provides downStreamRoute
+            ) {
                 children(backStack)
             }
         }
@@ -66,11 +69,10 @@ fun <T> Router(contextId: String, defaultRouting: T, children: @Composable() (Ba
 }
 
 private fun <T> fetchBackStack(key: String, defaultElement: T, override: T?): BackStack<T> {
-    val upstreamBundle = +ambient(savedInstanceState)
+    val upstreamBundle = AmbientSavedInstanceState.current
     val onElementRemoved: (Int) -> Unit = { upstreamBundle.remove(key(it)) }
 
-    val upstreamBackStacks = +ambient(backStackMap)
-    val existing = upstreamBackStacks[key] as BackStack<T>?
+    val existing = backStackMap[key] as BackStack<T>?
 
     return when {
         override != null -> BackStack(override, onElementRemoved)
@@ -78,7 +80,7 @@ private fun <T> fetchBackStack(key: String, defaultElement: T, override: T?): Ba
         else -> BackStack(defaultElement, onElementRemoved)
 
     }.also {
-        upstreamBackStacks[key] = it
+        backStackMap[key] = it
     }
 }
 

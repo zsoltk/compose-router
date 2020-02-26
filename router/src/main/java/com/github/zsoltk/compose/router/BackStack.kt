@@ -19,7 +19,7 @@ class BackStack<T> internal constructor(
         elements.last()
 
     fun push(element: T) {
-        elements = ArrayList(elements.plus(element))
+        elements = elements.plus(element)
     }
 
     fun pushAndDropNested(element: T) {
@@ -39,11 +39,9 @@ class BackStack<T> internal constructor(
 
     fun replace(element: T) {
         onElementRemoved.invoke(lastIndex)
-        elements = ArrayList(
-            elements
+        elements = elements
                 .subList(0, elements.lastIndex - 1)
                 .plus(element)
-        )
     }
 
     fun newRoot(element: T) {

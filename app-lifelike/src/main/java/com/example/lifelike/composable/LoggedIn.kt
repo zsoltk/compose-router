@@ -2,7 +2,9 @@ package com.example.lifelike.composable
 
 import androidx.animation.transitionDefinition
 import androidx.compose.Composable
-import androidx.ui.layout.FlexColumn
+import androidx.ui.core.Alignment
+import androidx.ui.layout.Column
+import androidx.ui.layout.Container
 import com.example.lifelike.composable.loggedin.Gallery
 import com.example.lifelike.composable.loggedin.Gallery.Routing.AlbumList
 import com.example.lifelike.composable.loggedin.Menu
@@ -55,21 +57,22 @@ interface LoggedIn {
             Router("LoggedIn", defaultRouting) { backStack ->
                 val routing = backStack.last()
 
-                FlexColumn {
-                    expanded(1f) {
+                Column {
+                    Container(
+                        modifier = LayoutFlexible(1f),
+                        alignment = Alignment.TopLeft
+                    ) {
                         AnimateChange(current = routing, enterAnim = enterAnim, exitAnim = exitAnim) {
                             it.toContent(user, onLogout)
                         }
                     }
 
-                    inflexible {
-                        Menu.Content(
-                            state = routing.toMenuState(),
-                            onMenuItemClicked = { menuItem ->
-                                backStack.push(menuItem.toRouting())
-                            }
-                        )
-                    }
+                    Menu.Content(
+                        state = routing.toMenuState(),
+                        onMenuItemClicked = { menuItem ->
+                            backStack.push(menuItem.toRouting())
+                        }
+                    )
                 }
             }
         }

@@ -3,30 +3,32 @@ package com.example.nestedcontainers
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
+import androidx.compose.Providers
 import androidx.ui.core.setContent
-import androidx.ui.foundation.VerticalScroller
 import androidx.ui.material.MaterialTheme
+import androidx.ui.foundation.HorizontalScroller
 import androidx.ui.tooling.preview.Preview
 import com.example.nestedcontainers.composable.SomeChild
+import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
 import com.github.zsoltk.compose.backpress.BackPressHandler
-import com.github.zsoltk.compose.router.routing
-import com.github.zsoltk.compose.savedinstancestate.TimeCapsule
+import com.github.zsoltk.compose.router.AmbientRouting
+import com.github.zsoltk.compose.savedinstancestate.BundleScope
+import com.github.zsoltk.compose.savedinstancestate.saveAmbient
 
 class MainActivity : AppCompatActivity() {
     private val backPressHandler = BackPressHandler()
-    private val timeCapsule = TimeCapsule()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             MaterialTheme {
-                VerticalScroller {
-                    timeCapsule.Provider(savedInstanceState) {
-                        backPressHandler.Provider {
-                            routing.Provider(intent.deepLinkRoute()) {
-                                SomeChild.Root()
-                            }
+                HorizontalScroller {
+                    Providers(
+                        AmbientBackPressHandler provides backPressHandler,
+                        AmbientRouting provides intent.deepLinkRoute()
+                    ) {
+                        BundleScope(savedInstanceState) {
+                            SomeChild.Root()
                         }
                     }
                 }
@@ -42,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        timeCapsule.onSaveInstanceState(outState)
+        outState.saveAmbient()
     }
 }
 
