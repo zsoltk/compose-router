@@ -68,6 +68,7 @@ fun <T> Router(contextId: String, defaultRouting: T, children: @Composable() (Ba
     }
 }
 
+@Composable
 private fun <T> fetchBackStack(key: String, defaultElement: T, override: T?): BackStack<T> {
     val upstreamBundle = AmbientSavedInstanceState.current
     val onElementRemoved: (Int) -> Unit = { upstreamBundle.remove(key(it)) }
