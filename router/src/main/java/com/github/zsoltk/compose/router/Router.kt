@@ -36,9 +36,14 @@ val AmbientRouting: ProvidableAmbient<List<Any>> = ambientOf {
  * Adds back stack functionality with bubbling up fallbacks if the back stack cannot be popped
  * on this level.
  *
- * @param defaultRouting   The default routing to initialise the back stack with
- * @param children  The @Composable to wrap with this BackHandler. It will have access to the back stack.
+ * @param defaultRouting    The default routing to initialise the back stack with
+ * @param children          The @Composable to wrap with this BackHandler. It will have access to the back stack.
  */
+@Composable
+inline fun <reified T> Router(defaultRouting: T, noinline children: @Composable() (BackStack<T>) -> Unit) {
+    Router(T::class.java.name, defaultRouting, children)
+}
+
 @Composable
 fun <T> Router(contextId: String, defaultRouting: T, children: @Composable() (BackStack<T>) -> Unit) {
     val route = AmbientRouting.current

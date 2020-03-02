@@ -22,7 +22,7 @@ interface LoggedIn {
     companion object {
         @Composable
         fun Content(defaultRouting: Routing, user: User, onLogout: () -> Unit) {
-            Router("LoggedIn", defaultRouting) { backStack ->
+            Router(defaultRouting) { backStack ->
                 val routing = backStack.last()
 
                 Column {
