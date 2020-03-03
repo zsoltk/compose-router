@@ -7,7 +7,7 @@ import androidx.animation.TransitionState
 import androidx.animation.transitionDefinition
 import androidx.compose.Composable
 import androidx.compose.Immutable
-import androidx.compose.Model
+import androidx.compose.Recompose
 import androidx.compose.Stable
 import androidx.compose.key
 import androidx.compose.remember
@@ -43,17 +43,18 @@ fun <T : Any> AnimateChange(
         val keys = animState.items.mapNotNull { it.key.takeIf { it != current } }
         animState.items.clear()
         keys.mapTo(animState.items) { key ->
-            AnimationItem(key) { children ->
+            AnimationItem(key) { recompose, children ->
                 ExitTransition(transitionDefinition, children) {
                     if (it === Exit && animState.current == current) {
                         animState.items.removeAll { it.key == key }
+                        recompose()
                     }
                 }
             }
         }
 
         val isFirst = keys.isEmpty()
-        animState.items += AnimationItem(current) { children ->
+        animState.items += AnimationItem(current) { _, children ->
             EnterTransition(
                 isFirst,
                 transitionDefinition,
@@ -63,11 +64,13 @@ fun <T : Any> AnimateChange(
     }
 
     Stack(LayoutWidth.Fill + LayoutHeight.Fill) {
-        animState.items.forEach { item ->
-            key(item.key) {
-                item.transition {
-                    AnimateTransition(state = it) {
-                        children(item.key)
+        Recompose {
+            animState.items.forEach { item ->
+                key(item.key) {
+                    item.transition(it) {
+                        AnimateTransition(state = it) {
+                            children(item.key)
+                        }
                     }
                 }
             }
@@ -161,13 +164,7 @@ private data class AnimationState<T>(
 @Immutable
 private data class AnimationItem<T>(
     val key: T,
-    val transition: @Composable() (@Composable() (TransitionState) -> Unit) -> Unit
-)
-
-@Model
-private class AnimationDisposedModel(
-    var removed: Boolean = false,
-    var visible: Boolean = true
+    val transition: @Composable() (recompose: () -> Unit, children: @Composable() (TransitionState) -> Unit) -> Unit
 )
 
 object AnimationParams {
