@@ -8,10 +8,10 @@ import androidx.animation.transitionDefinition
 import androidx.compose.Composable
 import androidx.compose.Immutable
 import androidx.compose.Stable
+import androidx.compose.key
 import androidx.compose.remember
 import androidx.ui.animation.Transition
 import androidx.ui.core.Clip
-import androidx.ui.core.Opacity
 import androidx.ui.core.drawWithContent
 import androidx.ui.foundation.shape.RectangleShape
 import androidx.ui.layout.Container
@@ -24,6 +24,7 @@ import com.github.zsoltk.compose.transition.AnimationParams.X
 import com.github.zsoltk.compose.transition.AnimationParams.Y
 import com.github.zsoltk.compose.transition.TransitionStates.Finish
 import com.github.zsoltk.compose.transition.TransitionStates.Start
+import kotlin.math.roundToInt
 
 object AnimationParams {
     val X = FloatPropKey()
@@ -52,9 +53,8 @@ fun <T : Any> AnimateChange(
     }
     if (animState.current != current) {
         animState.current = current
-        val keys = animState.items.map { it.key }.toMutableSet()
+        val keys = animState.items.mapNotNull { it.key.takeIf { it != current } }
         animState.items.clear()
-        println(keys.map { it.javaClass.simpleName })
         keys.mapTo(animState.items) { key ->
             AnimationItem(key) { children ->
                 ExitTransition(transitionDefinition, children) {
@@ -65,7 +65,7 @@ fun <T : Any> AnimateChange(
             }
         }
 
-        val isFirst = animState.items.size == 0
+        val isFirst = keys.isEmpty()
         animState.items += AnimationItem(current) { children ->
             EnterTransition(
                 isFirst,
@@ -77,13 +77,11 @@ fun <T : Any> AnimateChange(
 
     Stack(LayoutWidth.Fill + LayoutHeight.Fill) {
         animState.items.forEach { item ->
-            val key = item.key
-//            println("1: $key")
-            item.transition {
-//                println("3: $key")
-                AnimateTransition(state = it) {
-//                    println("2: $key")
-                    children(key)
+            key(item.key) {
+                item.transition {
+                    AnimateTransition(state = it) {
+                        children(item.key)
+                    }
                 }
             }
         }
@@ -122,13 +120,20 @@ private fun EnterTransition(
 }
 
 @Composable
-private fun RotateTranslate(state: TransitionState, f: @Composable() () -> Unit) {
+private fun RotateTranslateOpacity(state: TransitionState, f: @Composable() () -> Unit) {
     val x = state[X]
     val y = state[Y]
     val rotation = state[Rotation]
-    val modifier = remember(x, y, rotation) {
+    val opacity = state[Opacity]
+    val modifier = remember(x, y, rotation, opacity) {
         drawWithContent { canvas, size ->
-            canvas.save()
+            canvas.nativeCanvas.saveLayerAlpha(
+                0f,
+                0f,
+                size.width.value,
+                size.height.value,
+                (opacity * 255).roundToInt()
+            )
             val startX = size.width.value
             val startY = size.height.value
             canvas.translate(startX * x, startY * y)
@@ -148,6 +153,8 @@ private fun RotateTranslate(state: TransitionState, f: @Composable() () -> Unit)
     return
 }
 
+
+
 @Composable
 private fun AnimateTransition(
     state: TransitionState,
@@ -156,10 +163,8 @@ private fun AnimateTransition(
 
     Container(expanded = true) {
         Clip(shape = RectangleShape) {
-            RotateTranslate(state = state) {
-                Opacity(state[Opacity]) {
-                    f()
-                }
+            RotateTranslateOpacity(state = state) {
+                f()
             }
         }
     }

@@ -85,7 +85,7 @@ interface SomeChild {
             }
 
             transition {
-                Opacity using tween { duration = 300 }
+                Opacity using tween { duration = 1000 }
             }
         }
 
