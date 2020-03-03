@@ -26,17 +26,6 @@ import com.github.zsoltk.compose.transition.TransitionStates.Finish
 import com.github.zsoltk.compose.transition.TransitionStates.Start
 import kotlin.math.roundToInt
 
-object AnimationParams {
-    val X = FloatPropKey()
-    val Y = FloatPropKey()
-    val Opacity = FloatPropKey()
-    val Rotation = FloatPropKey()
-}
-
-enum class TransitionStates {
-    Start, Finish
-}
-
 @Composable
 fun <T : Any> AnimateChange(
     current: T,
@@ -89,6 +78,21 @@ fun <T : Any> AnimateChange(
 }
 
 @Composable
+private fun EnterTransition(
+    firstChild: Boolean,
+    def: TransitionDef,
+    children: @Composable() (TransitionState) -> Unit
+) {
+    Transition(
+        definition = def.enterTransition,
+        initState = if (!firstChild) Start else Finish,
+        toState = Finish
+    ) {
+        children(it)
+    }
+}
+
+@Composable
 private fun ExitTransition(
     def: TransitionDef,
     children: @Composable() (TransitionState) -> Unit,
@@ -105,17 +109,14 @@ private fun ExitTransition(
 }
 
 @Composable
-private fun EnterTransition(
-    firstChild: Boolean,
-    def: TransitionDef,
-    children: @Composable() (TransitionState) -> Unit
+private fun AnimateTransition(
+    state: TransitionState,
+    f: @Composable() () -> Unit
 ) {
-    Transition(
-        definition = def.enterTransition,
-        initState = if (!firstChild) Start else Finish,
-        toState = Finish
-    ) {
-        children(it)
+    Clip(shape = RectangleShape) {
+        RotateTranslateOpacity(state = state) {
+            f()
+        }
     }
 }
 
@@ -153,23 +154,6 @@ private fun RotateTranslateOpacity(state: TransitionState, f: @Composable() () -
     return
 }
 
-
-
-@Composable
-private fun AnimateTransition(
-    state: TransitionState,
-    f: @Composable() () -> Unit
-) {
-
-    Container(expanded = true) {
-        Clip(shape = RectangleShape) {
-            RotateTranslateOpacity(state = state) {
-                f()
-            }
-        }
-    }
-}
-
 @Stable
 private data class AnimationState<T>(
     var current: T? = null,
@@ -181,6 +165,17 @@ private data class AnimationItem<T>(
     val key: T,
     val transition: @Composable() (@Composable() (TransitionState) -> Unit) -> Unit
 )
+
+object AnimationParams {
+    val X = FloatPropKey()
+    val Y = FloatPropKey()
+    val Opacity = FloatPropKey()
+    val Rotation = FloatPropKey()
+}
+
+enum class TransitionStates {
+    Start, Finish
+}
 
 @Immutable
 private data class TransitionDef(

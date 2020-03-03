@@ -43,7 +43,7 @@ interface AlbumList {
 
             Ripple(bounded = true) {
                 Clickable(onClick = { onAlbumSelected(album) }) {
-                    Row(modifier = LayoutPadding(all = 16.dp)) {
+                    Row(modifier = LayoutPadding(all = 16.dp) + LayoutWidth.Fill) {
                             Container(width = 40.dp, height = 40.dp) {
                                 DrawImage(image)
                             }
