@@ -10,6 +10,7 @@ import androidx.compose.Immutable
 import androidx.compose.Stable
 import androidx.compose.key
 import androidx.compose.remember
+import androidx.compose.state
 import androidx.ui.animation.Transition
 import androidx.ui.core.Clip
 import androidx.ui.core.drawWithContent
@@ -22,23 +23,20 @@ import com.github.zsoltk.compose.transition.AnimationParams.Opacity
 import com.github.zsoltk.compose.transition.AnimationParams.Rotation
 import com.github.zsoltk.compose.transition.AnimationParams.X
 import com.github.zsoltk.compose.transition.AnimationParams.Y
-import com.github.zsoltk.compose.transition.TransitionStates.Finish
-import com.github.zsoltk.compose.transition.TransitionStates.Start
+import com.github.zsoltk.compose.transition.TransitionStates.Active
+import com.github.zsoltk.compose.transition.TransitionStates.Enter
+import com.github.zsoltk.compose.transition.TransitionStates.Exit
 import kotlin.math.roundToInt
 
 @Composable
 fun <T : Any> AnimateChange(
     current: T,
-    enterAnim: TransitionDefinition<TransitionStates>,
-    exitAnim: TransitionDefinition<TransitionStates>,
+    transition: TransitionDefinition<TransitionStates>,
     children: @Composable() (T) -> Unit
 ) {
     val animState = remember { AnimationState<T>() }
     val transitionDefinition = remember {
-        TransitionDef(
-            enterTransition = enterAnim.fillDefault(),
-            exitTransition = exitAnim.fillDefault()
-        )
+        transition.fillDefault()
     }
     if (animState.current != current) {
         animState.current = current
@@ -46,9 +44,14 @@ fun <T : Any> AnimateChange(
         animState.items.clear()
         keys.mapTo(animState.items) { key ->
             AnimationItem(key) { children ->
-                ExitTransition(transitionDefinition, children) {
-                    if (it == Finish && animState.current == current) {
-                        animState.items.removeAll { it.key != current }
+                // If item not visible, its part of composition will be disposed by this state
+                var itemVisible by state { true }
+                if (itemVisible) {
+                    ExitTransition(transitionDefinition, children) {
+                        if (it === Exit) {
+                            animState.items.removeAll { it.key === key }
+                            itemVisible = false
+                        }
                     }
                 }
             }
@@ -78,30 +81,30 @@ fun <T : Any> AnimateChange(
 }
 
 @Composable
-private fun EnterTransition(
+private inline fun EnterTransition(
     firstChild: Boolean,
-    def: TransitionDef,
-    children: @Composable() (TransitionState) -> Unit
+    transitionDefinition: TransitionDefinition<TransitionStates>,
+    crossinline children: @Composable() (TransitionState) -> Unit
 ) {
     Transition(
-        definition = def.enterTransition,
-        initState = if (!firstChild) Start else Finish,
-        toState = Finish
+        definition = transitionDefinition,
+        initState = if (!firstChild) Enter else Active,
+        toState = Active
     ) {
         children(it)
     }
 }
 
 @Composable
-private fun ExitTransition(
-    def: TransitionDef,
-    children: @Composable() (TransitionState) -> Unit,
-    onFinish: (TransitionStates) -> Unit
+private inline fun ExitTransition(
+    transitionDefinition: TransitionDefinition<TransitionStates>,
+    crossinline children: @Composable() (TransitionState) -> Unit,
+    noinline onFinish: (TransitionStates) -> Unit = { }
 ) {
     Transition(
-        definition = def.exitTransition,
-        initState = Start,
-        toState = Finish,
+        definition = transitionDefinition,
+        initState = Active,
+        toState = Exit,
         onStateChangeFinished = onFinish
     ) {
         children(it)
@@ -174,14 +177,8 @@ object AnimationParams {
 }
 
 enum class TransitionStates {
-    Start, Finish
+    Enter, Active, Exit
 }
-
-@Immutable
-private data class TransitionDef(
-    val enterTransition: TransitionDefinition<TransitionStates>,
-    val exitTransition: TransitionDefinition<TransitionStates>
-)
 
 private val Defaults = listOf(
     X to 0f,
@@ -208,40 +205,28 @@ private fun TransitionDefinition<TransitionStates>.fillDefault(): TransitionDefi
 /**
  * Example
  */
-private val enterAnim = transitionDefinition {
-    state(Start) {
+private val anim = transitionDefinition {
+    state(Enter) {
         this[X] = 1f
         this[Y] = 0f
         this[Opacity] = 1f
         this[Rotation] = 45f
     }
 
-    state(Finish) {
+    state(Active) {
         this[X] = 0f
         this[Y] = 0f
         this[Opacity] = 1f
         this[Rotation] = 0f
     }
 
-    transition {
-        X using tween { duration = 300 }
-    }
-}
-
-private val exitAnim = transitionDefinition {
-    state(Start) {
-        this[X] = 0f
-        this[Y] = 0f
-        this[Opacity] = 1f
-    }
-
-    state(Finish) {
+    state(Exit) {
         this[X] = -1f
         this[Y] = 0f
         this[Opacity] = 1f
     }
 
-    transition {
+    transition(fromState = Enter, toState = Active) {
         X using tween { duration = 300 }
     }
 }

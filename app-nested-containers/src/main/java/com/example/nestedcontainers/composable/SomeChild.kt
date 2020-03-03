@@ -2,6 +2,7 @@ package com.example.nestedcontainers.composable
 
 import androidx.animation.transitionDefinition
 import androidx.compose.Composable
+import androidx.compose.onActive
 import androidx.ui.core.Text
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
@@ -23,8 +24,9 @@ import com.github.zsoltk.compose.router.Router
 import com.github.zsoltk.compose.savedinstancestate.persistentInt
 import com.github.zsoltk.compose.transition.AnimateChange
 import com.github.zsoltk.compose.transition.AnimationParams.Opacity
-import com.github.zsoltk.compose.transition.TransitionStates.Finish
-import com.github.zsoltk.compose.transition.TransitionStates.Start
+import com.github.zsoltk.compose.transition.TransitionStates.Active
+import com.github.zsoltk.compose.transition.TransitionStates.Enter
+import com.github.zsoltk.compose.transition.TransitionStates.Exit
 
 interface SomeChild {
     /**
@@ -75,26 +77,16 @@ interface SomeChild {
             4 to 1
         )
 
-        private val alphaEnterAnim = transitionDefinition {
-            state(Start) {
+        private val alphaAnim = transitionDefinition {
+            state(Enter) {
                 this[Opacity] = 0f
             }
 
-            state(Finish) {
+            state(Active) {
                 this[Opacity] = 1f
             }
 
-            transition {
-                Opacity using tween { duration = 1000 }
-            }
-        }
-
-        private val alphaExitAnim = transitionDefinition {
-            state(Start) {
-                this[Opacity] = 1f
-            }
-
-            state(Finish) {
+            state(Exit) {
                 this[Opacity] = 0f
             }
 
@@ -176,8 +168,13 @@ interface SomeChild {
                     bgColor = bgColor,
                     onButtonClick = { backStack.push(backStack.last().next()) }
                 ) {
-                    println("Recomposing for $level.$id")
-                    AnimateChange(current = backStack.last(), enterAnim = alphaEnterAnim, exitAnim = alphaExitAnim) {
+                    onActive {
+                        println("Active: $level.$id")
+                        onDispose {
+                            println("Dispose: $level.$id")
+                        }
+                    }
+                    AnimateChange(current = backStack.last(), transition = alphaAnim) {
                         Row {
                             for (i in 1..nbChildren) {
                                 Child(
