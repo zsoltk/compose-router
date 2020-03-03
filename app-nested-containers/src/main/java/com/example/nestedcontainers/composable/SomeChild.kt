@@ -37,7 +37,7 @@ interface SomeChild {
     }
 
     companion object {
-        private const val MAX_NESTING_LEVEL = 2
+        private const val MAX_NESTING_LEVEL = 5
 
         private val colorSets = mapOf(
             Color.Red to listOf(
