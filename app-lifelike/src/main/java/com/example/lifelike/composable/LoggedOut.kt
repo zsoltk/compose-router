@@ -11,8 +11,9 @@ import com.example.lifelike.entity.User
 import com.github.zsoltk.compose.router.Router
 import com.github.zsoltk.compose.transition.AnimateChange
 import com.github.zsoltk.compose.transition.AnimationParams.X
-import com.github.zsoltk.compose.transition.TransitionStates.Finish
-import com.github.zsoltk.compose.transition.TransitionStates.Start
+import com.github.zsoltk.compose.transition.TransitionStates.Active
+import com.github.zsoltk.compose.transition.TransitionStates.Enter
+import com.github.zsoltk.compose.transition.TransitionStates.Exit
 
 interface LoggedOut {
 
@@ -42,7 +43,7 @@ interface LoggedOut {
                     }
                 }
 
-                AnimateChange(current = backStack.last(), enterAnim = enterAnim, exitAnim = exitAnim) { currentRouting ->
+                AnimateChange(current = backStack.last(), transition = anim) { currentRouting ->
                     when (currentRouting) {
                         Routing.Splash -> Splash.Content(onNext = currentRouting.next())
                         Routing.RegUserName -> RegUserName.Content(user = user, onNext = currentRouting.next())
@@ -54,26 +55,16 @@ interface LoggedOut {
             }
         }
 
-        private val enterAnim = transitionDefinition {
-            state(Start) {
+        private val anim = transitionDefinition {
+            state(Enter) {
                 this[X] = 1f
             }
 
-            state(Finish) {
+            state(Active) {
                 this[X] = 0f
             }
 
-            transition {
-                X using tween { duration = 300 }
-            }
-        }
-
-        private val exitAnim = transitionDefinition {
-            state(Start) {
-                this[X] = 0f
-            }
-
-            state(Finish) {
+            state(Exit) {
                 this[X] = -1f
             }
 

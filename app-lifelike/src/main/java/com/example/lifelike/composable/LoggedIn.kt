@@ -14,7 +14,9 @@ import com.example.lifelike.entity.User
 import com.github.zsoltk.compose.router.Router
 import com.github.zsoltk.compose.transition.AnimateChange
 import com.github.zsoltk.compose.transition.AnimationParams.X
-import com.github.zsoltk.compose.transition.TransitionStates
+import com.github.zsoltk.compose.transition.TransitionStates.Active
+import com.github.zsoltk.compose.transition.TransitionStates.Enter
+import com.github.zsoltk.compose.transition.TransitionStates.Exit
 
 interface LoggedIn {
     sealed class Routing {
@@ -24,26 +26,16 @@ interface LoggedIn {
     }
 
     companion object {
-        private val enterAnim = transitionDefinition {
-            state(TransitionStates.Start) {
+        private val anim = transitionDefinition {
+            state(Enter) {
                 this[X] = 1f
             }
 
-            state(TransitionStates.Finish) {
+            state(Active) {
                 this[X] = 0f
             }
 
-            transition {
-                X using tween { duration = 300 }
-            }
-        }
-
-        private val exitAnim = transitionDefinition {
-            state(TransitionStates.Start) {
-                this[X] = 0f
-            }
-
-            state(TransitionStates.Finish) {
+            state(Exit) {
                 this[X] = -1f
             }
 
@@ -62,7 +54,7 @@ interface LoggedIn {
                         modifier = LayoutFlexible(1f),
                         alignment = Alignment.TopLeft
                     ) {
-                        AnimateChange(current = routing, enterAnim = enterAnim, exitAnim = exitAnim) {
+                        AnimateChange(current = routing, transition = anim) {
                             it.toContent(user, onLogout)
                         }
                     }

@@ -7,10 +7,10 @@ import androidx.animation.TransitionState
 import androidx.animation.transitionDefinition
 import androidx.compose.Composable
 import androidx.compose.Immutable
+import androidx.compose.Model
 import androidx.compose.Stable
 import androidx.compose.key
 import androidx.compose.remember
-import androidx.compose.state
 import androidx.ui.animation.Transition
 import androidx.ui.core.Clip
 import androidx.ui.core.drawWithContent
@@ -44,14 +44,9 @@ fun <T : Any> AnimateChange(
         animState.items.clear()
         keys.mapTo(animState.items) { key ->
             AnimationItem(key) { children ->
-                // If item not visible, its part of composition will be disposed by this state
-                var itemVisible by state { true }
-                if (itemVisible) {
-                    ExitTransition(transitionDefinition, children) {
-                        if (it === Exit) {
-                            animState.items.removeAll { it.key === key }
-                            itemVisible = false
-                        }
+                ExitTransition(transitionDefinition, children) {
+                    if (it === Exit && animState.current == current) {
+                        animState.items.removeAll { it.key == key }
                     }
                 }
             }
@@ -81,10 +76,10 @@ fun <T : Any> AnimateChange(
 }
 
 @Composable
-private inline fun EnterTransition(
+private fun EnterTransition(
     firstChild: Boolean,
     transitionDefinition: TransitionDefinition<TransitionStates>,
-    crossinline children: @Composable() (TransitionState) -> Unit
+    children: @Composable() (TransitionState) -> Unit
 ) {
     Transition(
         definition = transitionDefinition,
@@ -96,10 +91,10 @@ private inline fun EnterTransition(
 }
 
 @Composable
-private inline fun ExitTransition(
+private fun ExitTransition(
     transitionDefinition: TransitionDefinition<TransitionStates>,
-    crossinline children: @Composable() (TransitionState) -> Unit,
-    noinline onFinish: (TransitionStates) -> Unit = { }
+    children: @Composable() (TransitionState) -> Unit,
+    onFinish: (TransitionStates) -> Unit = { }
 ) {
     Transition(
         definition = transitionDefinition,
@@ -167,6 +162,12 @@ private data class AnimationState<T>(
 private data class AnimationItem<T>(
     val key: T,
     val transition: @Composable() (@Composable() (TransitionState) -> Unit) -> Unit
+)
+
+@Model
+private class AnimationDisposedModel(
+    var removed: Boolean = false,
+    var visible: Boolean = true
 )
 
 object AnimationParams {
