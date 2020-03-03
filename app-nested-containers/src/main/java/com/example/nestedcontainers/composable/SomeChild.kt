@@ -23,9 +23,6 @@ import com.github.zsoltk.compose.router.Router
 import com.github.zsoltk.compose.savedinstancestate.persistentInt
 import com.github.zsoltk.compose.transition.AnimateChange
 import com.github.zsoltk.compose.transition.AnimationParams.Opacity
-import com.github.zsoltk.compose.transition.AnimationParams.Rotation
-import com.github.zsoltk.compose.transition.AnimationParams.X
-import com.github.zsoltk.compose.transition.AnimationParams.Y
 import com.github.zsoltk.compose.transition.TransitionStates.Finish
 import com.github.zsoltk.compose.transition.TransitionStates.Start
 
@@ -40,7 +37,7 @@ interface SomeChild {
     }
 
     companion object {
-        private const val MAX_NESTING_LEVEL = 5
+        private const val MAX_NESTING_LEVEL = 2
 
         private val colorSets = mapOf(
             Color.Red to listOf(
@@ -95,20 +92,14 @@ interface SomeChild {
         private val alphaExitAnim = transitionDefinition {
             state(Start) {
                 this[Opacity] = 1f
-                this[X] = 0f
-                this[Y] = 0f
-                this[Rotation] = 0f
             }
 
             state(Finish) {
                 this[Opacity] = 0f
-                this[X] = 0f
-                this[Y] = 0f
-                this[Rotation] = 0f
             }
 
             transition {
-                Opacity using tween { duration = 300 }
+                Opacity using tween { duration = 1000 }
             }
         }
 
@@ -185,6 +176,7 @@ interface SomeChild {
                     bgColor = bgColor,
                     onButtonClick = { backStack.push(backStack.last().next()) }
                 ) {
+                    println("Recomposing for $level.$id")
                     AnimateChange(current = backStack.last(), enterAnim = alphaEnterAnim, exitAnim = alphaExitAnim) {
                         Row {
                             for (i in 1..nbChildren) {
