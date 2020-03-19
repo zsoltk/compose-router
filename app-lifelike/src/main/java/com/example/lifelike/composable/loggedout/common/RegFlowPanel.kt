@@ -27,7 +27,7 @@ fun RegFlowPanel(
         Container(
             expanded = true,
             constraints = DpConstraints(maxHeight = 48.dp),
-            alignment = Alignment.CenterRight
+            alignment = Alignment.CenterEnd
         ) {
             BigButton(
                 text = "Next",

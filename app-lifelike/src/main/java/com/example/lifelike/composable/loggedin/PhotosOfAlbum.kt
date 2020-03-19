@@ -3,7 +3,7 @@ package com.example.lifelike.composable.loggedin
 import androidx.compose.Composable
 import androidx.ui.core.Text
 import androidx.ui.foundation.Clickable
-import androidx.ui.foundation.DrawImage
+import androidx.ui.foundation.Image
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Column
 import androidx.ui.layout.Container
@@ -58,7 +58,7 @@ interface PhotosOfAlbum {
             Text(
                 text = album.name,
                 style = typography.h4,
-                modifier = LayoutPadding(left = 8.dp, top = 16.dp, right = 8.dp, bottom = 4.dp)
+                modifier = LayoutPadding(start = 8.dp, top = 16.dp, end = 8.dp, bottom = 4.dp)
             )
         }
 
@@ -69,7 +69,7 @@ interface PhotosOfAlbum {
             Text(
                 text = "${album.photos.size} photos",
                 style = typography.body1,
-                modifier = LayoutPadding(left = 8.dp, right = 8.dp, bottom = 16.dp)
+                modifier = LayoutPadding(start = 8.dp, end = 8.dp, bottom = 16.dp)
             )
         }
 
@@ -94,7 +94,7 @@ interface PhotosOfAlbum {
                                 Container(modifier = LayoutPadding(4.dp)) {
                                     Clickable(onClick = { onPhotoSelected(album.photos[j]) }) {
                                         Container(expanded = true, modifier = LayoutAspectRatio(1f)) {
-                                            DrawImage(image)
+                                            Image(image)
                                         }
                                     }
                                 }

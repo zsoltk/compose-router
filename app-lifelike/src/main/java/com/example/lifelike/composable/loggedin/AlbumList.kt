@@ -3,7 +3,7 @@ package com.example.lifelike.composable.loggedin
 import androidx.compose.Composable
 import androidx.ui.core.Text
 import androidx.ui.foundation.Clickable
-import androidx.ui.foundation.DrawImage
+import androidx.ui.foundation.Image
 import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.Column
 import androidx.ui.layout.Container
@@ -45,7 +45,7 @@ interface AlbumList {
                 Clickable(onClick = { onAlbumSelected(album) }) {
                     Row(modifier = LayoutPadding(all = 16.dp)) {
                             Container(width = 40.dp, height = 40.dp) {
-                                DrawImage(image)
+                                Image(image)
                             }
                             Spacer(modifier = LayoutWidth(16.dp))
                             Column {
