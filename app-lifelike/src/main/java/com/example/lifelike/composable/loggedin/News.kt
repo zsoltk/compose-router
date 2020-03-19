@@ -14,7 +14,7 @@ interface News {
     companion object {
         @Composable
         fun Content() {
-            Container(modifier = LayoutPadding(left = 16.dp, right = 16.dp)) {
+            Container(modifier = LayoutPadding(start = 16.dp, end = 16.dp)) {
                 VerticalScroller {
                     Text(text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Adipiscing elit duis tristique sollicitudin nibh sit amet. Sed lectus vestibulum mattis ullamcorper. Sit amet purus gravida quis blandit turpis cursus. Amet nulla facilisi morbi tempus iaculis urna id volutpat lacus. In nibh mauris cursus mattis molestie a iaculis. Eu turpis egestas pretium aenean pharetra magna ac placerat vestibulum. Sollicitudin tempor id eu nisl. Vitae nunc sed velit dignissim sodales ut eu sem. Vulputate eu scelerisque felis imperdiet proin fermentum. Aliquam ut porttitor leo a diam sollicitudin tempor. Sed sed risus pretium quam.\n" +
                         "\n" +

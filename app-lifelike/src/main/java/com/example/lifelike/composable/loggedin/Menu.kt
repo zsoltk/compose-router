@@ -9,7 +9,7 @@ import androidx.ui.layout.LayoutPadding
 import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Row
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.surface.Surface
+import androidx.ui.material.Surface
 import androidx.ui.text.AnnotatedString
 import androidx.ui.text.ParagraphStyle
 import androidx.ui.text.style.TextAlign
@@ -37,7 +37,7 @@ interface Menu {
         fun Content(state: State, onMenuItemClicked: (MenuItem) -> Unit) {
             Row {
                 state.menuItems.forEach { item ->
-                    Container(modifier = LayoutFlexible(1f)) {
+                    Container(modifier = LayoutWeight(1f)) {
                         MenuItem(
                             item,
                             item == state.currentSelection

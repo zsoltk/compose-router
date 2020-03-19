@@ -27,8 +27,8 @@ interface LoggedIn {
 
                 Column {
                     Container(
-                        modifier = LayoutFlexible(1f),
-                        alignment = Alignment.TopLeft
+                        modifier = LayoutWeight(1f),
+                        alignment = Alignment.TopStart
                     ) {
                         routing.toContent(user, onLogout)
                     }
