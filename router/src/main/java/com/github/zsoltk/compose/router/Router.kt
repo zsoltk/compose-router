@@ -1,12 +1,6 @@
 package com.github.zsoltk.compose.router
 
-import androidx.compose.Composable
-import androidx.compose.Observe
-import androidx.compose.ProvidableAmbient
-import androidx.compose.Providers
-import androidx.compose.ambientOf
-import androidx.compose.onCommit
-import androidx.compose.remember
+import androidx.compose.*
 import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
 import com.github.zsoltk.compose.backpress.BackPressHandler
 import com.github.zsoltk.compose.savedinstancestate.AmbientSavedInstanceState
@@ -40,12 +34,19 @@ val AmbientRouting: ProvidableAmbient<List<Any>> = ambientOf {
  * @param children          The @Composable to wrap with this BackHandler. It will have access to the back stack.
  */
 @Composable
-inline fun <reified T> Router(defaultRouting: T, noinline children: @Composable() (BackStack<T>) -> Unit) {
+inline fun <reified T> Router(
+    defaultRouting: T,
+    noinline children: @Composable() (BackStack<T>) -> Unit
+) {
     Router(T::class.java.name, defaultRouting, children)
 }
 
 @Composable
-fun <T> Router(contextId: String, defaultRouting: T, children: @Composable() (BackStack<T>) -> Unit) {
+fun <T> Router(
+    contextId: String,
+    defaultRouting: T,
+    children: @Composable() (BackStack<T>) -> Unit
+) {
     val route = AmbientRouting.current
     val routingFromAmbient = route.firstOrNull() as? T
     val downStreamRoute = if (route.size > 1) route.takeLast(route.size - 1) else emptyList()

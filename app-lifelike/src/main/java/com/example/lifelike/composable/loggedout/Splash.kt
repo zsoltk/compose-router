@@ -2,12 +2,10 @@ package com.example.lifelike.composable.loggedout
 
 import androidx.compose.Composable
 import androidx.ui.core.Alignment
-import androidx.ui.core.Text
-import androidx.ui.layout.Arrangement
-import androidx.ui.layout.Column
-import androidx.ui.layout.Container
-import androidx.ui.layout.DpConstraints
-import androidx.ui.layout.LayoutPadding
+import androidx.ui.core.Modifier
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.Text
+import androidx.ui.layout.*
 import androidx.ui.material.MaterialTheme
 import androidx.ui.text.AnnotatedString
 import androidx.ui.text.ParagraphStyle
@@ -21,7 +19,7 @@ interface Splash {
 
         @Composable
         fun Content(onNext: () -> Unit) {
-            Column(modifier = LayoutPadding(40.dp), arrangement = Arrangement.SpaceAround) {
+            Column(modifier = Modifier.padding(40.dp), arrangement = Arrangement.SpaceAround) {
                 Text(
                     text = AnnotatedString(
                         text = "Welcome to amazing fake app",
@@ -29,12 +27,12 @@ interface Splash {
                             textAlign = TextAlign.Center
                         )
                     ),
-                    style = MaterialTheme.typography().h4
+                    style = MaterialTheme.typography.h4
                 )
-                Container(
-                    expanded = true,
-                    constraints = DpConstraints(maxHeight = 48.dp),
-                    alignment = Alignment.Center
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                            + Modifier.preferredSizeIn(DpConstraints(maxHeight = 48.dp))
+                            + Modifier.wrapContentSize(Alignment.Center)
                 ) {
                     BigButton(
                         text = "Create account",

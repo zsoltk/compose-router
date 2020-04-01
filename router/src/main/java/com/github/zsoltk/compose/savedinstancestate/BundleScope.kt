@@ -18,7 +18,7 @@ fun BundleScope(
     key: String,
     children: @Composable() (bundle: Bundle) -> Unit
 ) {
-    BundleScope(key, Bundle(),true, children)
+    BundleScope(key, Bundle(), true, children)
 }
 
 /**

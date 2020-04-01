@@ -1,11 +1,7 @@
 package com.example.lifelike.composable
 
 import androidx.compose.Composable
-import com.example.lifelike.composable.loggedout.RegConfirmSmsCode
-import com.example.lifelike.composable.loggedout.RegFinal
-import com.example.lifelike.composable.loggedout.RegUserName
-import com.example.lifelike.composable.loggedout.RegUserPhone
-import com.example.lifelike.composable.loggedout.Splash
+import com.example.lifelike.composable.loggedout.*
 import com.example.lifelike.entity.User
 import com.github.zsoltk.compose.router.Router
 
@@ -39,8 +35,14 @@ interface LoggedOut {
 
                 when (val currentRouting = backStack.last()) {
                     Routing.Splash -> Splash.Content(onNext = currentRouting.next())
-                    Routing.RegUserName -> RegUserName.Content(user = user, onNext = currentRouting.next())
-                    Routing.RegUserPhone -> RegUserPhone.Content(user = user, onNext = currentRouting.next())
+                    Routing.RegUserName -> RegUserName.Content(
+                        user = user,
+                        onNext = currentRouting.next()
+                    )
+                    Routing.RegUserPhone -> RegUserPhone.Content(
+                        user = user,
+                        onNext = currentRouting.next()
+                    )
                     Routing.RegConfirmSmsCode -> RegConfirmSmsCode.Content(onNext = currentRouting.next())
                     Routing.RegFinal -> RegFinal.Content(onNext = { onLoggedIn(user) })
                 }

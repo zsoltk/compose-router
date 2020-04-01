@@ -1,14 +1,12 @@
 package com.example.lifelike.composable.loggedin
 
 import androidx.compose.Composable
-import androidx.ui.core.Text
-import androidx.ui.foundation.Image
+import androidx.ui.core.Modifier
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.Text
 import androidx.ui.graphics.Color
-import androidx.ui.layout.Column
-import androidx.ui.layout.Container
-import androidx.ui.layout.LayoutHeight
-import androidx.ui.layout.LayoutPadding
-import androidx.ui.layout.Spacer
+import androidx.ui.graphics.ImageShader
+import androidx.ui.layout.*
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Surface
 import androidx.ui.res.imageResource
@@ -23,16 +21,16 @@ interface FullScreenPhoto {
         @Composable
         fun Content(photo: Photo) {
             val image = imageResource(R.drawable.placeholder)
-            val typography = MaterialTheme.typography()
+            val typography = MaterialTheme.typography
 
             Surface(color = Color.DarkGray) {
-                Container(modifier = LayoutPadding(32.dp)) {
+                Box(modifier = Modifier.padding(32.dp)) {
                     Column {
-                        Container(modifier = LayoutWeight(0.8f), expanded = true) {
-                            Image(image = image)
+                        Box(modifier = Modifier.weight(0.8f) + Modifier.fillMaxSize()) {
+                            ImageShader(image = image)
                         }
 
-                        Spacer(modifier = LayoutHeight(32.dp))
+                        Spacer(modifier = Modifier.preferredHeight(32.dp))
                         Text(
                             text = photo.title,
                             style = typography.subtitle1.copy(
