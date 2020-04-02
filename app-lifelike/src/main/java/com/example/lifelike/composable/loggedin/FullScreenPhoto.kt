@@ -1,16 +1,18 @@
 package com.example.lifelike.composable.loggedin
 
 import androidx.compose.Composable
+import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
+import androidx.ui.foundation.Image
 import androidx.ui.foundation.Text
 import androidx.ui.graphics.Color
-import androidx.ui.graphics.ImageShader
 import androidx.ui.layout.Column
 import androidx.ui.layout.Spacer
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredHeight
+import androidx.ui.layout.wrapContentSize
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Surface
 import androidx.ui.res.imageResource
@@ -30,8 +32,8 @@ interface FullScreenPhoto {
             Surface(color = Color.DarkGray) {
                 Box(modifier = Modifier.padding(32.dp)) {
                     Column {
-                        Box(modifier = Modifier.weight(0.8f).fillMaxSize()) {
-                            ImageShader(image = image)
+                        Box(modifier = Modifier.weight(0.8f).fillMaxSize().wrapContentSize(Alignment.Center)) {
+                            Image(asset = image)
                         }
 
                         Spacer(modifier = Modifier.preferredHeight(32.dp))

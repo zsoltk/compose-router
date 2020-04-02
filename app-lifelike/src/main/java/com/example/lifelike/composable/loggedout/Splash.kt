@@ -9,6 +9,7 @@ import androidx.ui.layout.Arrangement
 import androidx.ui.layout.Column
 import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.fillMaxSize
+import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredSizeIn
 import androidx.ui.layout.wrapContentSize
@@ -36,7 +37,7 @@ interface Splash {
                     style = MaterialTheme.typography.h4
                 )
                 Box(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxWidth()
                         .preferredSizeIn(DpConstraints(maxHeight = 48.dp))
                         .wrapContentSize(Alignment.Center)
                 ) {
