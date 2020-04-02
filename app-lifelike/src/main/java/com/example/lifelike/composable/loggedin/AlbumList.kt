@@ -2,8 +2,17 @@ package com.example.lifelike.composable.loggedin
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.*
-import androidx.ui.layout.*
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.Clickable
+import androidx.ui.foundation.Image
+import androidx.ui.foundation.Text
+import androidx.ui.foundation.VerticalScroller
+import androidx.ui.layout.Column
+import androidx.ui.layout.Row
+import androidx.ui.layout.Spacer
+import androidx.ui.layout.padding
+import androidx.ui.layout.preferredSize
+import androidx.ui.layout.preferredWidth
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.ripple.ripple
 import androidx.ui.res.imageResource

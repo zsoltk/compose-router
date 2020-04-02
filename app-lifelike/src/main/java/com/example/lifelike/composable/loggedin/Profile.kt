@@ -3,7 +3,12 @@ package com.example.lifelike.composable.loggedin
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Text
-import androidx.ui.layout.*
+import androidx.ui.layout.Arrangement
+import androidx.ui.layout.Column
+import androidx.ui.layout.Spacer
+import androidx.ui.layout.fillMaxHeight
+import androidx.ui.layout.padding
+import androidx.ui.layout.preferredHeight
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import androidx.ui.tooling.preview.Preview
@@ -17,7 +22,7 @@ interface Profile {
         @Composable
         fun Content(user: User, onLogout: () -> Unit) {
             Column(
-                modifier = Modifier.fillMaxHeight() + Modifier.padding(40.dp),
+                modifier = Modifier.fillMaxHeight().padding(40.dp),
                 arrangement = Arrangement.SpaceAround
             ) {
                 Text(

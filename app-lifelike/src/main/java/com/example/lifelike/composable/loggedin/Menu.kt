@@ -62,7 +62,7 @@ interface Menu {
                     onClick = { onClick.invoke(item) }
                 ) {
                     Text(
-                        modifier = Modifier.fillMaxWidth() + Modifier.padding(8.dp),
+                        modifier = Modifier.fillMaxWidth().padding(8.dp),
                         text = AnnotatedString(
                             text = when (item) {
                                 Gallery -> "Gallery"

@@ -2,8 +2,17 @@ package com.example.lifelike.composable.loggedin
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.*
-import androidx.ui.layout.*
+import androidx.ui.foundation.Box
+import androidx.ui.foundation.Clickable
+import androidx.ui.foundation.Image
+import androidx.ui.foundation.Text
+import androidx.ui.foundation.VerticalScroller
+import androidx.ui.layout.Column
+import androidx.ui.layout.Table
+import androidx.ui.layout.TableColumnWidth
+import androidx.ui.layout.aspectRatio
+import androidx.ui.layout.fillMaxSize
+import androidx.ui.layout.padding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.res.imageResource
 import androidx.ui.tooling.preview.Preview
@@ -86,10 +95,7 @@ interface PhotosOfAlbum {
                             for (j in startIndex..endIndex) {
                                 Box(modifier = Modifier.padding(4.dp)) {
                                     Clickable(onClick = { onPhotoSelected(album.photos[j]) }) {
-                                        Box(
-                                            modifier = Modifier.aspectRatio(1f)
-                                                    + Modifier.fillMaxSize()
-                                        ) {
+                                        Box(modifier = Modifier.aspectRatio(1f).fillMaxSize()) {
                                             Image(image)
                                         }
                                     }

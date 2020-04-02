@@ -1,7 +1,11 @@
 package com.example.lifelike.composable
 
 import androidx.compose.Composable
-import com.example.lifelike.composable.loggedout.*
+import com.example.lifelike.composable.loggedout.RegConfirmSmsCode
+import com.example.lifelike.composable.loggedout.RegFinal
+import com.example.lifelike.composable.loggedout.RegUserName
+import com.example.lifelike.composable.loggedout.RegUserPhone
+import com.example.lifelike.composable.loggedout.Splash
 import com.example.lifelike.entity.User
 import com.github.zsoltk.compose.router.Router
 

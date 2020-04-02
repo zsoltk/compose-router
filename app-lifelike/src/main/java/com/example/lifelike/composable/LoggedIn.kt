@@ -28,10 +28,7 @@ interface LoggedIn {
                 val routing = backStack.last()
 
                 Column {
-                    Box(
-                        modifier = Modifier.weight(1f)
-                                + Modifier.wrapContentSize(Alignment.TopStart)
-                    ) {
+                    Box(modifier = Modifier.weight(1f).wrapContentSize(Alignment.TopStart)) {
                         routing.toContent(user, onLogout)
                     }
 
