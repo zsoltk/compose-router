@@ -11,6 +11,7 @@ import androidx.ui.layout.DpConstraints
 import androidx.ui.layout.fillMaxSize
 import androidx.ui.layout.padding
 import androidx.ui.layout.preferredSizeIn
+import androidx.ui.layout.wrapContentHeight
 import androidx.ui.layout.wrapContentSize
 import androidx.ui.material.MaterialTheme
 import androidx.ui.unit.dp
@@ -22,15 +23,21 @@ fun RegFlowPanel(
     onNext: () -> Unit,
     content: @Composable() () -> Unit = {}
 ) {
-    Column(modifier = Modifier.padding(40.dp), arrangement = Arrangement.SpaceAround) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.h5
-        )
-        content()
+    Column(
+        modifier = Modifier.fillMaxSize().padding(40.dp),
+        arrangement = Arrangement.SpaceAround
+    ) {
+        Box(modifier = Modifier.wrapContentSize()) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.h5
+            )
+        }
+        Box(modifier = Modifier.fillMaxSize().weight(1f).wrapContentHeight()) {
+            content()
+        }
         Box(
             modifier = Modifier
-                .fillMaxSize()
                 .preferredSizeIn(DpConstraints(maxHeight = 48.dp))
                 .wrapContentSize(Alignment.CenterEnd)
         ) {

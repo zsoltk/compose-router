@@ -2,6 +2,7 @@ package com.example.lifelike.composable.loggedout
 
 import androidx.compose.Composable
 import androidx.ui.foundation.TextField
+import androidx.ui.tooling.preview.Preview
 import com.example.lifelike.composable.loggedout.common.RegFlowPanel
 import com.example.lifelike.entity.User
 
@@ -19,4 +20,10 @@ interface RegUserName {
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun PreviewRegUserName() {
+    RegUserName.Content(User("Test user", "123456"), {})
 }
