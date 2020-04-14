@@ -2,6 +2,7 @@ package com.example.nestedcontainers.composable
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
+import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.Text
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
@@ -9,6 +10,7 @@ import androidx.ui.graphics.Color
 import androidx.ui.layout.Column
 import androidx.ui.layout.Row
 import androidx.ui.layout.padding
+import androidx.ui.layout.wrapContentHeight
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Surface
@@ -168,17 +170,26 @@ interface SomeChild {
             children: @Composable() () -> Unit
         ) {
             var counter by persistentInt("counter")
+            val textStyle = MaterialTheme.typography.body1
 
             Surface(color = colorResource(bgColor)) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Button(onClick = onButtonClick, modifier = Modifier.ripple(true)) {
-                        Text("$name.NEXT")
+                    Box(modifier = Modifier.wrapContentHeight()) {
+                        Button(onClick = onButtonClick, modifier = Modifier.ripple(true)) {
+                            Text("$name.NEXT", style = textStyle.copy(color = Color.White))
+                        }
                     }
-                    Text("Back stack: $size")
-                    Clickable(onClick = { counter++ }, modifier = Modifier.ripple(true)) {
-                        Text("Local data: $counter")
+                    Box(modifier = Modifier.wrapContentHeight()) {
+                        Text("Back stack: $size", style = textStyle)
                     }
-                    children()
+                    Box(modifier = Modifier.wrapContentHeight()) {
+                        Clickable(onClick = { counter++ }, modifier = Modifier.ripple(true)) {
+                            Text("Local data: $counter", style = textStyle)
+                        }
+                    }
+                    Box(modifier = Modifier.wrapContentHeight()) {
+                        children()
+                    }
                 }
             }
         }
