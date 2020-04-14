@@ -9,8 +9,8 @@ import com.github.zsoltk.compose.router.Router
 interface Root {
 
     sealed class Routing {
-        object LoggedOut: Routing()
-        data class LoggedIn(val user: User): Routing()
+        object LoggedOut : Routing()
+        data class LoggedIn(val user: User) : Routing()
     }
 
     companion object {

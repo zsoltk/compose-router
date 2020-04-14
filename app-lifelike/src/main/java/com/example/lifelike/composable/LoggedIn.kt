@@ -2,8 +2,10 @@ package com.example.lifelike.composable
 
 import androidx.compose.Composable
 import androidx.ui.core.Alignment
+import androidx.ui.core.Modifier
+import androidx.ui.foundation.Box
 import androidx.ui.layout.Column
-import androidx.ui.layout.Container
+import androidx.ui.layout.wrapContentSize
 import com.example.lifelike.composable.loggedin.Gallery
 import com.example.lifelike.composable.loggedin.Gallery.Routing.AlbumList
 import com.example.lifelike.composable.loggedin.Menu
@@ -26,10 +28,7 @@ interface LoggedIn {
                 val routing = backStack.last()
 
                 Column {
-                    Container(
-                        modifier = LayoutWeight(1f),
-                        alignment = Alignment.TopStart
-                    ) {
+                    Box(modifier = Modifier.weight(1f).wrapContentSize(Alignment.TopStart)) {
                         routing.toContent(user, onLogout)
                     }
 

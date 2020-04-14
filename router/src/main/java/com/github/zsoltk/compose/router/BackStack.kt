@@ -40,8 +40,8 @@ class BackStack<T> internal constructor(
     fun replace(element: T) {
         onElementRemoved.invoke(lastIndex)
         elements = elements
-                .subList(0, elements.lastIndex - 1)
-                .plus(element)
+            .subList(0, elements.lastIndex - 1)
+            .plus(element)
     }
 
     fun newRoot(element: T) {

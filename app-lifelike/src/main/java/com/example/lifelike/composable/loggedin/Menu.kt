@@ -1,13 +1,14 @@
 package com.example.lifelike.composable.loggedin
 
 import androidx.compose.Composable
-import androidx.ui.core.Text
+import androidx.ui.core.Modifier
+import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
+import androidx.ui.foundation.Text
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.layout.Container
-import androidx.ui.layout.LayoutPadding
-import androidx.ui.layout.LayoutWidth
 import androidx.ui.layout.Row
+import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.padding
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Surface
 import androidx.ui.text.AnnotatedString
@@ -37,7 +38,7 @@ interface Menu {
         fun Content(state: State, onMenuItemClicked: (MenuItem) -> Unit) {
             Row {
                 state.menuItems.forEach { item ->
-                    Container(modifier = LayoutWeight(1f)) {
+                    Box(modifier = Modifier.weight(1f)) {
                         MenuItem(
                             item,
                             item == state.currentSelection
@@ -51,7 +52,7 @@ interface Menu {
 
         @Composable
         private fun MenuItem(item: MenuItem, isSelected: Boolean, onClick: (MenuItem) -> Unit) {
-            val color = MaterialTheme.colors()
+            val color = MaterialTheme.colors
 
             Surface(
                 color = if (isSelected) color.secondary else color.surface,
@@ -61,7 +62,7 @@ interface Menu {
                     onClick = { onClick.invoke(item) }
                 ) {
                     Text(
-                        modifier = LayoutWidth.Fill + LayoutPadding(8.dp),
+                        modifier = Modifier.fillMaxWidth().padding(8.dp),
                         text = AnnotatedString(
                             text = when (item) {
                                 Gallery -> "Gallery"
@@ -72,7 +73,7 @@ interface Menu {
                                 textAlign = TextAlign.Center
                             )
                         ),
-                        style = MaterialTheme.typography().body2.copy(
+                        style = MaterialTheme.typography.body2.copy(
                             color = if (isSelected) color.onSecondary else color.onSurface
                         )
                     )
