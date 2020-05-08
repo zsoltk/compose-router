@@ -2,3 +2,5 @@ include ':app-nested-containers'
 include ':app-lifelike'
 include ':router'
 rootProject.name = "compose-router"
+
+enableFeaturePreview("GRADLE_METADATA")
