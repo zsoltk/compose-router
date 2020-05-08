@@ -26,7 +26,7 @@ interface Splash {
 
         @Composable
         fun Content(onNext: () -> Unit) {
-            Column(modifier = Modifier.padding(40.dp), arrangement = Arrangement.SpaceAround) {
+            Column(modifier = Modifier.padding(40.dp), verticalArrangement = Arrangement.SpaceAround) {
                 Text(
                     text = AnnotatedString(
                         text = "Welcome to amazing fake app",

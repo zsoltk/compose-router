@@ -25,7 +25,7 @@ interface Profile {
         fun Content(user: User, onLogout: () -> Unit) {
             Column(
                 modifier = Modifier.fillMaxHeight().padding(40.dp),
-                arrangement = Arrangement.SpaceAround
+                verticalArrangement = Arrangement.SpaceAround
             ) {
                 Text(
                     text = "You are logged in as:",

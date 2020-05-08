@@ -2,6 +2,8 @@ package com.example.lifelike.composable.loggedout
 
 import androidx.compose.Composable
 import androidx.ui.foundation.TextField
+import androidx.ui.foundation.TextFieldValue
+import androidx.ui.text.TextRange
 import androidx.ui.tooling.preview.Preview
 import com.example.lifelike.composable.loggedout.common.RegFlowPanel
 import com.example.lifelike.entity.User
@@ -14,8 +16,8 @@ interface RegUserName {
         fun Content(user: User, onNext: () -> Unit) {
             RegFlowPanel("Your fake name", onNext) {
                 TextField(
-                    value = user.name,
-                    onValueChange = { user.name = it }
+                    value = TextFieldValue(user.name, TextRange(user.name.length,user.name.length)),
+                    onValueChange = { user.name = it.text }
                 )
             }
         }
