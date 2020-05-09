@@ -1,16 +1,14 @@
 package com.example.nestedcontainers.composable
 
 import androidx.compose.Composable
+import androidx.ui.core.Alignment
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.Text
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
-import androidx.ui.layout.Column
-import androidx.ui.layout.Row
-import androidx.ui.layout.padding
-import androidx.ui.layout.wrapContentHeight
+import androidx.ui.layout.*
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import androidx.ui.material.Surface
@@ -169,25 +167,25 @@ interface SomeChild {
             onButtonClick: () -> Unit,
             children: @Composable() () -> Unit
         ) {
-            var counter by persistentInt("counter")
+            val counter = persistentInt("counter")
             val textStyle = MaterialTheme.typography.body1
 
             Surface(color = colorResource(bgColor)) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Box(modifier = Modifier.wrapContentHeight()) {
+                    Box(modifier = Modifier.wrapContentHeight(Alignment.CenterVertically)) {
                         Button(onClick = onButtonClick, modifier = Modifier.ripple(true)) {
                             Text("$name.NEXT", style = textStyle.copy(color = Color.White))
                         }
                     }
-                    Box(modifier = Modifier.wrapContentHeight()) {
+                    Box(modifier = Modifier.wrapContentHeight(Alignment.CenterVertically)) {
                         Text("Back stack: $size", style = textStyle)
                     }
-                    Box(modifier = Modifier.wrapContentHeight()) {
-                        Clickable(onClick = { counter++ }, modifier = Modifier.ripple(true)) {
+                    Box(modifier = Modifier.wrapContentHeight(Alignment.CenterVertically)) {
+                        Clickable(onClick = { counter.value++ }, modifier = Modifier.ripple(true)) {
                             Text("Local data: $counter", style = textStyle)
                         }
                     }
-                    Box(modifier = Modifier.wrapContentHeight()) {
+                    Box(modifier = Modifier.wrapContentHeight(Alignment.CenterVertically)) {
                         children()
                     }
                 }
