@@ -182,7 +182,7 @@ interface SomeChild {
                     }
                     Box(modifier = Modifier.wrapContentHeight(Alignment.CenterVertically)) {
                         Clickable(onClick = { counter.value++ }, modifier = Modifier.ripple(true)) {
-                            Text("Local data: $counter", style = textStyle)
+                            Text("Local data: ${counter.value}", style = textStyle)
                         }
                     }
                     Box(modifier = Modifier.wrapContentHeight(Alignment.CenterVertically)) {
