@@ -11,7 +11,7 @@ import com.example.lifelike.entity.User
 fun Intent.deepLinkRoute(): List<Any> =
     when (data?.host) {
         //  adb shell 'am start -a "android.intent.action.VIEW" -d "app-lifelike://go-to-profile?name=fake&phone=123123"'
-        "go-to-profile" -> parseProfileDeepLink(data)
+        "go-to-profile" -> parseProfileDeepLink(data!!)
         null -> emptyList()
         else -> emptyList<Any>().also {
             Log.e("compose-router", "Unexpected deep link: $data")
