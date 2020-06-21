@@ -15,6 +15,9 @@ class BackStack<T> internal constructor(
     val size: Int
         get() = elements.size
 
+    fun top(): T =
+        elements.first()
+
     fun last(): T =
         elements.last()
 
