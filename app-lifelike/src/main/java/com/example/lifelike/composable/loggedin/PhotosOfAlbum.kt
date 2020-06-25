@@ -9,6 +9,7 @@ import androidx.ui.foundation.Box
 import androidx.ui.foundation.Image
 import androidx.ui.foundation.Text
 import androidx.ui.foundation.clickable
+import androidx.ui.foundation.lazy.LazyColumnItems
 import androidx.ui.layout.aspectRatio
 import androidx.ui.layout.Column
 import androidx.ui.layout.fillMaxSize
@@ -82,8 +83,7 @@ interface PhotosOfAlbum {
             val photoRows =  album.photos.chunked(cols)
 
             Box(modifier = Modifier.padding(4.dp)) {
-                //scrolling fast may cause exception: https://issuetracker.google.com/issues/154653504
-                AdapterList(photoRows) { row ->
+                LazyColumnItems(photoRows) { row ->
                     WithConstraints {
                         Row {
                             val w = with(DensityAmbient.current) { (constraints.maxWidth.toDp().value / cols).dp }
