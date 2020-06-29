@@ -1,13 +1,15 @@
 package com.github.zsoltk.compose.router
 
-import androidx.compose.Model
+import androidx.compose.getValue
+import androidx.compose.mutableStateOf
+import androidx.compose.setValue
 
-@Model
+
 class BackStack<T> internal constructor(
     initialElement: T,
     private var onElementRemoved: ((Int) -> Unit)
 ) {
-    private var elements = listOf(initialElement)
+    private var elements  by mutableStateOf(listOf(initialElement))
 
     val lastIndex: Int
         get() = elements.lastIndex

@@ -1,9 +1,14 @@
 package com.example.lifelike.entity
 
-import androidx.compose.Model
+import androidx.compose.getValue
+import androidx.compose.mutableStateOf
+import androidx.compose.setValue
 
-@Model
+
 class User(
-    var name: String,
-    var phone: String
-)
+    name: String,
+    phone: String
+){
+    var name by mutableStateOf(name)
+    var phone by mutableStateOf(phone)
+}
