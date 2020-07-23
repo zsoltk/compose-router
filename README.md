@@ -6,6 +6,7 @@
 ![logo](https://i.imgur.com/kKcAHa3.png)
 
 ## What's this?
+
 Routing functionality for Jetpack Compose with back stack:
 
 - Helps to map your whole app structure using Compose — not just the UI parts
@@ -16,7 +17,7 @@ Routing functionality for Jetpack Compose with back stack:
 - Can be integrated with automatic scoped `savedInstanceState` persistence
 - Supports routing based on deep links (POC impl)
 
-Compatible with Compose version **0.1.0-dev14**
+Compatible with Compose version **0.1.0-dev15**
 
 ## Sample apps
 
@@ -27,7 +28,6 @@ Compatible with Compose version **0.1.0-dev14**
 3. **Jetnews** - [fork](https://github.com/zsoltk/compose-samples) — Built with `compose-router`, adding proper screen history functionality.
 
 4. **Pokedex** - [compose-pokedex](https://github.com/zsoltk/compose-pokedex) — Using `compose-router` for app structure.
-
 
 ## Download
 
@@ -44,12 +44,13 @@ allprojects {
 ```
 
 Add the dependency:
+
 ```groovy
 implementation 'com.github.zsoltk:compose-router:{latest-version}'
 ```
 
-
 ## How to use
+
 On any level where routing functionality is needed, create a sealed class to represent your routing:
 
 ```kotlin
@@ -94,12 +95,12 @@ For more usage examples see the example apps.
 To go back in the back stack, you can either call the `.pop()` method programmatically, or just press the back button on the device (see next section for back press integration).
 
 Back stack operations:
+
 - **push()**
 - **pushAndDropNested()**
 - **pop()**
 - **replace()**
 - **newRoot()**
-
 
 ## Connect it to back press event
 

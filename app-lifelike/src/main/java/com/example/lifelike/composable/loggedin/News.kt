@@ -3,8 +3,8 @@ package com.example.lifelike.composable.loggedin
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
+import androidx.ui.foundation.ScrollableColumn
 import androidx.ui.foundation.Text
-import androidx.ui.foundation.VerticalScroller
 import androidx.ui.layout.padding
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
@@ -16,7 +16,7 @@ interface News {
         @Composable
         fun Content() {
             Box(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
-                VerticalScroller {
+                ScrollableColumn {
                     Text(
                         text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Adipiscing elit duis tristique sollicitudin nibh sit amet. Sed lectus vestibulum mattis ullamcorper. Sit amet purus gravida quis blandit turpis cursus. Amet nulla facilisi morbi tempus iaculis urna id volutpat lacus. In nibh mauris cursus mattis molestie a iaculis. Eu turpis egestas pretium aenean pharetra magna ac placerat vestibulum. Sollicitudin tempor id eu nisl. Vitae nunc sed velit dignissim sodales ut eu sem. Vulputate eu scelerisque felis imperdiet proin fermentum. Aliquam ut porttitor leo a diam sollicitudin tempor. Sed sed risus pretium quam.\n" +
                                 "\n" +

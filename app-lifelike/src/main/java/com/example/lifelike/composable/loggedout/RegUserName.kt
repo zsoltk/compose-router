@@ -2,7 +2,7 @@ package com.example.lifelike.composable.loggedout
 
 import androidx.compose.Composable
 import androidx.ui.foundation.TextField
-import androidx.ui.foundation.TextFieldValue
+import androidx.ui.input.TextFieldValue
 import androidx.ui.text.TextRange
 import androidx.ui.tooling.preview.Preview
 import com.example.lifelike.composable.loggedout.common.RegFlowPanel

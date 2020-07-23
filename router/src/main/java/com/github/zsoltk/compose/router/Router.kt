@@ -1,7 +1,6 @@
 package com.github.zsoltk.compose.router
 
 import androidx.compose.Composable
-import androidx.compose.Observe
 import androidx.compose.ProvidableAmbient
 import androidx.compose.Providers
 import androidx.compose.ambientOf
@@ -42,7 +41,7 @@ val AmbientRouting: ProvidableAmbient<List<Any>> = ambientOf {
 @Composable
 inline fun <reified T> Router(
     defaultRouting: T,
-    noinline children: @Composable() (BackStack<T>) -> Unit
+    noinline children: @Composable (BackStack<T>) -> Unit
 ) {
     Router(T::class.java.name, defaultRouting, children)
 }
@@ -51,7 +50,7 @@ inline fun <reified T> Router(
 fun <T> Router(
     contextId: String,
     defaultRouting: T,
-    children: @Composable() (BackStack<T>) -> Unit
+    children: @Composable (BackStack<T>) -> Unit
 ) {
     val route = AmbientRouting.current
     val routingFromAmbient = route.firstOrNull() as? T
@@ -66,6 +65,9 @@ fun <T> Router(
         upstreamHandler.children.add(handleBackPressHere)
         onDispose { upstreamHandler.children.remove(handleBackPressHere) }
     }
+
+    @Composable
+    fun Observe(body: @Composable () -> Unit) = body()
 
     Observe {
         // Not recomposing router on backstack operation
@@ -86,12 +88,10 @@ private fun <T> fetchBackStack(key: String, defaultElement: T, override: T?): Ba
     val onElementRemoved: (Int) -> Unit = { upstreamBundle.remove(key(it)) }
 
     val existing = backStackMap[key] as BackStack<T>?
-
     return when {
-        override != null -> BackStack(override, onElementRemoved)
+        override != null -> BackStack(override as T, onElementRemoved)
         existing != null -> existing
         else -> BackStack(defaultElement, onElementRemoved)
-
     }.also {
         backStackMap[key] = it
     }
