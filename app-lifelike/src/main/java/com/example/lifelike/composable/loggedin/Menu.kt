@@ -3,8 +3,8 @@ package com.example.lifelike.composable.loggedin
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Box
-import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.Text
+import androidx.ui.foundation.clickable
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.layout.Row
 import androidx.ui.layout.fillMaxWidth
@@ -58,8 +58,8 @@ interface Menu {
                 color = if (isSelected) color.secondary else color.surface,
                 shape = RoundedCornerShape(topLeft = 4.dp, topRight = 4.dp)
             ) {
-                Clickable(
-                    onClick = { onClick.invoke(item) }
+                Box(
+                    modifier = Modifier.clickable(onClick = { onClick.invoke(item) })
                 ) {
                     Text(
                         modifier = Modifier.fillMaxWidth().padding(8.dp),
