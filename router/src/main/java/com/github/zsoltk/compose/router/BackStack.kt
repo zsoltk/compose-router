@@ -9,7 +9,8 @@ class BackStack<T> internal constructor(
     initialElement: T,
     private var onElementRemoved: ((Int) -> Unit)
 ) {
-    private var elements  by mutableStateOf(listOf(initialElement))
+    var elements by mutableStateOf(listOf(initialElement))
+        private set
 
     val lastIndex: Int
         get() = elements.lastIndex
