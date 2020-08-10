@@ -1,8 +1,8 @@
 package com.github.zsoltk.compose.savedinstancestate
 
 import android.os.Bundle
-import androidx.compose.ProvidableAmbient
-import androidx.compose.ambientOf
+import androidx.compose.runtime.ProvidableAmbient
+import androidx.compose.runtime.ambientOf
 
 private val rootSavedInstanceState = Bundle()
 
