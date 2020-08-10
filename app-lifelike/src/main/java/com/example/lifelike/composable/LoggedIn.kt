@@ -1,11 +1,11 @@
 package com.example.lifelike.composable
 
-import androidx.compose.Composable
-import androidx.ui.core.Alignment
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
-import androidx.ui.layout.Column
-import androidx.ui.layout.wrapContentSize
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import com.example.lifelike.composable.loggedin.Gallery
 import com.example.lifelike.composable.loggedin.Gallery.Routing.AlbumList
 import com.example.lifelike.composable.loggedin.Menu

@@ -2,11 +2,11 @@ package com.example.nestedcontainers
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.Composable
-import androidx.compose.Providers
-import androidx.ui.core.setContent
-import androidx.ui.foundation.HorizontalScroller
-import androidx.ui.material.MaterialTheme
+import androidx.compose.foundation.HorizontalScroller
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
+import androidx.compose.ui.platform.setContent
 import androidx.ui.tooling.preview.Preview
 import com.example.nestedcontainers.composable.SomeChild
 import com.github.zsoltk.compose.backpress.AmbientBackPressHandler

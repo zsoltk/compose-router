@@ -2,9 +2,10 @@ package com.example.lifelike
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.Providers
-import androidx.ui.core.setContent
-import androidx.ui.material.MaterialTheme
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Providers
+import androidx.compose.ui.platform.setContent
 import com.example.lifelike.composable.Root
 import com.example.lifelike.composable.Root.Routing.LoggedOut
 import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
@@ -16,6 +17,7 @@ import com.github.zsoltk.compose.savedinstancestate.saveAmbient
 class MainActivity : AppCompatActivity() {
     private val backPressHandler = BackPressHandler()
 
+    @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

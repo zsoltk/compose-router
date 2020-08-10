@@ -1,6 +1,7 @@
 package com.example.lifelike.composable
 
-import androidx.compose.Composable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.runtime.Composable
 import com.example.lifelike.composable.loggedout.RegConfirmSmsCode
 import com.example.lifelike.composable.loggedout.RegFinal
 import com.example.lifelike.composable.loggedout.RegUserName
@@ -20,6 +21,7 @@ interface LoggedOut {
     }
 
     companion object {
+        @ExperimentalFoundationApi
         @Composable
         fun Content(defaultRouting: Routing, onLoggedIn: (User) -> Unit) {
             val user = User("Demo user", "123456789")

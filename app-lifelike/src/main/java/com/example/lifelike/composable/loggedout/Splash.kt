@@ -1,22 +1,22 @@
 package com.example.lifelike.composable.loggedout
 
-import androidx.compose.Composable
-import androidx.ui.core.Alignment
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Box
-import androidx.ui.foundation.Text
-import androidx.ui.layout.Arrangement
-import androidx.ui.layout.Column
-import androidx.ui.layout.DpConstraints
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.layout.padding
-import androidx.ui.layout.preferredSizeIn
-import androidx.ui.layout.wrapContentSize
-import androidx.ui.material.MaterialTheme
-import androidx.ui.text.AnnotatedString
-import androidx.ui.text.ParagraphStyle
-import androidx.ui.text.style.TextAlign
-import androidx.ui.unit.dp
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.DpConstraints
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.preferredSizeIn
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.ParagraphStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.example.lifelike.composable.common.BigButton
 
 

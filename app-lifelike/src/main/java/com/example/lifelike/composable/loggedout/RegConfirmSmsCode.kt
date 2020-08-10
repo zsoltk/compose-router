@@ -1,16 +1,18 @@
 package com.example.lifelike.composable.loggedout
 
-import androidx.compose.Composable
-import androidx.compose.state
-import androidx.ui.foundation.TextField
-import androidx.ui.input.TextFieldValue
-import androidx.ui.text.TextRange
+import androidx.compose.foundation.BaseTextField
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.state
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import com.example.lifelike.composable.loggedout.common.RegFlowPanel
 
 
 interface RegConfirmSmsCode {
     companion object {
 
+        @ExperimentalFoundationApi
         @Composable
         fun Content(onNext: () -> Unit) {
             val code = state {
@@ -21,7 +23,7 @@ interface RegConfirmSmsCode {
             RegFlowPanel(
                 "Confirm SMS code that will never arrive",
                 { if (code.value.text.length == 4) onNext() }) {
-                TextField(
+                BaseTextField(
                     value = code.value,
                     onValueChange = {
                         val digits = it.text.filter { it.isDigit() }

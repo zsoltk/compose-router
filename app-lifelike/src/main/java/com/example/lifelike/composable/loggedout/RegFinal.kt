@@ -1,6 +1,6 @@
 package com.example.lifelike.composable.loggedout
 
-import androidx.compose.Composable
+import androidx.compose.runtime.Composable
 import com.example.lifelike.composable.loggedout.common.RegFlowPanel
 
 

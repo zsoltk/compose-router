@@ -1,6 +1,7 @@
 package com.example.lifelike.composable
 
-import androidx.compose.Composable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.runtime.Composable
 import com.example.lifelike.composable.LoggedIn.Routing.Gallery
 import com.example.lifelike.composable.LoggedOut.Routing.Splash
 import com.example.lifelike.entity.User
@@ -14,6 +15,7 @@ interface Root {
     }
 
     companion object {
+        @ExperimentalFoundationApi
         @Composable
         fun Content(defaultRouting: Routing) {
             Router(defaultRouting) { backStack ->
