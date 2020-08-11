@@ -92,7 +92,7 @@ interface PhotosOfAlbum {
                                         .padding(4.dp)
                                         .clickable(onClick = { onPhotoSelected(photo) })
                                 ) {
-                                    Box(modifier = Modifier.aspectRatio(1f).fillMaxSize()) {
+                                    Box(modifier = Modifier.aspectRatio(1f)) {
                                         Image(image)
                                     }
                                 }
