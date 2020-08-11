@@ -1,8 +1,8 @@
 package com.github.zsoltk.compose.router
 
-import androidx.compose.getValue
-import androidx.compose.mutableStateOf
-import androidx.compose.setValue
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 
 
 class BackStack<T> internal constructor(

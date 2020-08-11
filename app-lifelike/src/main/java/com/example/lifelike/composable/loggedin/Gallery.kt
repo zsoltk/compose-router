@@ -1,6 +1,6 @@
 package com.example.lifelike.composable.loggedin
 
-import androidx.compose.Composable
+import androidx.compose.runtime.Composable
 import com.example.lifelike.entity.Album
 import com.example.lifelike.entity.Photo
 import com.github.zsoltk.compose.router.Router

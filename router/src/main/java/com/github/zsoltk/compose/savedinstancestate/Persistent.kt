@@ -1,8 +1,8 @@
 package com.github.zsoltk.compose.savedinstancestate
 
-import androidx.compose.Composable
-import androidx.compose.MutableState
-import androidx.compose.state
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.state
 
 @Composable
 fun persistentInt(key: String, defaultValue: Int = 0): MutableState<Int> {

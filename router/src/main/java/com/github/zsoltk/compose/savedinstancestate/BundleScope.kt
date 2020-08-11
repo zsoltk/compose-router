@@ -1,9 +1,9 @@
 package com.github.zsoltk.compose.savedinstancestate
 
 import android.os.Bundle
-import androidx.compose.Composable
-import androidx.compose.Providers
-import androidx.compose.onCommit
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
+import androidx.compose.runtime.onCommit
 
 @Composable
 fun BundleScope(
