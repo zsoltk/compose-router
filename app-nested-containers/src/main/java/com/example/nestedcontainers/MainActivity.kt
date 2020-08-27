@@ -2,7 +2,7 @@ package com.example.nestedcontainers
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.HorizontalScroller
+import androidx.compose.foundation.ScrollableRow
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                HorizontalScroller {
+                ScrollableRow {
                     Providers(
                         AmbientBackPressHandler provides backPressHandler,
                         AmbientRouting provides intent.deepLinkRoute()

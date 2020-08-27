@@ -2,15 +2,16 @@ package com.github.zsoltk.compose.savedinstancestate
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.state
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 
 @Composable
 fun persistentInt(key: String, defaultValue: Int = 0): MutableState<Int> {
     val bundle = AmbientSavedInstanceState.current
 
-    val state: MutableState<Int> = state {
+    val state: MutableState<Int> = remember { mutableStateOf(
         bundle.getInt(key, defaultValue)
-    }
+    )}
 
     saveInt(key, state.value)
 
