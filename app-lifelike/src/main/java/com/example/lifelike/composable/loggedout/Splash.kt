@@ -4,7 +4,6 @@ import androidx.compose.foundation.Box
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.DpConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredSizeIn
@@ -37,7 +36,7 @@ interface Splash {
                 )
                 Box(
                     modifier = Modifier.fillMaxWidth()
-                        .preferredSizeIn(DpConstraints(maxHeight = 48.dp))
+                        .preferredSizeIn(maxHeight = 48.dp)
                         .wrapContentSize(Alignment.Center)
                 ) {
                     BigButton(

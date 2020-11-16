@@ -14,7 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumnFor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.WithConstraints
+import androidx.compose.ui.layout.WithConstraints
 import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
