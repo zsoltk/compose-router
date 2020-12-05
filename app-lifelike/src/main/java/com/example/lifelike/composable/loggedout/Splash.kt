@@ -1,8 +1,8 @@
 package com.example.lifelike.composable.loggedout
 
-import androidx.compose.foundation.Box
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
