@@ -13,7 +13,7 @@ import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
 import com.github.zsoltk.compose.backpress.BackPressHandler
 import com.github.zsoltk.compose.router.AmbientRouting
 import com.github.zsoltk.compose.savedinstancestate.BundleScope
-import com.github.zsoltk.compose.savedinstancestate.saveAmbient
+import com.github.zsoltk.compose.savedinstancestate.saveLocal
 
 class MainActivity : AppCompatActivity() {
     private val backPressHandler = BackPressHandler()
@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.saveAmbient()
+        outState.saveLocal()
     }
 }
 

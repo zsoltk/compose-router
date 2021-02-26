@@ -1,22 +1,17 @@
 package com.example.lifelike.composable.loggedin
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.WithConstraints
-import androidx.compose.ui.platform.DensityAmbient
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.lifelike.R
@@ -78,22 +73,26 @@ interface PhotosOfAlbum {
         @Composable
         fun PhotoGrid(album: Album, onPhotoSelected: (Photo) -> Unit) {
             val cols = 4
-            val image = imageResource(R.drawable.placeholder)
+            val image = painterResource(R.drawable.placeholder)
             val photoRows =  album.photos.chunked(cols)
 
             Box(modifier = Modifier.padding(4.dp)) {
-                LazyColumnFor(photoRows) { row ->
-                    WithConstraints {
-                        Row {
-                            val w = with(DensityAmbient.current) { (constraints.maxWidth.toDp().value / cols).dp }
-                            row.forEach { photo ->
-                                Box(modifier = Modifier
-                                        .width(w)
-                                        .padding(4.dp)
-                                        .clickable(onClick = { onPhotoSelected(photo) })
-                                ) {
-                                    Box(modifier = Modifier.aspectRatio(1f)) {
-                                        Image(image)
+                LazyColumn {
+                    items(photoRows) { row ->
+                        BoxWithConstraints {
+                            val constraints = this.constraints
+
+                            Row {
+                                val w = with(LocalDensity.current) { (constraints.maxWidth.toDp().value / cols).dp }
+                                row.forEach { photo ->
+                                    Box(modifier = Modifier
+                                            .width(w)
+                                            .padding(4.dp)
+                                            .clickable(onClick = { onPhotoSelected(photo) })
+                                    ) {
+                                        Box(modifier = Modifier.aspectRatio(1f)) {
+                                            Image(image, null)
+                                        }
                                     }
                                 }
                             }
