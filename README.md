@@ -18,7 +18,7 @@ Routing functionality for Jetpack Compose with back stack:
 - Can be integrated with automatic scoped `savedInstanceState` persistence
 - Supports routing based on deep links (POC impl)
 
-Compatible with Compose version **1.0.0-alpha08**
+Compatible with Compose version **1.0.0-beta01**
 
 ## Sample apps
 
