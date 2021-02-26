@@ -1,7 +1,7 @@
 package com.example.lifelike.composable.loggedout
 
-import androidx.compose.foundation.BaseTextField
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
@@ -15,7 +15,7 @@ interface RegUserPhone {
         @Composable
         fun Content(user: User, onNext: () -> Unit) {
             RegFlowPanel("Your fake phone number", onNext) {
-                BaseTextField(
+                BasicTextField(
                     value = TextFieldValue(user.phone, TextRange(user.phone.length,user.phone.length)),
                     onValueChange = { user.phone = it.text.filter { it.isDigit() } }
                 )

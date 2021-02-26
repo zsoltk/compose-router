@@ -1,6 +1,5 @@
 package com.example.lifelike.composable.loggedin
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
@@ -56,7 +56,7 @@ interface Menu {
 
             Surface(
                 color = if (isSelected) color.secondary else color.surface,
-                shape = RoundedCornerShape(topLeft = 4.dp, topRight = 4.dp)
+                shape = RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp)
             ) {
                 Box(
                     modifier = Modifier.clickable(onClick = { onClick.invoke(item) })

@@ -1,20 +1,22 @@
 package com.example.lifelike
 
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Providers
-import androidx.compose.ui.platform.setContent
+import androidx.compose.runtime.CompositionLocalProvider
 import com.example.lifelike.composable.Root
 import com.example.lifelike.composable.Root.Routing.LoggedOut
-import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
 import com.github.zsoltk.compose.backpress.BackPressHandler
-import com.github.zsoltk.compose.router.AmbientRouting
+import com.github.zsoltk.compose.backpress.LocalBackPressHandler
+import com.github.zsoltk.compose.router.LocalRouting
 import com.github.zsoltk.compose.savedinstancestate.BundleScope
 import com.github.zsoltk.compose.savedinstancestate.saveAmbient
+import com.github.zsoltk.compose.savedinstancestate.saveLocal
 
 class MainActivity : AppCompatActivity() {
+
     private val backPressHandler = BackPressHandler()
 
     @ExperimentalFoundationApi
@@ -23,9 +25,9 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             MaterialTheme {
-                Providers(
-                    AmbientBackPressHandler provides backPressHandler,
-                    AmbientRouting provides intent.deepLinkRoute()
+                CompositionLocalProvider(
+                    LocalBackPressHandler provides backPressHandler,
+                    LocalRouting provides intent.deepLinkRoute()
                 ) {
                     BundleScope(savedInstanceState) {
                         Root.Content(LoggedOut)
@@ -43,6 +45,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.saveAmbient()
+        outState.saveLocal()
     }
 }

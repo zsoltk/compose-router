@@ -1,7 +1,7 @@
 package com.example.lifelike.composable.loggedout
 
-import androidx.compose.foundation.BaseTextField
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,15 +17,15 @@ interface RegConfirmSmsCode {
         @Composable
         fun Content(onNext: () -> Unit) {
 
-            val code = remember { mutableStateOf({
+            val code = remember {
                 val initialValue = "0000"
-                TextFieldValue(initialValue, TextRange(initialValue.length, initialValue.length))
-            }()) }
+                mutableStateOf(TextFieldValue(initialValue, TextRange(initialValue.length, initialValue.length)))
+            }
 
             RegFlowPanel(
                 "Confirm SMS code that will never arrive",
                 { if (code.value.text.length == 4) onNext() }) {
-                BaseTextField(
+                BasicTextField(
                     value = code.value,
                     onValueChange = {
                         var digits = it.text.filter { it.isDigit() }

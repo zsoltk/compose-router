@@ -1,10 +1,16 @@
 package com.github.zsoltk.compose.backpress
 
-import androidx.compose.runtime.ProvidableAmbient
-import androidx.compose.runtime.ambientOf
+import androidx.compose.runtime.ProvidableCompositionLocal
+import androidx.compose.runtime.compositionLocalOf
 
-val AmbientBackPressHandler: ProvidableAmbient<BackPressHandler> =
-    ambientOf { throw IllegalStateException("backPressHandler is not initialized") }
+val LocalBackPressHandler: ProvidableCompositionLocal<BackPressHandler> =
+        compositionLocalOf { throw IllegalStateException("backPressHandler is not initialized") }
+
+@Deprecated(
+        message = "Replaced with LocalBackPressHandler to reflect Compose API changes",
+        replaceWith = ReplaceWith("LocalBackPressHandler")
+)
+val AmbientBackPressHandler = LocalBackPressHandler
 
 
 class BackPressHandler(
