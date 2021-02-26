@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Providers(
-                AmbientBackPressHandler provides backPressHandler
+                LocalBackPressHandler provides backPressHandler
             ) {
                 // Your root composable goes here
             }
@@ -151,7 +151,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.saveAmbient()
+        outState.saveLocal()
     }
 }
 ```
