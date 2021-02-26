@@ -1,22 +1,15 @@
 package com.example.lifelike.composable.loggedin
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.Text
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredHeight
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.lifelike.R
@@ -27,17 +20,17 @@ interface FullScreenPhoto {
     companion object {
         @Composable
         fun Content(photo: Photo) {
-            val image = imageResource(R.drawable.placeholder)
+            val image = painterResource(R.drawable.placeholder)
             val typography = MaterialTheme.typography
 
             Surface(color = Color.DarkGray) {
                 Box(modifier = Modifier.padding(32.dp)) {
                     Column {
                         Box(modifier = Modifier.weight(0.8f).fillMaxSize().wrapContentSize(Alignment.Center)) {
-                            Image(bitmap = image)
+                            Image(image, null)
                         }
 
-                        Spacer(modifier = Modifier.preferredHeight(32.dp))
+                        Spacer(modifier = Modifier.height(32.dp))
                         Text(
                             text = photo.title,
                             style = typography.subtitle1.copy(color = Color.White)

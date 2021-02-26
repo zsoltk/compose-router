@@ -1,9 +1,7 @@
 package com.github.zsoltk.compose.savedinstancestate
 
 import android.os.Bundle
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
-import androidx.compose.runtime.onCommit
+import androidx.compose.runtime.*
 
 @Composable
 fun BundleScope(
@@ -32,17 +30,17 @@ fun BundleScope(
     autoDispose: Boolean = true,
     children: @Composable (Bundle) -> Unit
 ) {
-    val upstream = AmbientSavedInstanceState.current
+    val upstream = LocalSavedInstanceState.current
     val downstream = upstream.getBundle(key) ?: defaultBundle
 
-    onCommit {
+    SideEffect {
         upstream.putBundle(key, downstream)
-        if (autoDispose) {
-            onDispose { upstream.remove(key) }
-        }
+    }
+    if (autoDispose) {
+        DisposableEffect(Unit) { onDispose { upstream.remove(key) } }
     }
 
-    Providers(AmbientSavedInstanceState provides downstream) {
+    CompositionLocalProvider(LocalSavedInstanceState provides downstream) {
         children(downstream)
     }
 }

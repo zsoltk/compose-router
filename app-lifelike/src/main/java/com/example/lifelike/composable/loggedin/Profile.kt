@@ -1,14 +1,9 @@
 package com.example.lifelike.composable.loggedin
 
-import androidx.compose.foundation.Text
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,7 +29,7 @@ interface Profile {
                         text = user.name,
                         style = MaterialTheme.typography.h5
                     )
-                    Spacer(modifier = Modifier.preferredHeight(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         text = user.phone,
                         style = MaterialTheme.typography.h5

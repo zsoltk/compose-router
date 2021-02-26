@@ -1,19 +1,22 @@
 package com.example.nestedcontainers
 
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.ScrollableRow
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
-import androidx.compose.ui.platform.setContent
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.nestedcontainers.composable.SomeChild
-import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
 import com.github.zsoltk.compose.backpress.BackPressHandler
-import com.github.zsoltk.compose.router.AmbientRouting
+import com.github.zsoltk.compose.backpress.LocalBackPressHandler
+import com.github.zsoltk.compose.router.LocalRouting
 import com.github.zsoltk.compose.savedinstancestate.BundleScope
-import com.github.zsoltk.compose.savedinstancestate.saveAmbient
+import com.github.zsoltk.compose.savedinstancestate.saveLocal
 
 class MainActivity : AppCompatActivity() {
     private val backPressHandler = BackPressHandler()
@@ -22,10 +25,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                ScrollableRow {
-                    Providers(
-                        AmbientBackPressHandler provides backPressHandler,
-                        AmbientRouting provides intent.deepLinkRoute()
+                Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
+                    CompositionLocalProvider(
+                        LocalBackPressHandler provides backPressHandler,
+                        LocalRouting provides intent.deepLinkRoute()
                     ) {
                         BundleScope(savedInstanceState) {
                             SomeChild.Root()
@@ -44,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.saveAmbient()
+        outState.saveLocal()
     }
 }
 
