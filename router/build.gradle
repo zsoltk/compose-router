@@ -58,8 +58,8 @@ afterEvaluate {
                 from components.release
 
                 group = "com.github.zsoltk"
-                artifactId = "final"
-                version = "0.24.0"
+                artifactId = "compose-router"
+                version = "0.24.1"
             }
         }
     }
