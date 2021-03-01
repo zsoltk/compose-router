@@ -11,7 +11,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0"
+        versionName "0.24.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -56,10 +56,6 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
-
-                group = "com.github.zsoltk"
-                artifactId = "compose-router"
-                version = "0.24.1"
             }
         }
     }
