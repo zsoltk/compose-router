@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 
 @Composable
 fun persistentInt(key: String, defaultValue: Int = 0): MutableState<Int> {
-    val bundle = AmbientSavedInstanceState.current
+    val bundle = LocalSavedInstanceState.current
 
     val state: MutableState<Int> = remember { mutableStateOf(
         bundle.getInt(key, defaultValue)
@@ -20,6 +20,6 @@ fun persistentInt(key: String, defaultValue: Int = 0): MutableState<Int> {
 
 @Composable
 private fun saveInt(key: String, value: Int) {
-    val bundle = AmbientSavedInstanceState.current
+    val bundle = LocalSavedInstanceState.current
     bundle.putInt(key, value)
 }

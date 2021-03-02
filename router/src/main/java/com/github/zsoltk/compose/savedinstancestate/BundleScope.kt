@@ -20,7 +20,7 @@ fun BundleScope(
 }
 
 /**
- * Scopes a new Bundle with [key] under ambient [AmbientSavedInstanceState] and provides it
+ * Scopes a new Bundle with [key] under local [LocalSavedInstanceState] and provides it
  * to [children].
  */
 @Composable

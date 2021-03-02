@@ -1,10 +1,8 @@
 package com.github.zsoltk.compose.router
 
 import androidx.compose.runtime.*
-import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
 import com.github.zsoltk.compose.backpress.BackPressHandler
 import com.github.zsoltk.compose.backpress.LocalBackPressHandler
-import com.github.zsoltk.compose.savedinstancestate.AmbientSavedInstanceState
 import com.github.zsoltk.compose.savedinstancestate.BundleScope
 import com.github.zsoltk.compose.savedinstancestate.LocalSavedInstanceState
 
@@ -56,12 +54,12 @@ fun <T> Router(
     children: @Composable (BackStack<T>) -> Unit
 ) {
     val route = LocalRouting.current
-    val routingFromAmbient = route.firstOrNull() as? T
+    val routingFromLocal = route.firstOrNull() as? T
     val downStreamRoute = if (route.size > 1) route.takeLast(route.size - 1) else emptyList()
 
     val upstreamHandler = LocalBackPressHandler.current
     val localHandler = remember { BackPressHandler("${upstreamHandler.id}.$contextId") }
-    val backStack = fetchBackStack(localHandler.id, defaultRouting, routingFromAmbient)
+    val backStack = fetchBackStack(localHandler.id, defaultRouting, routingFromLocal)
     val handleBackPressHere: () -> Boolean = { localHandler.handle() || backStack.pop() }
 
     SideEffect {
