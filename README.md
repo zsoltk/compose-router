@@ -1,10 +1,19 @@
-# compose-router
+# DEPRECATED
+
+This project is now deprecated. No more development will be taking place here.
+
+The successor of this project is [<img src="https://user-images.githubusercontent.com/238198/177164121-3aa4d19d-7714-4f2e-af12-7d3335b43f9c.png" width="25" /> Appyx](https://github.com/bumble-tech/appyx). Check it out!
+
+
+
+## compose-router
 
 [![Build](https://github.com/zsoltk/compose-router/workflows/Build/badge.svg)](https://github.com/zsoltk/compose-router/actions)
 [![Version](https://jitpack.io/v/zsoltk/compose-router.svg)](https://jitpack.io/#zsoltk/compose-router)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 ![logo](https://i.imgur.com/kKcAHa3.png)
+
 
 ## What's this?
 
